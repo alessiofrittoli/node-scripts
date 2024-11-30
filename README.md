@@ -17,10 +17,10 @@ Version 0.1.0
 
 ### Getting started
 
-Run the following command to start using `node-module-starter` in your projects:
+Run the following command to start using `node-module-starter` for your projects:
 
 ```bash
-git clone git@github.com:alessiofrittoli/node-module-starter.git
+git clone git@github.com:alessiofrittoli/node-module-starter.git && git remote remove origin
 ```
 
 install dependencies
@@ -29,11 +29,19 @@ install dependencies
 pnpm i
 ```
 
-customize [tsup.config.ts](./tsup.config.ts) file and build your project
+Read the [Creating a repository from a template - GitHub Docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for more in-detail informations about creating a new Repository from a template using GitHub web interface.
+
+---
+
+### Build your source code
+
+Customize [tsup.config.ts](./tsup.config.ts) file and build your project
 
 ```bash
 pnpm build
 ```
+
+---
 
 ### [ESLint](https://www.npmjs.com/package/eslint)
 
