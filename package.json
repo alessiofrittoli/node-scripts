@@ -9,10 +9,7 @@
 	},
 	"license": "MIT",
 	"keywords": [
-		"crypto",
-		"one-time-passwords",
-		"hmac-otp",
-		"time-otp"
+		"nodejs", "npm", "node_modules"
 	],
 	"homepage": "https://github.com/alessiofrittoli/node-module-starter#readme",
 	"bugs": {
