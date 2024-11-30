@@ -7,15 +7,16 @@ Version 0.1.0
 ### Table of Contents
 
 - [Getting started](#getting-started)
-- [ESLint](#eslint)
-- [Jest](#jest)
+- [Development](#development)
+	- [ESLint](#eslint)
+	- [Jest](#jest)
 - [Contributing](#contributing)
 - [Security](#security)
 - [Credits](#made-with-)
 
 ---
 
-### Getting started
+### Getting started (delete once cloned in your project)
 
 Run the following command to start using `node-module-starter` for your projects:
 
@@ -33,17 +34,45 @@ Read the [Creating a repository from a template - GitHub Docs](https://docs.gith
 
 ---
 
-### Build your source code
+### Getting started (customize based on your project needs)
 
-Customize [tsup.config.ts](./tsup.config.ts) file and build your project
+Run the following command to start using `{package_name}` in your projects:
+
+```bash
+npm i {package_name}
+```
+
+or using `pnpm`
+
+```bash
+pnpm i {package_name}
+```
+
+---
+
+### Development
+
+#### Install depenendencies
+
+```bash
+npm install
+```
+
+or using `pnpm`
+
+```bash
+pnpm i
+```
+
+#### Build your source code
+
+Run the following command to build code for distribution.
 
 ```bash
 pnpm build
 ```
 
----
-
-### [ESLint](https://www.npmjs.com/package/eslint)
+#### [ESLint](https://www.npmjs.com/package/eslint)
 
 warnings / errors check.
 
@@ -51,7 +80,7 @@ warnings / errors check.
 pnpm lint
 ```
 
-### [Jest](https://npmjs.com/package/jest)
+#### [Jest](https://npmjs.com/package/jest)
 
 Run all the defined test suites by running the following:
 
