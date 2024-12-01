@@ -1,6 +1,6 @@
 # Node Module Starter 🛠️
 
-Version 0.1.0
+Version 0.1.1
 
 ## Starter repository for developing node_modules
 
