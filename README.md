@@ -1,6 +1,6 @@
 # Node Module Starter 🛠️
 
-Version 0.1.1
+Version 0.2.0
 
 ## Starter repository for developing node_modules
 
@@ -88,14 +88,21 @@ Run all the defined test suites by running the following:
 # Run tests and watch file changes.
 pnpm test
 
+# Run tests and watch file changes with jest-environment-jsdom.
+pnpm test:jsdom
+
 # Run tests in a CI environment.
 pnpm test:ci
+
+# Run tests in a CI environment with jest-environment-jsdom.
+pnpm test:ci:jsdom
 ```
 
 You can eventually run specific suits like so:
 
 ```bash
 pnpm test:jest
+pnpm test:jest:jsdom
 ```
 
 ---
