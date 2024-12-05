@@ -52,6 +52,8 @@ Keep changes relevant to your branch’s purpose.
 
 ### 5. Commit Changes
 
+This repository requires signed commit, so please before continuing, take a look at [Signing Commits - GitHub Docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits).
+
 - Stage your changes:
 
 ```bash
