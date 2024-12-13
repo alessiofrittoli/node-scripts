@@ -6,5 +6,6 @@
 		"statusBar.background": "#212121",
 		"statusBar.border":"#CB3837",
 		"statusBar.foreground": "#F0F0F0",
+		"activityBar.activeBorder": "#CB3837",
 	},
 }
