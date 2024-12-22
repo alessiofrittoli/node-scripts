@@ -1,6 +1,6 @@
 # Post Install Scripts 🫧
 
-Version 0.1.0-alpha.2
+Version 0.2.0
 
 ## Utility library with common `postinstall` scripts
 
