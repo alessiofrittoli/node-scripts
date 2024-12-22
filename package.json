@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/post-install-scripts",
-	"version": "0.1.0-alpha.2",
+	"version": "0.2.0",
 	"description": "Basic Node Module repository",
 	"author": {
 		"name": "Alessio Frittoli",
