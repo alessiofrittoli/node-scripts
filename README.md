@@ -2,7 +2,7 @@
 
 Version 0.1.0-alpha.1
 
-## Utility library to easly handle type reference files creation on `postinstall` scripts of your node module
+## Utility library with common `postinstall` scripts
 
 ### Table of Contents
 

@@ -1,1 +1,1 @@
-// 
+export { default as addTypesReference } from './types-reference'
