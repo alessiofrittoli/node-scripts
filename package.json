@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/post-install-scripts",
-	"version": "0.1.0-alpha.1",
+	"version": "0.1.0-alpha.2",
 	"description": "Basic Node Module repository",
 	"author": {
 		"name": "Alessio Frittoli",
@@ -31,6 +31,9 @@
 		".": {
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.cjs"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts"
 		},
 		"./types-reference": {
 			"types": "./dist/types-reference.d.ts",

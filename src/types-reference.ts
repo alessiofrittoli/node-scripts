@@ -1,17 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-
-interface Props
-{
-	projectName: string
-	outputFile?: string
-}
+import type { AddTypesReferenceOptions } from './types'
 
 
-const addTypesReference = ( props: Props ) => {
+const addTypesReference = ( options: AddTypesReferenceOptions ) => {
 
-	const { outputFile = 'alessiofrittoli-env.d.ts' } = props
-	const { projectName }	= props
+	const { outputFile = 'alessiofrittoli-env.d.ts' } = options
+	const { projectName }	= options
 	const projectRoot		= process.env.INIT_CWD || process.cwd()
 
 	const project = (
