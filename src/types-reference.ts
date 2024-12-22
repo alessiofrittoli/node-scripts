@@ -52,7 +52,7 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 		const lines	= file.toString().split( '\n' )
 
 		if ( lines.includes( data.replace( /\n/g, '' ) ) ) {
-			console.log( `The "${ outputFile }" file already exists and it includes the needed type references.` )
+			console.log( { package: projectName, message: `The "${ outputFile }" file already exists and it includes the needed type references.` } )
 			return true
 		}
 
@@ -60,7 +60,7 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 	
 		try {
 			fs.writeFileSync( referencesFilePath, output )
-			console.log( `The "${ outputFile }" file already exists and it has been edited with new type references.` )
+			console.log( { package: projectName, message: `The "${ outputFile }" file already exists and it has been edited with new type references.` } )
 			return true
 		} catch ( cause ) {
 			throw new Error( `An error occured while editing "${ outputFile }" in your project. Some global types may not working as expect.`, { cause } )
@@ -72,7 +72,7 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 
 	try {
 		fs.writeFileSync( referencesFilePath, output )
-		console.log( `"${ outputFile }" has been created at the root of your project.` )
+		console.log( { package: projectName, message: `"${ outputFile }" has been created at the root of your project.` } )
 		return true
 	} catch ( cause ) {
 		throw new Error( `An error occured while creating "${ outputFile }" at the root of your project. Some global types may not working as expect.`, { cause } )
@@ -80,9 +80,10 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 
 }
 
-const updateTsConfig = ( options: Omit<CommonOptions, 'projectName'> ) => {
+const updateTsConfig = ( options: CommonOptions ) => {
 
 	const { projectRoot }	= options
+	const { projectName }	= options
 	const { outputFile }	= options
 	const configFilename	= 'tsconfig.json'
 
@@ -100,7 +101,7 @@ const updateTsConfig = ( options: Omit<CommonOptions, 'projectName'> ) => {
 			tsconfig.include = include
 			try {
 				fs.writeFileSync( tsconfigPath, Buffer.from( JSON.stringify( tsconfig, undefined, '\t' ) ) )
-				console.log( `"${ outputFile }" added to \`include\` property of your "${ configFilename }" file.` )
+				console.log( { package: projectName, message: `"${ outputFile }" added to \`include\` property of your "${ configFilename }" file.` } )
 			} catch ( cause ) {
 				throw new Error( `Couldn't update your "${ configFilename }" file. You should manually update it by adding ${ outputFile } in the \`include\` array.`, { cause } )
 			}
@@ -120,11 +121,11 @@ const addTypesReference = ( options: AddTypesReferenceOptions ) => {
 
 	try {
 		if ( ! isExternalProject( { projectName, projectRoot } ) ) {
-			console.log( `Skip "postinstall" script. Running in ${ projectName }` )
+			console.log( { package: projectName, message: `Skip "postinstall" script. Running in ${ projectName }` } )
 			return
 		}
 		createReferenceFile( { projectName, projectRoot, outputFile } )
-		updateTsConfig( { projectRoot, outputFile } )
+		updateTsConfig( { projectRoot, projectName, outputFile } )
 	} catch ( error ) {
 		console.error( error )
 		process.exit( 1 )
