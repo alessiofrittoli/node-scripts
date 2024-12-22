@@ -1,7 +1,7 @@
 {
 	"name": "@alessiofrittoli/post-install-scripts",
-	"version": "0.2.0",
-	"description": "Basic Node Module repository",
+	"version": "0.3.0",
+	"description": "Utility library with common `postinstall` scripts",
 	"author": {
 		"name": "Alessio Frittoli",
 		"email": "info@alessiofrittoli.it",
