@@ -35,6 +35,26 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
+		"./git": {
+			"types": "./dist/git.d.ts",
+			"import": "./dist/git.mjs",
+			"require": "./dist/git.cjs"
+		},
+		"./package": {
+			"types": "./dist/package.d.ts",
+			"import": "./dist/package.mjs",
+			"require": "./dist/package.cjs"
+		},
+		"./process": {
+			"types": "./dist/process.d.ts",
+			"import": "./dist/process.mjs",
+			"require": "./dist/process.cjs"
+		},
+		"./release": {
+			"types": "./dist/release.d.ts",
+			"import": "./dist/release.mjs",
+			"require": "./dist/release.cjs"
+		},
 		"./postinstall": {
 			"types": "./dist/postinstall/index.d.ts",
 			"import": "./dist/postinstall/index.mjs",
@@ -44,6 +64,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "pnpm lint && pnpm test:ci && pnpm test:ci:jsdom && tsup",
+		"release": "node scripts/release.js --verbose --npm",
 		"build:watch": "tsup --watch",
 		"lint": "eslint",
 		"test": "jest --watchAll --verbose",
