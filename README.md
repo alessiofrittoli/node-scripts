@@ -1,8 +1,8 @@
-# Post Install Scripts 🫧
+# Node.js Scripts 🫧
 
 Version 0.3.0
 
-## Utility library with common `postinstall` scripts
+## Utility library with common Node.js scripts
 
 ### Table of Contents
 
@@ -14,16 +14,16 @@ Version 0.3.0
 
 ### Getting started
 
-Run the following command to start using `post-install-scripts` in your projects:
+Run the following command to start using `node-scripts` in your projects:
 
 ```bash
-npm i @alessiofrittoli/post-install-scripts
+npm i @alessiofrittoli/node-scripts
 ```
 
 or using `pnpm`
 
 ```bash
-pnpm i @alessiofrittoli/post-install-scripts
+pnpm i @alessiofrittoli/node-scripts
 ```
 
 ---
