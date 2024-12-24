@@ -35,21 +35,6 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-		"./git": {
-			"types": "./dist/git.d.ts",
-			"import": "./dist/git.mjs",
-			"require": "./dist/git.cjs"
-		},
-		"./package": {
-			"types": "./dist/package.d.ts",
-			"import": "./dist/package.mjs",
-			"require": "./dist/package.cjs"
-		},
-		"./process": {
-			"types": "./dist/process.d.ts",
-			"import": "./dist/process.mjs",
-			"require": "./dist/process.cjs"
-		},
 		"./release": {
 			"types": "./dist/release.d.ts",
 			"import": "./dist/release.mjs",
