@@ -66,12 +66,14 @@ const release = () => {
 	}
 
 	try {
+		execSync( 'git stash save -u -m "pre-release"', { stdio: 'inherit' } )
 		execSync( 'pnpm build', { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
 		if ( publishToNpm ) {
 			execSync( `pnpm publish --access ${ access }`, { stdio: 'inherit' } )
 		}
+		execSync( 'git stash pop', { stdio: 'inherit' } )
 
 		if ( verbose ) {
 			console.log( {
