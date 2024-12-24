@@ -16,7 +16,10 @@ const config = [
 	pluginJs.configs.recommended,
 	...tseslintReccommended,
 	{ files: [ 'src/**/*.{js,mjs,cjs,ts}' ] },
-	{ ignores: [ 'dist', 'scripts', 'coverage' ] },
+	{ ignores: [ 'dist', 'ts-node.config.js', 'scripts', 'coverage' ] },
+	{ rules: {
+		'@typescript-eslint/no-namespace': 'off',
+	} },
 ]
 
 export default config
