@@ -2,7 +2,7 @@
 	"name": "Tagging ruleset",
 	"target": "tag",
 	"source_type": "Repository",
-	"source": "alessiofrittoli/post-install-scripts",
+	"source": "alessiofrittoli/node-scripts",
 	"enforcement": "active",
 	"conditions": {
 		"ref_name": {

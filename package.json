@@ -1,7 +1,7 @@
 {
-	"name": "@alessiofrittoli/post-install-scripts",
+	"name": "@alessiofrittoli/node-scripts",
 	"version": "0.3.0",
-	"description": "Utility library with common `postinstall` scripts",
+	"description": "Utility library with common Node.js scripts",
 	"author": {
 		"name": "Alessio Frittoli",
 		"email": "info@alessiofrittoli.it",
@@ -10,16 +10,16 @@
 	"license": "MIT",
 	"keywords": [
 		"nodejs",
-		"postinstall"
+		"node-scripts"
 	],
-	"homepage": "https://github.com/alessiofrittoli/post-install-scripts#readme",
+	"homepage": "https://github.com/alessiofrittoli/node-scripts#readme",
 	"bugs": {
-		"url": "https://github.com/alessiofrittoli/post-install-scripts/issues",
+		"url": "https://github.com/alessiofrittoli/node-scripts/issues",
 		"email": "info@alessiofrittoli.it"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/alessiofrittoli/post-install-scripts.git"
+		"url": "git+https://github.com/alessiofrittoli/node-scripts.git"
 	},
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
