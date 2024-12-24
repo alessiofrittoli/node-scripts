@@ -35,15 +35,16 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-		"./types-reference": {
-			"types": "./dist/types-reference.d.ts",
-			"import": "./dist/types-reference.mjs",
-			"require": "./dist/types-reference.cjs"
+		"./postinstall": {
+			"types": "./dist/postinstall/index.d.ts",
+			"import": "./dist/postinstall/index.mjs",
+			"require": "./dist/postinstall/index.cjs"
 		}
 	},
 	"sideEffects": false,
 	"scripts": {
 		"build": "pnpm lint && pnpm test:ci && pnpm test:ci:jsdom && tsup",
+		"build:watch": "tsup --watch",
 		"lint": "eslint",
 		"test": "jest --watchAll --verbose",
 		"test:jsdom": "JSDOM=true pnpm test",
