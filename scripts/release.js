@@ -1,3 +1,3 @@
 require( 'ts-node' ).register( require( '../ts-node.config.js' ) )
 
-require( '../src/release' ).default()
+require( '../src/release' ).release()
