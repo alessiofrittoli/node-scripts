@@ -21,7 +21,7 @@
 		"type": "git",
 		"url": "git+https://github.com/alessiofrittoli/node-scripts.git"
 	},
-	"main": "./dist/index.cjs",
+	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"files": [
@@ -30,7 +30,7 @@
 	"exports": {
 		".": {
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.cjs"
+			"require": "./dist/index.js"
 		},
 		"./types": {
 			"types": "./dist/types.d.ts"
@@ -38,12 +38,12 @@
 		"./release": {
 			"types": "./dist/release.d.ts",
 			"import": "./dist/release.mjs",
-			"require": "./dist/release.cjs"
+			"require": "./dist/release.js"
 		},
 		"./postinstall": {
 			"types": "./dist/postinstall/index.d.ts",
 			"import": "./dist/postinstall/index.mjs",
-			"require": "./dist/postinstall/index.cjs"
+			"require": "./dist/postinstall/index.js"
 		}
 	},
 	"sideEffects": false,
