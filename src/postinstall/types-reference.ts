@@ -122,7 +122,7 @@ const updateTsConfig = ( options: CommonOptions ) => {
  *
  * @throws Will throw an error if the process fails.
  */
-const addTypesReference = ( options: AddTypesReferenceOptions ) => {
+export const addTypesReference = ( options: AddTypesReferenceOptions ) => {
 
 	const { outputFile = 'alessiofrittoli-env.d.ts' } = options
 	const { name }	= options
@@ -141,6 +141,3 @@ const addTypesReference = ( options: AddTypesReferenceOptions ) => {
 	}
 
 }
-
-
-export default addTypesReference

@@ -18,7 +18,7 @@ import type { Release } from './types'
  *
  * @throws Will exit the process with code 1 if any critical error occurs during the release process.
  */
-const release = () => {
+export const release = () => {
 	
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let project: Record<string, any> | null = null
@@ -89,6 +89,3 @@ const release = () => {
 	}
 
 }
-
-
-export default release
