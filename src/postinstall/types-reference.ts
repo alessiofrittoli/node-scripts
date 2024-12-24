@@ -2,14 +2,28 @@ import fs from 'fs'
 import path from 'path'
 import type { AddTypesReferenceOptions } from './types'
 
+/**
+ * Common options for types-reference scripts.
+ *
+ */
 interface CommonOptions
 {
-	projectRoot	: string
-	projectName	: string
-	outputFile	: string
+	/** The root directory of the project. */
+	projectRoot: string
+	/** The name of the project. */
+	projectName: string
+	/** The output file name. */
+	outputFile: string
 }
 
 
+/**
+ * Determines if the script is running in an external project.
+ *
+ * @param options - The options object excluding the 'outputFile' property.
+ * @returns A boolean indicating whether the script is running in an external project.
+ * @throws Will throw an error if `INIT_CWD` is not set or if the script cannot determine the project status.
+ */
 const isExternalProject = ( options: Omit<CommonOptions, 'outputFile'> ) => {
 
 	const { projectRoot }	= options
@@ -37,7 +51,17 @@ const isExternalProject = ( options: Omit<CommonOptions, 'outputFile'> ) => {
 }
 
 
-const createReferenceFile = ( options: CommonOptions ): true => {
+/**
+ * Creates or updates a reference file with type definitions for a project.
+ *
+ * @param options - Common options for the reference file creation.
+ * @param options.projectRoot - The root directory of the project.
+ * @param options.projectName - The name of the project.
+ * @param options.outputFile - The name of the output file to create or update.
+ * @returns `void` if the operation was successful.
+ * @throws {Error} Throws an error if there is an issue creating or updating the file.
+ */
+const createReferenceFile = ( options: CommonOptions ) => {
 
 	const { projectRoot }	= options
 	const { projectName }	= options
@@ -53,7 +77,7 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 
 		if ( lines.includes( data.replace( /\n/g, '' ) ) ) {
 			console.log( { package: projectName, message: `The "${ outputFile }" file already exists and it includes the needed type references.` } )
-			return true
+			return
 		}
 
 		const output = Buffer.concat( [ Buffer.from( data ), file ] )
@@ -61,7 +85,7 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 		try {
 			fs.writeFileSync( referencesFilePath, output )
 			console.log( { package: projectName, message: `The "${ outputFile }" file already exists and it has been edited with new type references.` } )
-			return true
+			return
 		} catch ( cause ) {
 			throw new Error( `An error occured while editing "${ outputFile }" in your project. Some global types may not working as expect.`, { cause } )
 		}
@@ -80,6 +104,17 @@ const createReferenceFile = ( options: CommonOptions ): true => {
 
 }
 
+
+/**
+ * Updates the `tsconfig.json` file by adding the specified output file to the `include` array.
+ *
+ * @param options - The options for updating the `tsconfig.json` file.
+ * @param options.projectRoot - The root directory of the project.
+ * @param options.projectName - The name of the project.
+ * @param options.outputFile - The file to be added to the `include` array in the `tsconfig.json`.
+ *
+ * @throws {Error} Throws an error if the `tsconfig.json` file cannot be read or updated.
+ */
 const updateTsConfig = ( options: CommonOptions ) => {
 
 	const { projectRoot }	= options
@@ -113,6 +148,15 @@ const updateTsConfig = ( options: CommonOptions ) => {
 }
 
 
+/**
+ * Adds a TypeScript reference file and updates the tsconfig.json for the given project.
+ *
+ * @param options - The options for adding the types reference.
+ * @param options.outputFile - The name of the output file to create. Defaults to 'alessiofrittoli-env.d.ts'.
+ * @param options.projectName - The name of the project.
+ *
+ * @throws Will throw an error if the process fails.
+ */
 const addTypesReference = ( options: AddTypesReferenceOptions ) => {
 
 	const { outputFile = 'alessiofrittoli-env.d.ts' } = options

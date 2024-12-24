@@ -1,1 +1,2 @@
-export { default as addTypesReference } from './types-reference'
+export * from './postinstall'
+export type * from './types'

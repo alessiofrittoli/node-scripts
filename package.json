@@ -35,10 +35,10 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-		"./types-reference": {
-			"types": "./dist/types-reference.d.ts",
-			"import": "./dist/types-reference.mjs",
-			"require": "./dist/types-reference.cjs"
+		"./postinstall": {
+			"types": "./dist/postinstall/index.d.ts",
+			"import": "./dist/postinstall/index.mjs",
+			"require": "./dist/postinstall/index.cjs"
 		}
 	},
 	"sideEffects": false,
