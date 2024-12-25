@@ -73,7 +73,13 @@ export const release = () => {
 		if ( publishToNpm ) {
 			execSync( `pnpm publish --access ${ access }`, { stdio: 'inherit' } )
 		}
-		execSync( 'git stash pop', { stdio: 'inherit' } )
+
+		try {
+			execSync( 'git stash pop', { stdio: 'inherit' } )
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch ( err ) {
+			// .. do nothing (No stash entries found.)
+		}
 
 		if ( verbose ) {
 			console.log( {
