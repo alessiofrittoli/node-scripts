@@ -10,12 +10,12 @@ export interface Package
 }
 
 /**
- * Namespace containing types related to release options.
+ * Namespace containing types related to publish options.
  */
-export namespace Release
+export namespace Publish
 {
 	/**
-	 * Type representing possible release options.
+	 * Type representing possible publish options.
 	 */
 	export type Option = (
 		| '--verbose'
@@ -28,9 +28,9 @@ export namespace Release
 	)
 
 	/**
-	 * Type representing the value associated with a specific release option.
+	 * Type representing the value associated with a specific publish option.
 	 * 
-	 * @template T - The release option type.
+	 * @template T - The publish option type.
 	 */
 	export type OptionValue<T extends Option> = (
 		T extends '--verbose'
@@ -41,7 +41,7 @@ export namespace Release
 	)
 
 	/**
-	 * Interface representing a map of release options to their values.
+	 * Interface representing a map of publish options to their values.
 	 */
 	export interface OptionsMap extends Map<Option, OptionValue<Option>>
 	{
