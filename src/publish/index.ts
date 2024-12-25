@@ -1,24 +1,24 @@
 import { execSync } from 'child_process'
-import { getProcessOptions, getProcessRoot } from './process'
-import { getPackageJson } from './package'
-import { getDefaltPushRemote } from './git'
-import type { Release } from './types'
+import { getProcessOptions, getProcessRoot } from '../process'
+import { getPackageJson } from '../package'
+import { getDefaltPushRemote } from '../git'
+import type { Publish } from '../types'
 
 
 /**
- * Executes the release process for a project.
+ * Executes the publish process for a project.
  *
  * This function performs the following steps:
  * 1. Retrieves the project's `package.json` file.
- * 2. Retrieves process options and sets various release parameters.
+ * 2. Retrieves process options and sets various publish parameters.
  * 3. Validates the version and access options.
  * 4. Determines the Git origin for pushing tags.
  * 5. Builds the project, creates a Git tag, pushes the tag, and optionally publishes to npm.
- * 6. Logs the release details if verbose mode is enabled.
+ * 6. Logs the publish details if verbose mode is enabled.
  *
- * @throws Will exit the process with code 1 if any critical error occurs during the release process.
+ * @throws Will exit the process with code 1 if any critical error occurs during the publish process.
  */
-export const release = () => {
+export const publish = () => {
 	
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let project: Record<string, any> | null = null
@@ -30,7 +30,7 @@ export const release = () => {
 		//
 	}
 
-	const options		= getProcessOptions() as Release.OptionsMap
+	const options		= getProcessOptions() as Publish.OptionsMap
 	const verbose		= options.has( '--verbose' )
 	const version		= options.get( '--version' ) || project?.version
 	let origin			= options.get( '--origin' ) || options.get( '--o' )

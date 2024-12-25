@@ -29,16 +29,17 @@
 	],
 	"exports": {
 		".": {
+			"types": "./dist/index.d.ts",
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.js"
 		},
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-		"./release": {
-			"types": "./dist/release.d.ts",
-			"import": "./dist/release.mjs",
-			"require": "./dist/release.js"
+		"./publish": {
+			"types": "./dist/publish/index.d.ts",
+			"import": "./dist/publish/index.mjs",
+			"require": "./dist/publish/index.js"
 		},
 		"./postinstall": {
 			"types": "./dist/postinstall/index.d.ts",
@@ -49,7 +50,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "pnpm lint && pnpm test:ci && pnpm test:ci:jsdom && tsup",
-		"release": "node scripts/release.js --verbose --npm",
+		"publish": "node scripts/publish.js --verbose --npm",
 		"build:watch": "tsup --watch",
 		"lint": "eslint",
 		"test": "jest --watchAll --verbose",
