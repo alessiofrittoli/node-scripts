@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson } from '../package'
-import { getDefaltPushRemote } from '../git'
+import { getDefaltPushRemote, getStashBy } from '../git'
 import type { Publish } from '../types'
 
 
@@ -36,6 +36,7 @@ export const publish = () => {
 	let origin			= options.get( '--origin' ) || options.get( '--o' )
 	const publishToNpm	= options.has( '--npm' )
 	const access		= options.get( '--access' ) || 'public'
+	const stashName		= 'pre-release'
 
 	if ( ! version ) {
 		console.error( 'No `version` found in `package.json`' )
@@ -66,7 +67,7 @@ export const publish = () => {
 	}
 
 	try {
-		execSync( 'git stash save -u -m "pre-release"', { stdio: 'inherit' } )
+		execSync( `git stash save -u -m "${ stashName }"`, { stdio: 'inherit' } )
 		execSync( 'pnpm build', { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
@@ -74,11 +75,9 @@ export const publish = () => {
 			execSync( `pnpm publish --access ${ access }`, { stdio: 'inherit' } )
 		}
 
-		try {
-			execSync( 'git stash pop', { stdio: 'inherit' } )
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		} catch ( err ) {
-			// .. do nothing (No stash entries found.)
+		const stash = getStashBy( { name: stashName } )
+		if ( stash ) {
+			execSync( `git stash pop --index ${ stash.index }`, { stdio: 'inherit' } )
 		}
 
 		if ( verbose ) {

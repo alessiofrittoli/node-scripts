@@ -92,3 +92,49 @@ export namespace NodeJS
 		export type ArgvValue<T = string> = T | null
 	}
 }
+
+
+/**
+ * Namespace containing Git-related types.
+ */
+export namespace Git
+{
+	/**
+	 * Represents a Git stash.
+	 */
+	export interface Stash
+	{
+		/**
+		 * The index of the stash.
+		 */
+		index: number;
+
+		/**
+		 * The branch associated with the stash.
+		 */
+		branch: string;
+
+		/**
+		 * The name of the stash, or null if not named.
+		 */
+		name: string | null;
+	}
+
+	/**
+	 * Options for retrieving a stash by either index or name.
+	 */
+	export type GetStashByOptions = (
+		| {
+			/**
+			 * The index of the stash to retrieve.
+			 */
+			index: NonNullable<Git.Stash['index']>;
+		}
+		| {
+			/**
+			 * The name of the stash to retrieve.
+			 */
+			name: NonNullable<Git.Stash['name']>;
+		}
+	);
+}
