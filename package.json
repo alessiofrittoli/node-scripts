@@ -53,6 +53,7 @@
 		"build:watch": "tsup --watch",
 		"lint": "eslint",
 		"release": "node scripts/publish.js --verbose --npm",
+		"test": "pnpm test:watch",
 		"test:watch": "jest --watchAll --verbose",
 		"test:ci": "jest --ci --verbose",
 		"test:coverage": "pnpm test:watch --coverage",
