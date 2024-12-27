@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson } from '../package'
-import { getDefaltPushRemote, getStashBy } from '../git'
+import { getDefaltRemote, getStashBy } from '../git'
 import type { Publish } from '../types'
 
 
@@ -56,14 +56,8 @@ export const publish = () => {
 	}
 
 	if ( ! origin ) {
-		try {
-			const [ name ] = getDefaltPushRemote()
-			origin = name
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		} catch ( error ) {
-			//
-		}
-		origin ||= 'origin'
+		const remote = getDefaltRemote()
+		origin = remote?.get( 'name' ) || 'origin'
 	}
 
 	try {
@@ -84,6 +78,7 @@ export const publish = () => {
 			console.log( {
 				package		: project?.name,
 				message		: `Released version ${ version }`,
+				origin		: origin,
 				tag			: `v${ version }`,
 				npmPublish	: publishToNpm,
 			} )

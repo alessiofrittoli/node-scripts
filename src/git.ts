@@ -1,45 +1,101 @@
 import { execSync } from 'child_process'
-import { Git } from './types'
+import type { Git } from './types'
 
 /**
- * Retrieves the list of Git remotes for the current repository.
- *
- * @returns {Map<string, string>} A map where the keys are the remote names and the values are the remote URLs.
- *
- * @throws {Error} If the `git remote -v` command fails.
- *
- * @example
- * ```typescript
- * const remotes = getRemotes();
- * console.log(remotes);
- * // Map { 'origin' => 'https://github.com/user/repo.git' }
- * ```
+ * Retrieves the list of Git remotes and their URLs.
+ * 
+ * This function executes the `git remote -v` command to get the list of remotes and their URLs.
+ * It then parses the output and organizes the remotes into a Map where each remote name maps to another Map containing the remote's name and URLs.
+ * The URLs are further categorized by their type (fetch or push).
+ * 
+ * @returns A Map where each key is a remote name and the value is another Map containing the remote's name and URLs.
+ * 
+ * @remarks
+ * The list of remotes is ordered in alphabetical order.
  */
 export const getRemotes = () => {
 
 	const stdOut	= execSync( 'git remote -v', { encoding: 'buffer' } )
 	const remotes	= stdOut.toString().split( '\n' )
+	const remotesMap = new Map<string, Git.Remote.Map>()
 
-	return new Map<string, string>(
-		remotes.map( remote => {
-			const [ name, url ] = remote.split( '\t' )
-			if ( ! name || ! url ) return null
-			return [ name, url ]
-		} )
-		.filter( Boolean ) as [ string, string ][]
-	)
+	remotes.map( remote => {
+		const [ name, formattedUrl ] = remote.split( '\t' )
+		if ( ! name || ! formattedUrl ) return null
+
+		const remoteMap = (
+			remotesMap.get( name ) || new Map() as Git.Remote.Map
+		)
+		const remoteMapUrls = (
+			remoteMap.get( 'urls' ) || new Map() as Git.Remote.Urls
+		)
+
+		const parts	= formattedUrl.split( ' ' )
+		const type	= ( parts.pop()?.replace( /\(|\)/g, '' ) || 'fetch' ) as Git.Remote.Type
+		const url	= parts.shift()
+		if ( ! url ) return null
+
+		remoteMapUrls.set( type, url )
+		remoteMap.set( 'name', name )
+		remoteMap.set( 'urls', remoteMapUrls )
+
+		if ( ! remotesMap.has( name ) ) {
+			remotesMap.set( name, remoteMap )
+		}
+
+	} )
+
+	return remotesMap
 }
 
 
 /**
- * Retrieves the default push remote URL from the list of git remotes.
+ * Retrieves the default remote and branch of the current Git repository.
  *
- * @returns An array containing the default push remote name and URL if found, otherwise an empty array.
+ * This function executes a Git command to list all remote branches and filters
+ * the output to find the default branch (HEAD). It then parses the result to
+ * extract the remote name and branch name.
+ *
+ * @returns A tuple containing the remote name and branch name as strings.
+ *          If the default remote and branch cannot be determined, both values
+ *          in the tuple will be `null`.
  */
-export const getDefaltPushRemote = () => (
-	[ ...getRemotes().entries() ]
-		.find( ( [, url ] ) => url.endsWith( '(push)' ) ) || []
-)
+export const getDefaultRemoteAndBranch = () => (
+	execSync( 'git branch -rl \'*/HEAD\'' )
+		?.toString()
+		.split( '\n' )
+		.filter( Boolean ).at( 0 )
+		?.split( ' -> ' ).at( 1 )
+		?.split( '/' ) || [ null, null ]
+) as ( [ string | null, string | null ] )
+
+
+
+/**
+ * Retrieves the default remote.
+ *
+ * This function attempts to get the default remote name by first
+ * calling `getDefaultRemoteAndBranch` to obtain the remote name. If a
+ * remote name is found, it retrieves the corresponding remote from the
+ * list of remotes. If no default remote is found, it returns the first
+ * remote in the list of remotes.
+ *
+ * @returns The default remote, or the first remote in the list if no default is found.
+ */
+export const getDefaltRemote = () => {
+
+	const [ remote ] = getDefaultRemoteAndBranch()
+	
+	return (
+		remote
+			? getRemotes().get( remote )
+			: getRemotes()
+				.entries()
+				.next()
+				.value?.[ 1 ]
+	)
+
+}
 
 
 /**
