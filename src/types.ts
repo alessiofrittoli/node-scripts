@@ -100,6 +100,82 @@ export namespace NodeJS
 export namespace Git
 {
 	/**
+	 * Namespace containing types and interfaces related to remote operations.
+	 */
+	export namespace Remote
+	{
+		/**
+		 * Type representing the kind of remote url type.
+		 * - 'fetch': Represents a fetch operation.
+		 * - 'push': Represents a push operation.
+		 */
+		export type Type = 'fetch' | 'push'
+
+
+		/**
+		 * Type representing a map of url types to their corresponding URLs.
+		 */
+		export type Urls = globalThis.Map<Git.Remote.Type, string>
+
+		
+		/**
+		 * Union type representing the possible keys for the Git.Remote.Map.
+		 * - 'name': Represents the name key.
+		 * - 'urls': Represents the URLs key.
+		 */
+		export type MapKey = 'name' | 'urls'
+
+
+		/**
+		 * Conditional type that maps a Remote.MapKey to its corresponding value type.
+		 * - If T is 'urls', the value type is Remote.Urls.
+		 * - If T is 'name', the value type is string.
+		 * - Otherwise, the value type is never.
+		 */
+		export type MapValue<T extends Remote.MapKey> = (
+			T extends 'urls'
+				? Remote.Urls
+			: T extends 'name'
+				? string
+			: never
+		)
+		
+		
+		/**
+		 * Interface representing a map with keys of type Remote.MapKey and values of type Remote.MapValue.
+		 * Extends the global Map interface.
+		 * 
+		 * @template K - The type of the keys in the map. Defaults to Remote.MapKey.
+		 */
+		export interface Map<
+			K extends Remote.MapKey = Remote.MapKey
+		> extends globalThis.Map<K, Remote.MapValue<K>>
+		{
+			/**
+			 * Executes a provided function once per each key/value pair in the Map, in insertion order.
+			 */
+			forEach<
+				K extends Remote.MapKey = Remote.MapKey,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			>( callbackfn: ( value: Remote.MapValue<K>, key: K, map: globalThis.Map<K, Remote.MapValue<K>> ) => void, thisArg?: any ): void
+			/**
+			  * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
+			  * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
+			  */
+			get<
+				K extends Remote.MapKey = Remote.MapKey,
+			>( key: K ): Remote.MapValue<K> | undefined
+			/**
+			 * Adds a new element with a specified key and value to the Map. If an element with the same key already exists, the element will be updated.
+			 */
+			set<
+				K extends Remote.MapKey = Remote.MapKey,
+			>( key: K, value: Remote.MapValue<K> ): this
+		}
+	}
+
+
+	/**
 	 * Represents a Git stash.
 	 */
 	export interface Stash
@@ -107,17 +183,17 @@ export namespace Git
 		/**
 		 * The index of the stash.
 		 */
-		index: number;
+		index: number
 
 		/**
 		 * The branch associated with the stash.
 		 */
-		branch: string;
+		branch: string
 
 		/**
 		 * The name of the stash, or null if not named.
 		 */
-		name: string | null;
+		name: string | null
 	}
 
 	/**
@@ -128,13 +204,13 @@ export namespace Git
 			/**
 			 * The index of the stash to retrieve.
 			 */
-			index: NonNullable<Git.Stash['index']>;
+			index: NonNullable<Git.Stash['index']>
 		}
 		| {
 			/**
 			 * The name of the stash to retrieve.
 			 */
-			name: NonNullable<Git.Stash['name']>;
+			name: NonNullable<Git.Stash['name']>
 		}
-	);
+	)
 }
