@@ -29,13 +29,17 @@ export const getRemotes = () => {
 		const remoteMapUrls = (
 			remoteMap.get( 'urls' ) || new Map() as Git.Remote.Urls
 		)
+		
+		
+		const parts		= formattedUrl.split( ' ' )
+		const parsedType= ( parts.at( 1 )?.replace( /\(|\)/g, '' ) || 'fetch' ) as Git.Remote.Type
+		const type		= ! remoteMapUrls.has( parsedType ) ? parsedType : parsedType === 'fetch' ? 'push' : 'fetch'
+		const url		= parts.at( 0 )
 
-		const parts	= formattedUrl.split( ' ' )
-		const type	= ( parts.pop()?.replace( /\(|\)/g, '' ) || 'fetch' ) as Git.Remote.Type
-		const url	= parts.shift()
 		if ( ! url ) return null
 
 		remoteMapUrls.set( type, url )
+
 		remoteMap.set( 'name', name )
 		remoteMap.set( 'urls', remoteMapUrls )
 
@@ -125,12 +129,12 @@ export const getStashList = () => (
 		.map( entry => {
 			if ( ! entry ) return null
 
-			const chunks	= entry.split( ': ' )
-			const index		= Number( chunks.at( 0 )?.split( '@{' ).pop()?.split( '}' )[ 0 ] )
+			const chunks	= entry.split( ': ' )			
+			const index		= Number( chunks.at( 0 )!.split( '@{' ).pop()!.split( '}' ).at( 0 ) || 'invalid' )
 			if ( isNaN( index ) ) return null
 
-			const branch	= chunks.at( 1 )?.split( ' ' ).pop() || 'main'
-			const name		= chunks.at( 2 ) || null
+			const branch	= ( ! chunks.at( 2 ) ? null : chunks.at( 1 )?.split( ' ' ).pop() ) || 'main'
+			const name		= chunks.at( 2 ) || chunks.at( 1 )?.split( ' ' ).pop() || null
 
 			const stash: Git.Stash = {
 				index,
