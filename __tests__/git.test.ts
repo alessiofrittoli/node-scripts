@@ -50,10 +50,7 @@ describe( 'Git', () => {
 		} )
 	} )
 
-	afterEach( () => {
-		jest.clearAllMocks()
-		jest.restoreAllMocks()
-	} )
+	afterEach( () => jest.resetAllMocks().resetModules() )
 
 
 	describe( 'getRemotes', () => {

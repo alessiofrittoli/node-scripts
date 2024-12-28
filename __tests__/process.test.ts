@@ -2,19 +2,24 @@ import { getProcessRoot, getProcessOptions } from '@/process'
 
 describe( 'Process', () => {
 
+	const originalEnv	= process.env
+	const originalArgv	= process.argv
+	const defaultArgv	= [ '/usr/local/bin/node', '/path/to/the/executed/script.js' ]
+
+	beforeEach( () => {
+		process.argv	= [ ...defaultArgv ]
+		process.env		= { ...originalEnv }
+	} )
+
+	afterEach( () => {
+		process.argv	= originalArgv
+		process.env		= originalEnv
+
+		jest.resetAllMocks().resetModules()
+	} )
+
 	describe( 'getProcessRoot', () => {
-		const originalEnv = process.env
-	
-		beforeEach( () => {
-			jest.resetModules()
-			process.env = { ...originalEnv }
-		} )
-	
-		afterEach( () => {
-			process.env = originalEnv
-		} )
-	
-	
+			
 		it( 'returns INIT_CWD if it is set', () => {
 			process.env.INIT_CWD = '/mock/init/cwd'
 			expect( getProcessRoot() ).toBe( '/mock/init/cwd' )
@@ -31,19 +36,6 @@ describe( 'Process', () => {
 	} )
 	
 	describe( 'getProcessOptions', () => {
-
-		const originalArgv = process.argv
-		const defaultArgv = [ '/usr/local/bin/node', '/path/to/the/executed/script.js' ]
-	
-		beforeEach( () => {
-			jest.resetModules()
-			process.argv = [ ...defaultArgv ]			
-		} )
-	
-		afterEach( () => {
-			process.argv = originalArgv
-		} )
-
 
 		it( 'maps the first argument to --executable', () => {
 			const options = getProcessOptions()

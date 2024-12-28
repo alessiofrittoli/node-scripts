@@ -5,29 +5,25 @@ import { getPackageJson, isExternalPackage } from '@/package'
 jest.mock( 'fs' )
 jest.mock( 'path' )
 
+const readFileSync	= fs.readFileSync as jest.Mock
+const pathResolve	= path.resolve as jest.Mock
 
 describe( 'Package', () => {
 
-	
-	const readFileSync	= fs.readFileSync as jest.Mock
-	const pathResolve	= path.resolve as jest.Mock
-	
 	const mockRoot			= '/mock/root'
 	const mockPackage		= { name: 'mock-package', version: '0.0.0' }
 	const externalPackage	= { name: 'external-package', version: '0.0.0' }
 	const packageFilepath	= `${ mockRoot }/package.json`
+
+	beforeEach( () => {
+		readFileSync.mockReturnValue( JSON.stringify( mockPackage ) )
+		pathResolve.mockReturnValue( packageFilepath )
+	} )
+
+	afterEach( () => jest.resetAllMocks().resetModules() )
 	
 	
 	describe( 'getPackageJson', () => {
-	
-		beforeEach( () => {
-			readFileSync.mockReturnValue( JSON.stringify( mockPackage ) )
-			pathResolve.mockReturnValue( packageFilepath )
-		} )
-	
-		afterEach( () => {
-			jest.clearAllMocks()
-		} )
 	
 		it( 'read and parse the package.json file', () => {
 			const result = getPackageJson( mockRoot )
@@ -47,17 +43,6 @@ describe( 'Package', () => {
 	
 	
 	describe( 'isExternalPackage', () => {
-	
-	
-		beforeEach( () => {
-			readFileSync.mockReturnValue( JSON.stringify( mockPackage ) )
-			pathResolve.mockReturnValue( packageFilepath )
-		} )
-	
-		afterEach( () => {
-			jest.clearAllMocks()
-		} )
-	
 	
 		it( 'returns false if the script is running in the same project', () => {
 			const result = isExternalPackage( { root: mockRoot, name: mockPackage.name } )
