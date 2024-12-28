@@ -7,6 +7,19 @@ Version 2.1.0
 ### Table of Contents
 
 - [Getting started](#getting-started)
+- [API Reference](#api-reference)
+	- [Post-Install scripts](#post-install-scripts)
+		- [TypeScript Type Reference Management](#typescript-type-reference-management)
+			- [Type Reference Interfaces](#type-reference-interfaces)
+				- [`CommonOptions`](#commonoptions)
+				- [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+			- [Type Reference Functions](#type-reference-functions)
+				- [`createReferenceFile`](#createreferencefile)
+				- [`updateTsConfig`](#updatetsconfig)
+				- [`addTypesReference`](#addtypesreference)
+			- [Add Types Reference Example usage](#add-types-reference-example-usage)
+	- [Publish Scripts](#publish-scripts)
+		- [Publish](#publish)
 - [Security](#security)
 - [Credits](#made-with-)
 
@@ -28,52 +41,19 @@ pnpm i @alessiofrittoli/node-scripts
 
 ---
 
-### Types API Reference
-
-#### `AddTypesReferenceOptions`
-
-<details>
-
-<summary>Properties</summary>
-
-| Property     | Type     | Default | Description |
-|--------------|----------|---------|-------------|
-| `name`       | `string` | - | The project name currently executing the script. |
-| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The *.d.ts output file name. |
-
-</details>
-
-#### Package
-#### Publish
-#### NodeJS
-#### Git
-
 ### API Reference
 
 #### Post-Install scripts
 
 ##### TypeScript Type Reference Management
 
-The `addTypesReference` function allows you to create and manage TypeScript reference files and update the related `tsconfig.json` file for a project installing your node_module.
+The `addTypesReference` function allows you to create and manage TypeScript reference files and update the related `tsconfig.json` file for a project installing your node module.
 
 Below are the detailed descriptions of the interfaces and functions included.
 
-###### Table of Contents
-
-- Interfaces
-	- `CommonOptions`
-- Functions
-	- `createReferenceFile`
-	- `updateTsConfig`
-	- `addTypesReference`
-
-###### Interfaces
+###### Type Reference Interfaces
 
 ###### `CommonOptions`
-
-Extends: `Package`
-
-- See [Package](#package) interface in [Types API Reference](#types-api-reference) section.
 
 <details>
 
@@ -87,11 +67,30 @@ Extends: `Package`
 
 </details>
 
-###### Functions
+---
+
+###### `AddTypesReferenceOptions`
+
+<details>
+
+<summary>Properties</summary>
+
+| Property     | Type     | Default | Description |
+|--------------|----------|---------|-------------|
+| `name`       | `string` | - | The project name currently executing the script. |
+| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The *.d.ts output file name. |
+
+</details>
+
+---
+
+###### Type Reference Functions
 
 ###### `createReferenceFile`
 
 Creates or updates a reference file with type definitions for a project.
+
+<details>
 
 **Parameters**
 
@@ -109,9 +108,15 @@ Creates or updates a reference file with type definitions for a project.
 
 `Error` - Throws an error if there is an issue creating or updating the file.
 
+</details>
+
 ###### `updateTsConfig`
 
 Updates the tsconfig.json file by adding the specified output file to the `include` array.
+
+<details>
+
+**Parameters**
 
 | Parameter    | Type            | Description |
 |--------------|-----------------|-------------|
@@ -127,11 +132,17 @@ Updates the tsconfig.json file by adding the specified output file to the `inclu
 
 `Error` - Throws an error if the tsconfig.json file cannot be read or updated.
 
+</details>
+
 ###### `addTypesReference`
 
 Adds a TypeScript reference file and updates the tsconfig.json for the project installing your node module.
 
 If the `options.outputFile` already exists, it will be updated with the new package reference if not already in there.
+
+<details>
+
+**Parameters**
 
 | Parameter    | Type            | Description |
 |--------------|-----------------|-------------|
@@ -147,9 +158,13 @@ If the `options.outputFile` already exists, it will be updated with the new pack
 
 Exit the process with code `1` on failure.
 
-<details>
+</details>
 
-<summary>Example usage</summary>
+---
+
+###### Add Types Reference Example usage
+
+<details>
 
 Add the `postinstall` script in your `package.json` file which will execute the script once your package get installed in an external project.
 
@@ -300,25 +315,6 @@ require( '@alessiofrittoli/node-scripts/publish' )
 
 </details>
 
----
-
-#### Internal Utility functions
-
-##### GIT functions
-
----
-
-##### `package.json` functions
-
----
-
-##### Node.js Process functions
-
----
-
-
----
----
 ---
 
 <!-- ### Development
