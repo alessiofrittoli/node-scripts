@@ -7,6 +7,19 @@ Version 2.1.0
 ### Table of Contents
 
 - [Getting started](#getting-started)
+- [API Reference](#api-reference)
+	- [Post-Install scripts](#post-install-scripts)
+		- [TypeScript Type Reference Management](#typescript-type-reference-management)
+			- [Type Reference Interfaces](#type-reference-interfaces)
+				- [`CommonOptions`](#commonoptions)
+				- [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+			- [Type Reference Functions](#type-reference-functions)
+				- [`createReferenceFile`](#createreferencefile)
+				- [`updateTsConfig`](#updatetsconfig)
+				- [`addTypesReference`](#addtypesreference)
+			- [Add Types Reference Example usage](#add-types-reference-example-usage)
+	- [Publish Scripts](#publish-scripts)
+		- [Publish](#publish)
 - [Security](#security)
 - [Credits](#made-with-)
 
@@ -25,6 +38,282 @@ or using `pnpm`
 ```bash
 pnpm i @alessiofrittoli/node-scripts
 ```
+
+---
+
+### API Reference
+
+#### Post-Install scripts
+
+##### TypeScript Type Reference Management
+
+The `addTypesReference` function allows you to create and manage TypeScript reference files and update the related `tsconfig.json` file for a project installing your node module.
+
+Below are the detailed descriptions of the interfaces and functions included.
+
+###### Type Reference Interfaces
+
+###### `CommonOptions`
+
+<details>
+
+<summary>Properties</summary>
+
+| Property     | Type     | Description |
+|--------------|----------|-------------|
+| `root`       | `string` | The root directory of the project which is installing your node module. |
+| `name`       | `string` | The name of your node module. |
+| `outputFile` | `string` | The output file name. |
+
+</details>
+
+---
+
+###### `AddTypesReferenceOptions`
+
+<details>
+
+<summary>Properties</summary>
+
+| Property     | Type     | Default | Description |
+|--------------|----------|---------|-------------|
+| `name`       | `string` | - | The project name currently executing the script. |
+| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The *.d.ts output file name. |
+
+</details>
+
+---
+
+###### Type Reference Functions
+
+###### `createReferenceFile`
+
+Creates or updates a reference file with type definitions for a project.
+
+<details>
+
+**Parameters**
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `CommonOptions` | Common options for the reference file creation. |
+
+- See [CommonOptions](#commonoptions) interface.
+
+**Returns**
+
+`void`
+
+**Throws**
+
+`Error` - Throws an error if there is an issue creating or updating the file.
+
+</details>
+
+###### `updateTsConfig`
+
+Updates the tsconfig.json file by adding the specified output file to the `include` array.
+
+<details>
+
+**Parameters**
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `CommonOptions` | Common options for the reference file creation. |
+
+- See [CommonOptions](#commonoptions) interface.
+
+**Returns**
+
+`void`
+
+**Throws**
+
+`Error` - Throws an error if the tsconfig.json file cannot be read or updated.
+
+</details>
+
+###### `addTypesReference`
+
+Adds a TypeScript reference file and updates the tsconfig.json for the project installing your node module.
+
+If the `options.outputFile` already exists, it will be updated with the new package reference if not already in there.
+
+<details>
+
+**Parameters**
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `AddTypesReferenceOptions` | The options for adding the types reference. |
+
+- See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
+
+**Returns**
+
+`void`
+
+**Error**
+
+Exit the process with code `1` on failure.
+
+</details>
+
+---
+
+###### Add Types Reference Example usage
+
+<details>
+
+Add the `postinstall` script in your `package.json` file which will execute the script once your package get installed in an external project.
+
+```json
+{
+	// ...
+	"files": [
+		// ...,
+		"path-to-my-scripts" // ensure folder is published to `npm`
+	],
+	"scripts": {
+		// ...
+		"postinstall": "node path-to-my-scripts/ts-setup.js"
+	}
+}
+```
+
+Then in your `ts-setup.js` file simply import the script and execute it with a few options.
+
+```ts
+// path-to-my-scripts/ts-setup.js
+const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
+const project = require( '../../package.json' )
+
+addTypesReference( {
+	name: project.name,
+	outputFile: `${ project.name }.d.ts`, // optional
+} )
+```
+
+Or you can statically pass a `outputFile` to add all your scoped packages in a single file.
+
+```ts
+// path-to-my-scripts/ts-setup.js
+const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
+const project = require( '../../package.json' )
+
+addTypesReference( {
+	name: project.name,
+	outputFile: 'my-package-scope-env.d.ts',
+} )
+```
+
+</details>
+
+---
+
+#### Publish scripts
+
+##### `publish`
+
+The `publish` function automates the process of building, tagging, and optionally publishing a project to npm.
+
+<details>
+
+<summary>Process Options</summary>
+
+| Option           | Type                   | Default                 | Description |
+|------------------|------------------------|-------------------------|-------------|
+| `--version`      | `string`               | Value from package.json | The version to release. Retrieved from package.json if omitted. |
+| `--verbose`      | `boolean \| undefined` | `false`                 | Enables detailed logging. |
+| `--origin`, `-o` | `string`               | 'origin'                | The Git origin for pushing tags. |
+| `--npm`          | `boolean \| undefined` | `false`                 | Indicates whether to publish the package to npm. |
+| `--access`       | `public \| restricted` | 'public'                | Sets npm access level (public or restricted). |
+
+</details>
+
+---
+
+<details>
+
+<summary>Performed steps</summary>
+
+<ol>
+<li>
+Retrieve package.json:
+
+- Attempts to load and parse the `package.json` file.
+- Exits the process with code "1" if the file is unavailable or invalid.
+- Retrieve the version to use as fallback if no `--version` option has been provided.
+
+</li>
+<li>
+Parse Options:
+
+- Retrieves CLI options using `getProcessOptions()`.
+- Validates critical parameters such as `version` and `access`.
+
+</li>
+<li>
+Prepare Git and Build:
+
+- Stashes any uncommitted changes with a stash name (`pre-release`).
+- Executes the `pnpm build` command.
+- Create the Git Tag as `v{version}`
+- Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
+
+</li>
+<li>
+Publish to npm (Optional):
+
+- Publishes the package using `pnpm publish` if the `--npm` flag is set.
+
+</li>
+<li>
+Restore Stash:
+
+- Restores the stashed changes if any were saved during the process.
+
+</li>
+<li>
+Verbose Logging:
+
+- Logs details of the publish process if the `--verbose` flag is set.
+
+</li>
+</ol>
+
+</details>
+
+---
+
+<details>
+
+<summary>Example usage</summary>
+
+Add the `release` script in your `package.json` file so you can easly run from your terminal.
+
+```json
+{
+	// ...
+	"scripts": {
+		// ...
+		"release": "node path-to-my-scripts/publish.js --verbose --npm --access restricted"
+	}
+}
+```
+
+Then in your `publish.js` file simply import the script and execute it.
+
+⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
+
+```ts
+// path-to-my-scripts/publish.js
+require( '@alessiofrittoli/node-scripts/publish' )
+	.publish()
+```
+
+</details>
 
 ---
 
