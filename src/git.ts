@@ -126,25 +126,50 @@ export const getStashList = () => (
 	execSync( 'git stash list' )
 		.toString()
 		.split( '\n' )
-		.map( entry => {
-			if ( ! entry ) return null
-
-			const chunks	= entry.split( ': ' )			
-			const index		= Number( chunks.at( 0 )!.split( '@{' ).pop()!.split( '}' ).at( 0 ) || 'invalid' )
-			if ( isNaN( index ) ) return null
-
-			const branch	= ( ! chunks.at( 2 ) ? null : chunks.at( 1 )?.split( ' ' ).pop() ) || 'main'
-			const name		= chunks.at( 2 ) || chunks.at( 1 )?.split( ' ' ).pop() || null
-
-			const stash: Git.Stash = {
-				index,
-				branch,
-				name,
-			}
-			
-			return stash
-		} )
+		.map( formatStash )
 		.filter( Boolean ) as Git.Stash[]
+)
+
+
+/**
+ * Formats a given stash string into an object containing index, branch, and name.
+ *
+ * @param stash - The stash string to format.
+ * @returns An object containing the index, branch, and name of the stash, or null if the stash is invalid.
+ *
+ * @example
+ * ```ts
+ * console.log( formatStash( 'stash@{0}: WIP on main: 1234567 Commit message' ) )
+ * // Outputs: { index: 0, branch: 'main', name: '1234567 Commit message' }
+ * ```
+ *
+ * @remarks
+ * The function expects the stash string to be in the format "stash@{index}: branch: name".
+ * If the stash string is invalid or the index is not a number, the function returns null.
+ */
+export const formatStash = ( stash: string ) => {
+	if ( ! stash ) return null
+
+	const chunks	= stash.split( ': ' )			
+	const index		= Number( chunks.at( 0 )!.split( '@{' ).pop()!.split( '}' ).at( 0 ) || 'invalid' )
+	if ( isNaN( index ) ) return null
+
+	const branch	= ( ! chunks.at( 2 ) ? null : chunks.at( 1 )?.split( ' ' ).pop() ) || 'main'
+	const name		= chunks.at( 2 ) || chunks.at( 1 )?.split( ' ' ).pop() || null
+	
+	return { index, branch, name } as Git.Stash
+}
+
+
+
+/**
+ * Formats a list of git stashes.
+ *
+ * @param stashes - An array of strings representing git stashes.
+ * @returns An array of formatted git stashes.
+ */
+export const formatStashList = ( stashes: string[] ) => (
+	stashes.map( formatStash )
 )
 
 

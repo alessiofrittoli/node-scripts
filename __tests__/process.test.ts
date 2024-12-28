@@ -58,11 +58,11 @@ describe( 'Process', () => {
 		} )
 	
 		
-		it( 'maps options without values to null', () => {
+		it( 'maps options without values to true', () => {
 			process.argv = [ ...defaultArgv, '--option1', '--option2', 'value2' ]
 			const options = getProcessOptions()
 			expect( options.has( '--option1' ) ).toBe( true )
-			expect( options.get( '--option1' ) ).toBeNull()
+			expect( options.get( '--option1' ) ).toBe( true )
 			expect( options.get( '--option2' ) ).toBe( 'value2' )
 		} )
 	} )
