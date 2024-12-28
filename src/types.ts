@@ -87,9 +87,9 @@ export namespace NodeJS
 		 * Type representing a value in the process arguments.
 		 * 
 		 * @template T - The type of the argument value, defaults to `string`.
-		 * @type T | null - The argument value can be of type `T` or `null`.
+		 * @type T | true - The argument value can be of type `T` or `true`.
 		 */
-		export type ArgvValue<T = string> = T | null
+		export type ArgvValue<T = string> = T | true
 	}
 }
 

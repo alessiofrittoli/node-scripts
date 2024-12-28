@@ -43,11 +43,9 @@ export const getProcessOptions = <K, V extends NodeJS.Process.ArgvValue>() => (
 						const nextOption = options[ index + 1 ]
 						if ( ! option.isValue ) {
 							if ( nextOption?.isValue ) {
-								// map.set( option.value, nextOption.value )
 								return [ option.value, nextOption.value ]
 							}
-							// map.set( option.value, null )
-							return [ option.value, null ]
+							return [ option.value, true ]
 						}
 					}
 				}

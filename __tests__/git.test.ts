@@ -1,5 +1,5 @@
 import { execSync as processExecSync } from 'child_process'
-import { getDefaltRemote, getDefaultRemoteAndBranch, getRemotes, getStashBy, getStashList } from '@/git'
+import { formatStash, formatStashList, getDefaltRemote, getDefaultRemoteAndBranch, getRemotes, getStashBy, getStashList } from '@/git'
 
 const stdOut = ( input: string | Array<string> ) => (
 	Array.isArray( input )
@@ -50,10 +50,7 @@ describe( 'Git', () => {
 		} )
 	} )
 
-	afterEach( () => {
-		jest.clearAllMocks()
-		jest.restoreAllMocks()
-	} )
+	afterEach( () => jest.resetAllMocks().resetModules() )
 
 
 	describe( 'getRemotes', () => {
@@ -273,17 +270,81 @@ describe( 'Git', () => {
 
 	describe( 'getStashBy', () => {
 
-		it( 'returns a stashe by stash index', () => {
+		it( 'returns a stash by stash index', () => {
 			const stash = getStashBy( { index: 2 } )
 			expect( stash?.name ).toBe( 'stash-3' )
 			expect( stash?.branch ).toBe( 'another-branch' )
 		} )
 
 
-		it( 'returns a stashe by stash name', () => {
+		it( 'returns a stash by stash name', () => {
 			const stash = getStashBy( { name: 'stash-2' } )
 			expect( stash?.index ).toBe( 1 )
 			expect( stash?.branch ).toBe( 'master' )
+		} )
+
+	} )
+
+
+	describe( 'formatStash', () => {
+
+		it( 'formats a valid stash string into an object', () => {
+			expect( formatStash( 'stash@{0}: WIP on main: 1234567 Commit message' ) ).toEqual( {
+				index	: 0,
+				branch	: 'main',
+				name	: '1234567 Commit message',
+			} )
+		} )
+
+		it( 'returns null for an invalid stash string', () => {
+			expect( formatStash( 'invalid stash string' ) ).toBeNull()
+		} )
+
+		it( 'defaults branch to `main` if no branch name is found', () => {
+			expect( formatStash( 'stash@{0}: : 1234567 Commit message' ) ).toEqual( {
+				index	: 0,
+				branch	: 'main',
+				name	: '1234567 Commit message',
+			} )
+		} )
+
+		it( 'returns null if the index is not a number', () => {
+			expect(
+				formatStash( 'stash@{invalid}: WIP on main: 1234567 Commit message' )
+			).toBeNull()
+		} )
+
+	} )
+
+
+	describe( 'formatStashList', () => {
+
+		it( 'formats a list of valid stash strings into an array of objects', () => {
+			const stashStrings = [
+				'stash@{0}: WIP on main: 1234567 Commit message',
+				'stash@{1}: WIP on feature-branch: 89abcdef Another commit message'
+			]
+
+			expect( formatStashList( stashStrings ) ).toEqual( [
+				{
+					index	: 0,
+					branch	: 'main',
+					name	: '1234567 Commit message',
+				},
+				{
+					index	: 1,
+					branch	: 'feature-branch',
+					name	: '89abcdef Another commit message',
+				}
+			] )
+		} )
+
+		it( 'returns an array with null elements for invalid stash strings', () => {
+			const stashStrings = [
+				'invalid stash string',
+				'stash@{invalid}: WIP on main: 1234567 Commit message'
+			]
+			expect( formatStashList( stashStrings ) ).toEqual( [ null, null ] )
 		} )
 
 	} )

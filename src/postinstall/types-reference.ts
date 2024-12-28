@@ -52,7 +52,7 @@ const createReferenceFile = ( options: CommonOptions ) => {
 			console.log( { package: name, message: `The "${ outputFile }" file already exists and it has been edited with new type references.` } )
 			return
 		} catch ( cause ) {
-			throw new Error( `An error occured while editing "${ outputFile }" in your project. Some global types may not working as expect.`, { cause } )
+			throw new Error( `An error occured while editing "${ outputFile }" in your project. Some global types may not work as expected.`, { cause } )
 		}
 
 	}
@@ -60,11 +60,11 @@ const createReferenceFile = ( options: CommonOptions ) => {
 	const output = [ data, comment ].join( '\n' )
 
 	try {
-		fs.writeFileSync( referencesFilePath, output )
+		fs.writeFileSync( referencesFilePath, Buffer.from( output ) )
 		console.log( { package: name, message: `"${ outputFile }" has been created at the root of your project.` } )
 		return true
 	} catch ( cause ) {
-		throw new Error( `An error occured while creating "${ outputFile }" at the root of your project. Some global types may not working as expect.`, { cause } )
+		throw new Error( `An error occurred while creating "${ outputFile }" at the root of your project. Some global types may not work as expected.`, { cause } )
 	}
 
 }
@@ -91,14 +91,14 @@ const updateTsConfig = ( options: CommonOptions ) => {
 		const tsconfigPath = path.resolve( root, configFilename )
 		const tsconfig = (
 			JSON.parse(
-				fs.readFileSync( path.resolve( root, configFilename ) ).toString()
+				fs.readFileSync( tsconfigPath ).toString()
 			)
 		)
-		const include = 'include' in tsconfig ? tsconfig.include : []
+		tsconfig.include ||= []
+		const { include } = tsconfig
 
 		if ( Array.isArray( include ) && ! include.includes( outputFile ) ) {
 			include.push( outputFile )
-			tsconfig.include = include
 			try {
 				fs.writeFileSync( tsconfigPath, Buffer.from( JSON.stringify( tsconfig, undefined, '\t' ) ) )
 				console.log( { package: name, message: `"${ outputFile }" added to \`include\` property of your "${ configFilename }" file.` } )
