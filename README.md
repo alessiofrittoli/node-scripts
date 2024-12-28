@@ -151,7 +151,7 @@ Exit the process with code `1` on failure.
 
 <summary>Example usage</summary>
 
-Add the `postinstall` script in your `package.json` file which will execute the scritp once your package get installed in an external project.
+Add the `postinstall` script in your `package.json` file which will execute the script once your package get installed in an external project.
 
 ```json
 {
@@ -167,7 +167,7 @@ Add the `postinstall` script in your `package.json` file which will execute the 
 }
 ```
 
-Then in your `ts-setup.js` file simply import the script and execute it with a few options:
+Then in your `ts-setup.js` file simply import the script and execute it with a few options.
 
 ```ts
 // path-to-my-scripts/ts-setup.js
@@ -198,6 +198,107 @@ addTypesReference( {
 ---
 
 #### Publish scripts
+
+##### `publish`
+
+The `publish` function automates the process of building, tagging, and optionally publishing a project to npm.
+
+<details>
+
+<summary>Process Options</summary>
+
+| Option           | Type                   | Default                 | Description |
+|------------------|------------------------|-------------------------|-------------|
+| `--version`      | `string`               | Value from package.json | The version to release. Retrieved from package.json if omitted. |
+| `--verbose`      | `boolean \| undefined` | `false`                 | Enables detailed logging. |
+| `--origin`, `-o` | `string`               | 'origin'                | The Git origin for pushing tags. |
+| `--npm`          | `boolean \| undefined` | `false`                 | Indicates whether to publish the package to npm. |
+| `--access`       | `public \| restricted` | 'public'                | Sets npm access level (public or restricted). |
+
+</details>
+
+---
+
+<details>
+
+<summary>Performed steps</summary>
+
+<ol>
+<li>
+Retrieve package.json:
+
+- Attempts to load and parse the `package.json` file.
+- Exits the process with code "1" if the file is unavailable or invalid.
+- Retrieve the version to use as fallback if no `--version` option has been provided.
+
+</li>
+<li>
+Parse Options:
+
+- Retrieves CLI options using `getProcessOptions()`.
+- Validates critical parameters such as `version` and `access`.
+
+</li>
+<li>
+Prepare Git and Build:
+
+- Stashes any uncommitted changes with a stash name (`pre-release`).
+- Executes the `pnpm build` command.
+- Create the Git Tag as `v{version}`
+- Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
+
+</li>
+<li>
+Publish to npm (Optional):
+
+- Publishes the package using `pnpm publish` if the `--npm` flag is set.
+
+</li>
+<li>
+Restore Stash:
+
+- Restores the stashed changes if any were saved during the process.
+
+</li>
+<li>
+Verbose Logging:
+
+- Logs details of the publish process if the `--verbose` flag is set.
+
+</li>
+</ol>
+
+</details>
+
+---
+
+<details>
+
+<summary>Example usage</summary>
+
+Add the `release` script in your `package.json` file so you can easly run from your terminal.
+
+```json
+{
+	// ...
+	"scripts": {
+		// ...
+		"release": "node path-to-my-scripts/publish.js --verbose --npm --access restricted"
+	}
+}
+```
+
+Then in your `publish.js` file simply import the script and execute it.
+
+⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
+
+```ts
+// path-to-my-scripts/publish.js
+require( '@alessiofrittoli/node-scripts/publish' )
+	.publish()
+```
+
+</details>
 
 ---
 
