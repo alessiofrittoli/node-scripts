@@ -28,6 +28,198 @@ pnpm i @alessiofrittoli/node-scripts
 
 ---
 
+### Types API Reference
+
+#### `AddTypesReferenceOptions`
+
+<details>
+
+<summary>Properties</summary>
+
+| Property     | Type     | Default | Description |
+|--------------|----------|---------|-------------|
+| `name`       | `string` | - | The project name currently executing the script. |
+| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The *.d.ts output file name. |
+
+</details>
+
+#### Package
+#### Publish
+#### NodeJS
+#### Git
+
+### API Reference
+
+#### Post-Install scripts
+
+##### TypeScript Type Reference Management
+
+The `addTypesReference` function allows you to create and manage TypeScript reference files and update the related `tsconfig.json` file for a project installing your node_module.
+
+Below are the detailed descriptions of the interfaces and functions included.
+
+###### Table of Contents
+
+- Interfaces
+	- `CommonOptions`
+- Functions
+	- `createReferenceFile`
+	- `updateTsConfig`
+	- `addTypesReference`
+
+###### Interfaces
+
+###### `CommonOptions`
+
+Extends: `Package`
+
+- See [Package](#package) interface in [Types API Reference](#types-api-reference) section.
+
+<details>
+
+<summary>Properties</summary>
+
+| Property     | Type     | Description |
+|--------------|----------|-------------|
+| `root`       | `string` | The root directory of the project which is installing your node module. |
+| `name`       | `string` | The name of your node module. |
+| `outputFile` | `string` | The output file name. |
+
+</details>
+
+###### Functions
+
+###### `createReferenceFile`
+
+Creates or updates a reference file with type definitions for a project.
+
+**Parameters**
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `CommonOptions` | Common options for the reference file creation. |
+
+- See [CommonOptions](#commonoptions) interface.
+
+**Returns**
+
+`void`
+
+**Throws**
+
+`Error` - Throws an error if there is an issue creating or updating the file.
+
+###### `updateTsConfig`
+
+Updates the tsconfig.json file by adding the specified output file to the `include` array.
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `CommonOptions` | Common options for the reference file creation. |
+
+- See [CommonOptions](#commonoptions) interface.
+
+**Returns**
+
+`void`
+
+**Throws**
+
+`Error` - Throws an error if the tsconfig.json file cannot be read or updated.
+
+###### `addTypesReference`
+
+Adds a TypeScript reference file and updates the tsconfig.json for the project installing your node module.
+
+If the `options.outputFile` already exists, it will be updated with the new package reference if not already in there.
+
+| Parameter    | Type            | Description |
+|--------------|-----------------|-------------|
+| `options`    | `AddTypesReferenceOptions` | The options for adding the types reference. |
+
+- See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
+
+**Returns**
+
+`void`
+
+**Error**
+
+Exit the process with code `1` on failure.
+
+<details>
+
+<summary>Example usage</summary>
+
+Add the `postinstall` script in your `package.json` file which will execute the scritp once your package get installed in an external project.
+
+```json
+{
+	// ...
+	"files": [
+		// ...,
+		"path-to-my-scripts" // ensure folder is published to `npm`
+	],
+	"scripts": {
+		// ...
+		"postinstall": "node path-to-my-scripts/ts-setup.js"
+	}
+}
+```
+
+Then in your `ts-setup.js` file simply import the script and execute it with a few options:
+
+```ts
+// path-to-my-scripts/ts-setup.js
+const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
+const project = require( '../../package.json' )
+
+addTypesReference( {
+	name: project.name,
+	outputFile: `${ project.name }.d.ts`, // optional
+} )
+```
+
+Or you can statically pass a `outputFile` to add all your scoped packages in a single file.
+
+```ts
+// path-to-my-scripts/ts-setup.js
+const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
+const project = require( '../../package.json' )
+
+addTypesReference( {
+	name: project.name,
+	outputFile: 'my-package-scope-env.d.ts',
+} )
+```
+
+</details>
+
+---
+
+#### Publish scripts
+
+---
+
+#### Internal Utility functions
+
+##### GIT functions
+
+---
+
+##### `package.json` functions
+
+---
+
+##### Node.js Process functions
+
+---
+
+
+---
+---
+---
+
 <!-- ### Development
 
 #### Install depenendencies

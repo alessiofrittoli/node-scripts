@@ -1,9 +1,10 @@
 import fs from 'fs'
 import path from 'path'
-import type { AddTypesReferenceOptions } from './types'
-import { Package } from '@/types'
+
 import { getProcessRoot } from '@/process'
 import { isExternalPackage } from '@/package'
+import type { AddTypesReferenceOptions } from './types'
+import type { Package } from '@/types'
 
 /**
  * Common options for types-reference scripts.
@@ -24,9 +25,9 @@ interface CommonOptions extends Package
  * @param options.name - The name of the project.
  * @param options.outputFile - The name of the output file to create or update.
  * @returns `void` if the operation was successful.
- * @throws {Error} Throws an error if there is an issue creating or updating the file.
+ * @throws Throws an Error if there is an issue creating or updating the file.
  */
-const createReferenceFile = ( options: CommonOptions ) => {
+export const createReferenceFile = ( options: CommonOptions ) => {
 
 	const { root }			= options
 	const { name }			= options
@@ -78,9 +79,9 @@ const createReferenceFile = ( options: CommonOptions ) => {
  * @param options.name - The name of the project.
  * @param options.outputFile - The file to be added to the `include` array in the `tsconfig.json`.
  *
- * @throws {Error} Throws an error if the `tsconfig.json` file cannot be read or updated.
+ * @throws Throws an Error if the `tsconfig.json` file cannot be read or updated.
  */
-const updateTsConfig = ( options: CommonOptions ) => {
+export const updateTsConfig = ( options: CommonOptions ) => {
 
 	const { root }	= options
 	const { name }	= options
