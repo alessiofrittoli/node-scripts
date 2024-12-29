@@ -87,9 +87,37 @@ export namespace NodeJS
 		 * Type representing a value in the process arguments.
 		 * 
 		 * @template T - The type of the argument value, defaults to `string`.
-		 * @type T | true - The argument value can be of type `T` or `true`.
+		 * @type T | 'true' - The argument value can be of type `T` or `'true'`.
 		 */
-		export type ArgvValue<T = string> = T | true
+		export type ArgvValue<T = string> = T | 'true'
+	}
+
+	export interface GlobalPackage
+	{
+		version?: string
+		overridden: boolean
+		problems?: string[]
+	}
+
+
+	export interface LocalPackage extends GlobalPackage
+	{
+		resolved: string
+		extraneous?: boolean
+	}
+
+	export namespace Deps
+	{
+		export interface Global
+		{
+			name?: string
+			dependencies?: Record<string, GlobalPackage>
+		}
+
+		export interface Local extends Global, Omit<LocalPackage, 'extraneous' | 'overridden' | 'resolved'>
+		{
+			dependencies?: Record<string, LocalPackage>
+		}
 	}
 }
 

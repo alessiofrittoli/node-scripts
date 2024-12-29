@@ -2,6 +2,7 @@ import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson } from '../package'
 import { getDefaltRemote, getStashBy } from '../git'
+import { isPackageInstalled } from '../npm'
 import type { Publish } from '../types'
 
 
@@ -37,6 +38,20 @@ export const publish = () => {
 	const publishToNpm	= options.has( '--npm' )
 	const access		= options.get( '--access' ) || 'public'
 	const stashName		= 'pre-release'
+	
+	let run: 'npm run' | 'pnpm' = 'npm run'
+
+	try {
+		run = ! isPackageInstalled( 'pnpm', true ) ? 'npm run' : 'pnpm'
+	} catch ( err ) {
+		const error = err as Error
+		console.log( {
+			package	: project?.name,
+			message	: 'Couldn\'t check if `pnpm` is installed. Using `npm` instead.',
+			error	: error.message,
+		} )
+	}
+	
 
 	if ( ! version ) {
 		console.error( 'No `version` found in `package.json`' )
@@ -62,11 +77,11 @@ export const publish = () => {
 
 	try {
 		execSync( `git stash save -u -m "${ stashName }"`, { stdio: 'inherit' } )
-		execSync( 'pnpm build', { stdio: 'inherit' } )
+		execSync( `${ run } build`, { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
 		if ( publishToNpm ) {
-			execSync( `pnpm publish --access ${ access }`, { stdio: 'inherit' } )
+			execSync( `npm publish --access ${ access }`, { stdio: 'inherit' } )
 		}
 
 		const stash = getStashBy( { name: stashName } )
