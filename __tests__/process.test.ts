@@ -62,7 +62,7 @@ describe( 'Process', () => {
 			process.argv = [ ...defaultArgv, '--option1', '--option2', 'value2' ]
 			const options = getProcessOptions()
 			expect( options.has( '--option1' ) ).toBe( true )
-			expect( options.get( '--option1' ) ).toBe( true )
+			expect( options.get( '--option1' ) ).toBe( 'true' )
 			expect( options.get( '--option2' ) ).toBe( 'value2' )
 		} )
 	} )

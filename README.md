@@ -258,7 +258,7 @@ Parse Options:
 Prepare Git and Build:
 
 - Stashes any uncommitted changes with a stash name (`pre-release`).
-- Executes the `pnpm build` command.
+- Executes the `npm run build` or `pnpm build` command (if `pnpm` is globally installed).
 - Create the Git Tag as `v{version}`
 - Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
 
@@ -266,7 +266,7 @@ Prepare Git and Build:
 <li>
 Publish to npm (Optional):
 
-- Publishes the package using `pnpm publish` if the `--npm` flag is set.
+- Publishes the package using `npm publish` if the `--npm` flag is set.
 
 </li>
 <li>

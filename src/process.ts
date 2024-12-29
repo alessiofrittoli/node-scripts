@@ -45,7 +45,7 @@ export const getProcessOptions = <K, V extends NodeJS.Process.ArgvValue>() => (
 							if ( nextOption?.isValue ) {
 								return [ option.value, nextOption.value ]
 							}
-							return [ option.value, true ]
+							return [ option.value, 'true' ]
 						}
 					}
 				}

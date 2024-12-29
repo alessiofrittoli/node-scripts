@@ -4,6 +4,7 @@ import * as processModule from '@/process'
 import * as packageModule from '@/package'
 import * as gitModule from '@/git'
 import type { Git, NodeJS } from '@/types'
+import { mockGlobalPackages, mockGlobalPackagesWithPnpm } from '../../src/lib/mock/publish.mock'
 
 jest
 	.mock( 'child_process', () => ( {
@@ -45,10 +46,20 @@ describe( 'publish', () => {
 
 
 	beforeEach( () => {
+
+		mockExecSync.mockImplementation( ( command: string ) => {
+			switch ( command ) {
+				case 'npm list --json -g':
+					return Buffer.from( JSON.stringify( mockGlobalPackages ) )
+				default:
+					// throw new Error( `command not found: ${ command }` )
+			}
+		} )
+
 		jest.spyOn( processModule, 'getProcessRoot' )
 			.mockReturnValue( mockRoot )
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map( [ [ '--verbose', true ] ] ) )
+			.mockReturnValue( new Map( [ [ '--verbose', 'true' ] ] ) )
 
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( { version: '1.0.0', name: 'test-package' } )
@@ -79,13 +90,30 @@ describe( 'publish', () => {
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git stash save -u -m "pre-release"', { stdio: 'inherit' } )
 		expect( execSync )
-			.toHaveBeenCalledWith( 'pnpm build', { stdio: 'inherit' } )
+			.toHaveBeenCalledWith( 'npm run build', { stdio: 'inherit' } )
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git tag v1.0.0', { stdio: 'inherit' } )
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git stash pop --index 0', { stdio: 'inherit' } )
+	} )
+
+
+	it( 'executes the publish process with `pnpm`', () => {
+
+		mockExecSync.mockImplementation( ( command: string ) => {
+			switch ( command ) {
+				case 'npm list --json -g':
+					return Buffer.from( JSON.stringify( mockGlobalPackagesWithPnpm ) )
+				default:
+			}
+		} )
+
+		publish()
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'pnpm build', { stdio: 'inherit' } )
 	} )
 
 
@@ -105,7 +133,7 @@ describe( 'publish', () => {
 		
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--verbose', true ],
+				[ '--verbose', 'true' ],
 				[ '--version', '1.0.0-alpha.1' ]
 			] ) )
 
@@ -123,29 +151,29 @@ describe( 'publish', () => {
 	it( 'publish to npm if --npm flag is set', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map( [
-				[ '--verbose', true ],
-				[ '--npm', true ],
+				[ '--verbose', 'true' ],
+				[ '--npm', 'true' ],
 			] ) )
 
 		publish()
 
 		expect( execSync )
-			.toHaveBeenCalledWith( 'pnpm publish --access public', { stdio: 'inherit' } )
+			.toHaveBeenCalledWith( 'npm publish --access public', { stdio: 'inherit' } )
 	} )
 
 
 	it( 'publish to npm with restricted access', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--verbose', true ],
-				[ '--npm', true ],
+				[ '--verbose', 'true' ],
+				[ '--npm', 'true' ],
 				[ '--access', 'restricted' ],
 			] ) )
 
 		publish()
 
 		expect( execSync )
-			.toHaveBeenCalledWith( 'pnpm publish --access restricted', { stdio: 'inherit' } )
+			.toHaveBeenCalledWith( 'npm publish --access restricted', { stdio: 'inherit' } )
 	} )
 
 
@@ -172,7 +200,7 @@ describe( 'publish', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
 				[ '--access', 'invalid' ],
-				[ '--npm', true ],
+				[ '--npm', 'true' ],
 			] ) )
 
 		expect( () => publish() ).toThrow( 'process.exit: 1' )
