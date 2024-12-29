@@ -1,6 +1,6 @@
 # Node.js Scripts 🫧
 
-Version 2.2.0
+Version 2.2.1
 
 ## Utility library with common Node.js scripts
 
