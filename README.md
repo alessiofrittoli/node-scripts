@@ -38,8 +38,8 @@
   - [Build the source code](#build-the-source-code)
   - [ESLint](#eslint)
   - [Jest](#jest)
-  - [Contributing](#contributing)
-  - [Security](#security)
+- [Contributing](#contributing)
+- [Security](#security)
 - [Credits](#made-with-)
 
 ---
