@@ -1,13 +1,15 @@
 # Node.js Scripts 🫧
 
-[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
+[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![Socket Status][socket-badge]][socket-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
 
-[![GitHubSponsor][sponsor-badge]][sponsor-url]
+[![GitHub Sponsor][sponsor-badge]][sponsor-url]
 
 [version-badge]: https://img.shields.io/npm/v/%40alessiofrittoli%2Fnode-scripts
 [npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fnode-scripts
 [coverage-badge]: https://coveralls.io/repos/github/alessiofrittoli/node-scripts/badge.svg
 [coverage-url]: https://coveralls.io/github/alessiofrittoli/node-scripts
+[socket-badge]: https://socket.dev/api/badge/npm/package/@alessiofrittoli/node-scripts
+[socket-url]: https://socket.dev/npm/package/@alessiofrittoli/node-scripts/overview
 [downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fnode-scripts.svg
 [deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-scripts
 [deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts
