@@ -1,6 +1,19 @@
 # Node.js Scripts 🫧
 
-Version 2.2.1
+[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
+
+[![Sponsor on GitHub][sponsor-badge]][sponsor-url]
+
+[version-badge]: https://img.shields.io/npm/v/%40alessiofrittoli%2Fnode-scripts
+[npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fnode-scripts
+[coverage-badge]: https://coveralls.io/repos/github/alessiofrittoli/node-scripts/badge.svg
+[coverage-url]: https://coveralls.io/github/alessiofrittoli/node-scripts
+[downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fnode-scripts.svg
+[deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-scripts
+[deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts
+
+[sponsor-badge]: https://img.shields.io/static/v1?label=Sponsor%20this%20project&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
+[sponsor-url]: https://github.com/sponsors/alessiofrittoli
 
 ## Utility library with common Node.js scripts
 
@@ -8,19 +21,25 @@ Version 2.2.1
 
 - [Getting started](#getting-started)
 - [API Reference](#api-reference)
-	- [Post-Install scripts](#post-install-scripts)
-		- [TypeScript Type Reference Management](#typescript-type-reference-management)
-			- [Type Reference Interfaces](#type-reference-interfaces)
-				- [`CommonOptions`](#commonoptions)
-				- [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
-			- [Type Reference Functions](#type-reference-functions)
-				- [`createReferenceFile`](#createreferencefile)
-				- [`updateTsConfig`](#updatetsconfig)
-				- [`addTypesReference`](#addtypesreference)
-			- [Add Types Reference Example usage](#add-types-reference-example-usage)
-	- [Publish Scripts](#publish-scripts)
-		- [Publish](#publish)
-- [Security](#security)
+  - [Post-Install scripts](#post-install-scripts)
+    - [TypeScript Type Reference Management](#typescript-type-reference-management)
+      - [Type Reference Interfaces](#type-reference-interfaces)
+        - [`CommonOptions`](#commonoptions)
+        - [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+      - [Type Reference Functions](#type-reference-functions)
+        - [`createReferenceFile`](#createreferencefile)
+        - [`updateTsConfig`](#updatetsconfig)
+        - [`addTypesReference`](#addtypesreference)
+      - [Add Types Reference Example usage](#add-types-reference-example-usage)
+  - [Publish Scripts](#publish-scripts)
+    - [Publish](#publish)
+- [Development](#development)
+  - [Install depenendencies](#install-depenendencies)
+  - [Build the source code](#build-the-source-code)
+  - [ESLint](#eslint)
+  - [Jest](#jest)
+  - [Contributing](#contributing)
+  - [Security](#security)
 - [Credits](#made-with-)
 
 ---
@@ -170,15 +189,15 @@ Add the `postinstall` script in your `package.json` file which will execute the 
 
 ```json
 {
-	// ...
-	"files": [
-		// ...,
-		"path-to-my-scripts" // ensure folder is published to `npm`
-	],
-	"scripts": {
-		// ...
-		"postinstall": "node path-to-my-scripts/ts-setup.js"
-	}
+    // ...
+    "files": [
+        // ...,
+        "path-to-my-scripts" // ensure folder is published to `npm`
+    ],
+    "scripts": {
+        // ...
+        "postinstall": "node path-to-my-scripts/ts-setup.js"
+    }
 }
 ```
 
@@ -190,8 +209,8 @@ const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstal
 const project = require( '../../package.json' )
 
 addTypesReference( {
-	name: project.name,
-	outputFile: `${ project.name }.d.ts`, // optional
+    name: project.name,
+    outputFile: `${ project.name }.d.ts`, // optional
 } )
 ```
 
@@ -203,8 +222,8 @@ const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstal
 const project = require( '../../package.json' )
 
 addTypesReference( {
-	name: project.name,
-	outputFile: 'my-package-scope-env.d.ts',
+    name: project.name,
+    outputFile: 'my-package-scope-env.d.ts',
 } )
 ```
 
@@ -295,11 +314,11 @@ Add the `release` script in your `package.json` file so you can easly run from y
 
 ```json
 {
-	// ...
-	"scripts": {
-		// ...
-		"release": "node path-to-my-scripts/publish.js --verbose --npm --access restricted"
-	}
+    // ...
+    "scripts": {
+        // ...
+        "release": "node path-to-my-scripts/publish.js --verbose --npm --access restricted"
+    }
 }
 ```
 
@@ -310,14 +329,14 @@ Then in your `publish.js` file simply import the script and execute it.
 ```ts
 // path-to-my-scripts/publish.js
 require( '@alessiofrittoli/node-scripts/publish' )
-	.publish()
+    .publish()
 ```
 
 </details>
 
 ---
 
-<!-- ### Development
+### Development
 
 #### Install depenendencies
 
@@ -331,9 +350,9 @@ or using `pnpm`
 pnpm i
 ```
 
-#### Build your source code
+#### Build the source code
 
-Run the following command to build code for distribution.
+Run the following command to test and build code for distribution.
 
 ```bash
 pnpm build
@@ -353,7 +372,7 @@ Run all the defined test suites by running the following:
 
 ```bash
 # Run tests and watch file changes.
-pnpm test
+pnpm test:watch
 
 # Run tests and watch file changes with jest-environment-jsdom.
 pnpm test:jsdom
@@ -379,17 +398,22 @@ An HTTP server is then started to serve coverage files from `./coverage` folder.
 ⚠️ You may see a blank page the first time you run this command. Simply refresh the browser to see the updates.
 
 ```bash
-pnpm test:coverage
+test:coverage:serve
 ```
 
 ---
 
 ### Contributing
 
-Contributions are truly welcome!\
+Contributions are truly welcome!
+
 Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information on how to start contributing to this project.
 
---- -->
+Help keep this project up to date with [GitHub Sponsor][sponsor-url].
+
+[![Sponsor on GitHub][sponsor-badge]][sponsor-url]
+
+---
 
 ### Security
 
@@ -398,30 +422,30 @@ If you believe you have found a security vulnerability, we encourage you to **_r
 ### Made with ☕
 
 <table style='display:flex;gap:20px;'>
-	<tbody>
-		<tr>
-			<td>
-				<img src='https://avatars.githubusercontent.com/u/35973186' style='width:60px;border-radius:50%;object-fit:contain;'>
-			</td>
-			<td>
-				<table style='display:flex;gap:2px;flex-direction:column;'>
-					<tbody>
-						<tr>
-							<td>
-								<a href='https://github.com/alessiofrittoli' target='_blank' rel='noopener'>Alessio Frittoli</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<small>
-									<a href='https://alessiofrittoli.it' target='_blank' rel='noopener'>https://alessiofrittoli.it</a> |
-									<a href='mailto:info@alessiofrittoli.it' target='_blank' rel='noopener'>info@alessiofrittoli.it</a>
-								</small>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-	</tbody>
+  <tbody>
+    <tr>
+      <td>
+        <img alt="avatar" src='https://avatars.githubusercontent.com/u/35973186' style='width:60px;border-radius:50%;object-fit:contain;'>
+      </td>
+      <td>
+        <table style='display:flex;gap:2px;flex-direction:column;'>
+          <tbody>
+              <tr>
+                <td>
+                  <a href='https://github.com/alessiofrittoli' target='_blank' rel='noopener'>Alessio Frittoli</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <small>
+                    <a href='https://alessiofrittoli.it' target='_blank' rel='noopener'>https://alessiofrittoli.it</a> |
+                    <a href='mailto:info@alessiofrittoli.it' target='_blank' rel='noopener'>info@alessiofrittoli.it</a>
+                  </small>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
 </table>
