@@ -2,7 +2,7 @@
 
 [![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
 
-[![Sponsor on GitHub][sponsor-badge]][sponsor-url]
+[![GitHubSponsor][sponsor-badge]][sponsor-url]
 
 [version-badge]: https://img.shields.io/npm/v/%40alessiofrittoli%2Fnode-scripts
 [npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fnode-scripts
@@ -12,7 +12,7 @@
 [deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-scripts
 [deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts
 
-[sponsor-badge]: https://img.shields.io/static/v1?label=Sponsor%20this%20project&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
+[sponsor-badge]: https://img.shields.io/static/v1?label=Fund%20this%20package&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
 [sponsor-url]: https://github.com/sponsors/alessiofrittoli
 
 ## Utility library with common Node.js scripts
@@ -411,7 +411,7 @@ Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information o
 
 Help keep this project up to date with [GitHub Sponsor][sponsor-url].
 
-[![Sponsor on GitHub][sponsor-badge]][sponsor-url]
+[![GitHubSponsor][sponsor-badge]][sponsor-url]
 
 ---
 
