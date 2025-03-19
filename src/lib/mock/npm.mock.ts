@@ -11,6 +11,11 @@ export const mockGlobalPackages: NodeJS.Deps.Global = {
 }
 
 
+export const noDepsGlobalPackages: NodeJS.Deps.Global = {
+	name: 'lib',
+}
+
+
 export const mockLocalPackages: NodeJS.Deps.Local = {
 	name			: 'package-name',
 	version			: '0.0.0',

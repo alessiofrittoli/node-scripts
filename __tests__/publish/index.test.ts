@@ -21,7 +21,7 @@ jest
 		const gitModule = jest.requireActual( '@/git' )
 		return ( {
 			formatStash		: gitModule.formatStash,
-			getDefaltRemote	: jest.fn(),
+			getDefaultRemote	: jest.fn(),
 			getStashBy		: jest.fn(),
 		} )
 	} )
@@ -64,7 +64,7 @@ describe( 'publish', () => {
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( { version: '1.0.0', name: 'test-package' } )
 		
-		jest.spyOn( gitModule, 'getDefaltRemote' )
+		jest.spyOn( gitModule, 'getDefaultRemote' )
 			.mockReturnValue( mockDefaultRemote )
 		jest.spyOn( gitModule, 'getStashBy' )
 			.mockReturnValue( mockStash )
@@ -117,9 +117,43 @@ describe( 'publish', () => {
 	} )
 
 
+	it( 'executes the publish process with `npm` if `isPackageInstalled` throws an error', () => {
+
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--version', '1.0.0-alpha.1' ]
+			] ) )
+		
+		jest.spyOn( packageModule, 'getPackageJson' )
+			.mockReturnValue( undefined )
+
+		mockExecSync.mockImplementation( ( command: string ) => {
+			switch ( command ) {
+				case 'npm list --json -g':
+					throw new Error( 'SyntaxError: JSON Parse error: Unexpected identifier "invalid"' )
+				default:
+			}
+		} )
+
+		const consoleLogSpy = jest.spyOn( console, 'log' )
+
+		publish()
+
+		expect( consoleLogSpy )
+			.toHaveBeenCalledWith( {
+				package	: undefined,
+				message	: 'Couldn\'t check if `pnpm` is installed. Using `npm` instead.',
+				error	: 'SyntaxError: JSON Parse error: Unexpected identifier "invalid"',
+			} )
+		
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm run build', { stdio: 'inherit' } )
+	} )
+
+
 	it( 'push the git tag to "origin" if no --origin has been set or found in the current git configuration', () => {
 
-		jest.spyOn( gitModule, 'getDefaltRemote' )
+		jest.spyOn( gitModule, 'getDefaultRemote' )
 			.mockReturnValue( undefined )
 
 		publish()
@@ -187,10 +221,16 @@ describe( 'publish', () => {
 	} )
 
 
-	it( 'exit with code "1" if no `--version` option is provided and no version is found in package.json', () => {
+	it( 'exit with code "1" if no `--version` option is provided and no version is found in package.json or package.json cannot be found', () => {
 		jest.spyOn( packageModule, 'getPackageJson' ).mockReturnValue( {} )
 		jest.spyOn( processModule, 'getProcessOptions' ).mockReturnValue( new Map() )
 
+		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( process.exit ).toHaveBeenCalledWith( 1 )
+
+		jest.spyOn( packageModule, 'getPackageJson' )
+			.mockReturnValue( undefined )
+		
 		expect( () => publish() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 	} )

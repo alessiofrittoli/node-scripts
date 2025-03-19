@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson } from '../package'
-import { getDefaltRemote, getStashBy } from '../git'
+import { getDefaultRemote, getStashBy } from '../git'
 import { isPackageInstalled } from '../npm'
 import type { Publish } from '../types'
 
@@ -71,7 +71,7 @@ export const publish = () => {
 	}
 
 	if ( ! origin ) {
-		const remote = getDefaltRemote()
+		const remote = getDefaultRemote()
 		origin = remote?.get( 'name' ) || 'origin'
 	}
 
