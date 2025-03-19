@@ -1,6 +1,6 @@
 import { execSync as processExecSync } from 'child_process'
 import { getPackage, isPackageInstalled } from '@/npm'
-import { mockGlobalPackages, mockLocalPackages } from '../src/lib/mock/npm.mock'
+import { mockGlobalPackages, mockLocalPackages, noDepsGlobalPackages } from '../src/lib/mock/npm.mock'
 
 jest.mock( 'child_process' )
 const execSync = processExecSync as jest.Mock
@@ -13,6 +13,7 @@ describe( 'NPM', () => {
 
 	const localPackages		= JSON.stringify( mockLocalPackages )
 	const globalPackages	= JSON.stringify( mockGlobalPackages )
+	const noDepsPackages	= JSON.stringify( noDepsGlobalPackages )
 
 	describe( 'getPackage', () => {
 		it( 'retrieves local npm packages', () => {
@@ -57,6 +58,12 @@ describe( 'NPM', () => {
 			execSync.mockReturnValueOnce( Buffer.from( globalPackages ) )
 
 			expect( isPackageInstalled( 'non-existent-package', true ) ).toBe( false )
+		} )
+		
+		
+		it( 'returns `false` if `dependencies` is not defined in package details returned by `getPackage`', () => {
+			execSync.mockReturnValueOnce( Buffer.from( noDepsPackages ) )
+			expect( isPackageInstalled( 'some-package' ) ).toBe( false )
 		} )
 	} )
 } )

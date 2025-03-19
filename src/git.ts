@@ -86,7 +86,7 @@ export const getDefaultRemoteAndBranch = () => (
  *
  * @returns The default remote, or the first remote in the list if no default is found.
  */
-export const getDefaltRemote = () => {
+export const getDefaultRemote = () => {
 
 	const [ remote ] = getDefaultRemoteAndBranch()
 	
@@ -154,7 +154,7 @@ export const formatStash = ( stash: string ) => {
 	const index		= Number( chunks.at( 0 )!.split( '@{' ).pop()!.split( '}' ).at( 0 ) || 'invalid' )
 	if ( isNaN( index ) ) return null
 
-	const branch	= ( ! chunks.at( 2 ) ? null : chunks.at( 1 )?.split( ' ' ).pop() ) || 'main'
+	const branch	= ( ! chunks.at( 2 ) ? null : chunks.at( 1 )!.split( ' ' ).pop() ) || 'main'
 	const name		= chunks.at( 2 ) || chunks.at( 1 )?.split( ' ' ).pop() || null
 	
 	return { index, branch, name } as Git.Stash

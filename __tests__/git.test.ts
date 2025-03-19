@@ -1,5 +1,6 @@
 import { execSync as processExecSync } from 'child_process'
-import { formatStash, formatStashList, getDefaltRemote, getDefaultRemoteAndBranch, getRemotes, getStashBy, getStashList } from '@/git'
+import { formatStash, formatStashList, getStashBy, getStashList } from '@/git'
+import { getDefaultRemote, getDefaultRemoteAndBranch, getRemotes } from '@/git'
 
 const stdOut = ( input: string | Array<string> ) => (
 	Array.isArray( input )
@@ -150,9 +151,9 @@ describe( 'Git', () => {
 	} )
 
 
-	describe( 'getDefaltRemote', () => {
+	describe( 'getDefaultRemote', () => {
 		it( 'returns the default remote map', () => {
-			const remote = getDefaltRemote()
+			const remote = getDefaultRemote()
 			const remoteUrls = remote?.get( 'urls' )
 			expect( remote?.get( 'name' ) ).toBe( 'origin' )
 			expect( remoteUrls?.get( 'fetch' ) ).toBe( 'git@github.com:username/project-name.git' )
@@ -179,7 +180,7 @@ describe( 'Git', () => {
 				}
 			} )
 
-			const remote = getDefaltRemote()
+			const remote = getDefaultRemote()
 			expect( remote?.get( 'name' ) ).toBe( 'another-remote' )
 			
 		} )
@@ -197,7 +198,7 @@ describe( 'Git', () => {
 				}
 			} )
 
-			const remote = getDefaltRemote()
+			const remote = getDefaultRemote()
 			expect( remote ).toBeUndefined()
 			
 		} )
@@ -298,6 +299,10 @@ describe( 'Git', () => {
 
 		it( 'returns null for an invalid stash string', () => {
 			expect( formatStash( 'invalid stash string' ) ).toBeNull()
+		} )
+		
+		it( 'returns null if an invalid stash index is provided', () => {
+			expect( formatStash( 'stash@{}: WIP on main: 1234567 Commit message' ) ).toBeNull()
 		} )
 
 		it( 'defaults branch to `main` if no branch name is found', () => {
