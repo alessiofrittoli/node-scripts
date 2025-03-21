@@ -376,22 +376,11 @@ Run all the defined test suites by running the following:
 # Run tests and watch file changes.
 pnpm test:watch
 
-# Run tests and watch file changes with jest-environment-jsdom.
-pnpm test:jsdom
-
 # Run tests in a CI environment.
 pnpm test:ci
-
-# Run tests in a CI environment with jest-environment-jsdom.
-pnpm test:ci:jsdom
 ```
 
-You can eventually run specific suits like so:
-
-```bash
-pnpm test:jest
-pnpm test:jest:jsdom
-```
+- See [`package.json`](./package.json) file scripts for more info.
 
 Run tests with coverage.
 
@@ -413,7 +402,7 @@ Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information o
 
 Help keep this project up to date with [GitHub Sponsor][sponsor-url].
 
-[![GitHubSponsor][sponsor-badge]][sponsor-url]
+[![GitHub Sponsor][sponsor-badge]][sponsor-url]
 
 ---
 
