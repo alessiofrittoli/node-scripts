@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/node-scripts",
-	"version": "2.4.0",
+	"version": "2.5.0",
 	"description": "Utility library with common Node.js scripts",
 	"author": {
 		"name": "Alessio Frittoli",
@@ -73,7 +73,7 @@
 		"//3b": "************************ UNIT TESTS COVERAGE ************************",
 		"//3c": "*********************************************************************",
 		"test:coverage": "pnpm test:watch --coverage",
-		"test:ci:coverage": "pnpm test:ci --coverage",
+		"test:coverage:ci": "pnpm test:ci --coverage",
 		"test:serve-coverage": "http-server ./coverage/lcov-report --gzip true -p 0 -o --silent",
 		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\"",
 		"//4a": "*********************************************************************",
