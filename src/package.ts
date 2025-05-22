@@ -45,5 +45,5 @@ export const isExternalPackage = ( { root, name }: Package ) => {
  */
 export const getPreReleaseTag = ( version: string ): string | null => {
 	const match = version.match( /-(\w+)\.\d+/ )
-	return match ? match[ 1 ] || null : null
+	return match ? match[ 1 ]! : null
 }

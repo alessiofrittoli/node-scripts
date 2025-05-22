@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { getPackageJson, isExternalPackage } from '@/package'
+import { getPackageJson, getPreReleaseTag, isExternalPackage } from '@/package'
 
 jest.mock( 'fs' )
 jest.mock( 'path' )
@@ -64,6 +64,34 @@ describe( 'Package', () => {
 				() => isExternalPackage( { root: mockRoot, name: mockPackage.name } )
 			).toThrow( 'Couldn\'t check if script is running in an external project.' )
 		} )
+	} )
+
+
+	describe( 'getPreReleaseTag', () => {
+		
+		it( 'returns the pre-release tag from the given version', () => {
+
+			expect( getPreReleaseTag( '1.0.0-alpha.1' ) )
+				.toBe( 'alpha' )
+			
+			expect( getPreReleaseTag( '1.0.0-beta.1' ) )
+				.toBe( 'beta' )
+			
+			expect( getPreReleaseTag( '1.0.0-rc.1' ) )
+				.toBe( 'rc' )
+
+		} )
+
+		it( 'returns null if there is no tag or a non-semantic version is given', () => {
+
+			expect( getPreReleaseTag( '1.0.0' ) )
+				.toBeNull()
+			
+			expect( getPreReleaseTag( 'invalid' ) )
+				.toBeNull()
+
+		} )
+
 	} )
 
 } )
