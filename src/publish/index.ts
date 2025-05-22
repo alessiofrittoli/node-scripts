@@ -27,7 +27,7 @@ export const publish = () => {
 	try {
 		project = getPackageJson( getProcessRoot() )
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	} catch (error) {
+	} catch ( error ) {
 		//
 	}
 
