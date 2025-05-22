@@ -197,3 +197,14 @@ export const getStashBy = ( options: Git.GetStashByOptions ) => (
 				: stash.index === options.index
 		) )
 )
+
+
+/**
+ * Pop a stash entry by stash index.
+ * 
+ * @param index The numeric stash index.
+ * @returns The `git stash pop` command `stdout`.
+ */
+export const popStashByIndex = ( index: number ) => (
+	execSync( `git stash pop --index ${ index }`, { stdio: 'inherit' } )
+)
