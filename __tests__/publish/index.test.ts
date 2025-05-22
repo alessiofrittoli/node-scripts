@@ -20,9 +20,10 @@ jest
 	.mock( '@/git', () => {
 		const gitModule = jest.requireActual( '@/git' )
 		return ( {
-			formatStash		: gitModule.formatStash,
+			formatStash			: gitModule.formatStash,
 			getDefaultRemote	: jest.fn(),
-			getStashBy		: jest.fn(),
+			getStashBy			: jest.fn(),
+			popStashByIndex		: jest.fn(),
 		} )
 	} )
 
@@ -43,6 +44,11 @@ describe( 'publish', () => {
 	const mockStash = (
 		gitModule.formatStash( 'stash@{0}: On master: pre-release' ) || undefined
 	)
+	const mockPopStash = Buffer.from( [
+		'Already up to date.',
+		'no changes added to commit (use "git add" and/or "git commit -a")',
+		'Dropped refs/stash@{0} (d566fd42b6785efe70f2c83abcc2374fc054088c)'
+	].join( '\n' ) )
 
 
 	beforeEach( () => {
@@ -68,6 +74,8 @@ describe( 'publish', () => {
 			.mockReturnValue( mockDefaultRemote )
 		jest.spyOn( gitModule, 'getStashBy' )
 			.mockReturnValue( mockStash )
+		jest.spyOn( gitModule, 'popStashByIndex' )
+			.mockReturnValue( mockPopStash )
 
 
 		jest.spyOn( console, 'log' ).mockImplementation( () => {} )
@@ -89,15 +97,18 @@ describe( 'publish', () => {
 		publish()
 
 		expect( execSync )
-			.toHaveBeenCalledWith( 'git stash save -u -m "pre-release"', { stdio: 'inherit' } )
+			.toHaveBeenNthCalledWith( 1, 'npm list --json -g' )
 		expect( execSync )
-			.toHaveBeenCalledWith( 'npm run build', { stdio: 'inherit' } )
+			.toHaveBeenNthCalledWith( 2, 'git stash save -u -m "pre-release"', { stdio: 'inherit' } )
 		expect( execSync )
-			.toHaveBeenCalledWith( 'git tag v1.0.0', { stdio: 'inherit' } )
+			.toHaveBeenNthCalledWith( 3, 'npm run build', { stdio: 'inherit' } )
 		expect( execSync )
-			.toHaveBeenCalledWith( 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
+			.toHaveBeenNthCalledWith( 4, 'git tag v1.0.0', { stdio: 'inherit' } )
 		expect( execSync )
-			.toHaveBeenCalledWith( 'git stash pop --index 0', { stdio: 'inherit' } )
+			.toHaveBeenNthCalledWith( 5, 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
+		
+		expect( gitModule.popStashByIndex )
+			.toHaveBeenCalledWith( 0 )
 
 	} )
 

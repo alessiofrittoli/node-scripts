@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson } from '../package'
-import { getDefaultRemote, getStashBy } from '../git'
+import { getDefaultRemote, getStashBy, popStashByIndex } from '../git'
 import { isPackageInstalled } from '../npm'
 import type { Publish } from '../types'
 
@@ -80,13 +80,15 @@ export const publish = () => {
 		execSync( `${ run } build`, { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
+		
 		if ( publishToNpm ) {
 			execSync( `npm publish --access ${ access }`, { stdio: 'inherit' } )
 		}
 
 		const stash = getStashBy( { name: stashName } )
+
 		if ( stash ) {
-			execSync( `git stash pop --index ${ stash.index }`, { stdio: 'inherit' } )
+			popStashByIndex( stash.index )
 		}
 
 		if ( verbose ) {
