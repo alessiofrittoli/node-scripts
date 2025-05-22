@@ -1,5 +1,5 @@
 import { execSync as processExecSync } from 'child_process'
-import { formatStash, formatStashList, getStashBy, getStashList } from '@/git'
+import { formatStash, formatStashList, getStashBy, getStashList, popStashByIndex } from '@/git'
 import { getDefaultRemote, getDefaultRemoteAndBranch, getRemotes } from '@/git'
 
 const stdOut = ( input: string | Array<string> ) => (
@@ -354,5 +354,43 @@ describe( 'Git', () => {
 
 	} )
 
+
+	describe( 'popStashByIndex', () => {
+
+		it( 'applies and pop a git stash by stash index', () => {
+
+			execSync.mockImplementation( ( command: string ) => {
+
+				if ( ! command.startsWith( 'git stash pop --index' ) ) {
+					throw new Error( 'You can only test `git stash pop --index` commands here.' )
+				}
+
+				return stdOut( [
+					'Already up to date.',
+					'On branch master',
+					'Your branch is up to date with \'origin/master\'.',
+					'Changes not staged for commit:',
+					'\t(use "git add <file>..." to update what will be committed)',
+					'\t(use "git restore <file>..." to discard changes in working directory)',
+					'\t\tmodified:\tsrc/file1.ts',
+					'\t\tmodified:\tsrc/folder/file2.ts\n',
+					'no changes added to commit (use "git add" and/or "git commit -a")',
+					'Dropped refs/stash@{0} (d566fd42b6785efe70f2c83abcc2374fc054088c)'
+				] )
+
+			} )
+			
+
+			popStashByIndex( 0 )
+			popStashByIndex( 1 )
+
+			expect( execSync )
+				.toHaveBeenNthCalledWith( 1, `git stash pop --index 0`, { stdio: 'inherit' } )
+			expect( execSync )
+				.toHaveBeenNthCalledWith( 2, `git stash pop --index 1`, { stdio: 'inherit' } )
+
+		} )
+
+	} )
 
 } )
