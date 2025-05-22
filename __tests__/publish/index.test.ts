@@ -70,7 +70,7 @@ describe( 'publish', () => {
 			.mockReturnValue( mockStash )
 
 
-		// jest.spyOn( console, 'log' ).mockImplementation( () => {} )
+		jest.spyOn( console, 'log' ).mockImplementation( () => {} )
 		jest.spyOn( console, 'error' ).mockImplementation( () => {} )
 		jest.spyOn( process, 'exit' ).mockImplementation( code => {
 			throw new Error( `process.exit: ${ code }` )
@@ -82,6 +82,7 @@ describe( 'publish', () => {
 	afterEach( () => {
 		jest.resetAllMocks().resetModules()
 	} )
+
 
 	it( 'executes the publish process correctly', () => {
 
@@ -97,6 +98,7 @@ describe( 'publish', () => {
 			.toHaveBeenCalledWith( 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git stash pop --index 0', { stdio: 'inherit' } )
+
 	} )
 
 
@@ -114,6 +116,7 @@ describe( 'publish', () => {
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'pnpm build', { stdio: 'inherit' } )
+
 	} )
 
 
@@ -130,7 +133,7 @@ describe( 'publish', () => {
 		mockExecSync.mockImplementation( ( command: string ) => {
 			switch ( command ) {
 				case 'npm list --json -g':
-					throw new Error( 'SyntaxError: JSON Parse error: Unexpected identifier "invalid"' )
+					throw new Error( 'SyntaxError: JSON Parse error: Unexpected identifier "invalid" - Mock Error' )
 				default:
 			}
 		} )
@@ -143,11 +146,12 @@ describe( 'publish', () => {
 			.toHaveBeenCalledWith( {
 				package	: undefined,
 				message	: 'Couldn\'t check if `pnpm` is installed. Using `npm` instead.',
-				error	: 'SyntaxError: JSON Parse error: Unexpected identifier "invalid"',
+				error	: 'SyntaxError: JSON Parse error: Unexpected identifier "invalid" - Mock Error',
 			} )
 		
 		expect( execSync )
 			.toHaveBeenCalledWith( 'npm run build', { stdio: 'inherit' } )
+
 	} )
 
 
@@ -246,4 +250,5 @@ describe( 'publish', () => {
 		expect( () => publish() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 	} )
+
 } )
