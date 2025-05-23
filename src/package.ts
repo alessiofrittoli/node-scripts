@@ -35,3 +35,15 @@ export const isExternalPackage = ( { root, name }: Package ) => {
 		throw new Error( 'Couldn\'t check if script is running in an external project.', { cause } )
 	}
 }
+
+
+/**
+ * Get package pre-release tag.
+ * 
+ * @param version The package version.
+ * @returns The pre-release tag.
+ */
+export const getPreReleaseTag = ( version: string ): string | null => {
+	const match = version.match( /-(\w+)\.\d+/ )
+	return match ? match[ 1 ]! : null
+}
