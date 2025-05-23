@@ -14,9 +14,13 @@ jest
 		getProcessOptions	: jest.fn(),
 		getProcessRoot		: jest.fn(),
 	} ) )
-	.mock( '@/package', () => ( {
-		getPackageJson: jest.fn(),
-	} ) )
+	.mock( '@/package', () => {
+		const packageModule = jest.requireActual( '@/package' )
+		return ( {
+			getPackageJson		: jest.fn(),
+			getPreReleaseTag	: packageModule.getPreReleaseTag,
+		} )
+	} )
 	.mock( '@/git', () => {
 		const gitModule = jest.requireActual( '@/git' )
 		return ( {
@@ -135,7 +139,7 @@ describe( 'publish', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--version', '1.0.0-alpha.1' ]
+				[ '--version', '1.0.0' ]
 			] ) )
 		
 		jest.spyOn( packageModule, 'getPackageJson' )
@@ -183,7 +187,7 @@ describe( 'publish', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
 				[ '--verbose', 'true' ],
-				[ '--version', '1.0.0-alpha.1' ]
+				[ '--version', '1.0.0' ]
 			] ) )
 
 		jest.spyOn( packageModule, 'getPackageJson' )
@@ -192,7 +196,7 @@ describe( 'publish', () => {
 		publish()
 
 		expect( execSync )
-			.toHaveBeenCalledWith( 'git tag v1.0.0-alpha.1', { stdio: 'inherit' } )
+			.toHaveBeenCalledWith( 'git tag v1.0.0', { stdio: 'inherit' } )
 
 	} )
 
@@ -226,6 +230,50 @@ describe( 'publish', () => {
 	} )
 
 
+	it( 'publish pre-releases to npm', () => {
+
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--verbose', 'true' ],
+				[ '--npm', 'true' ],
+				[ '--version', '1.0.0-alpha.1' ],
+			] ) )
+		
+		publish()
+
+
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--verbose', 'true' ],
+				[ '--npm', 'true' ],
+				[ '--version', '1.0.0-beta.1' ],
+			] ) )
+
+		publish()
+
+
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--verbose', 'true' ],
+				[ '--npm', 'true' ],
+				[ '--version', '1.0.0-rc.1' ],
+			] ) )
+
+		publish()
+		
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm publish --access public --tag alpha', { stdio: 'inherit' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm publish --access public --tag beta', { stdio: 'inherit' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm publish --access public --tag rc', { stdio: 'inherit' } )
+
+	} )
+
+
 	it( 'exit with code "1" if an unexpected error occurs', () => {
 		mockExecSync.mockImplementation( command => {
 			throw new Error( `command not found: ${ command.split( ' ' ).at( 0 ) }` )
@@ -243,8 +291,16 @@ describe( 'publish', () => {
 		expect( () => publish() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 
+		
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( undefined )
+		
+		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( process.exit ).toHaveBeenCalledWith( 1 )
+		
+
+		jest.spyOn( packageModule, 'getPackageJson' )
+			.mockReturnValue( { version: true } )
 		
 		expect( () => publish() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
