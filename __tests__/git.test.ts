@@ -1,4 +1,4 @@
-import { execSync as processExecSync } from 'child_process'
+import { execSync as processExecSync, execFileSync as processExecFileSync } from 'child_process'
 import { formatStash, formatStashList, getStashBy, getStashList, popStashByIndex } from '@/git'
 import { getDefaultRemote, getDefaultRemoteAndBranch, getRemotes } from '@/git'
 
@@ -10,8 +10,10 @@ const stdOut = ( input: string | Array<string> ) => (
 
 jest.mock( 'child_process', () => ( {
 	execSync: jest.fn(),
+	execFileSync: jest.fn(),
 } ) )
 const execSync = processExecSync as jest.Mock
+const execFileSync = processExecFileSync as jest.Mock
 
 describe( 'Git', () => {
 
@@ -359,10 +361,10 @@ describe( 'Git', () => {
 
 		it( 'applies and pop a git stash by stash index', () => {
 
-			execSync.mockImplementation( ( command: string ) => {
+			execFileSync.mockImplementation( ( command: string ) => {
 
-				if ( ! command.startsWith( 'git stash pop --index' ) ) {
-					throw new Error( 'You can only test `git stash pop --index` commands here.' )
+				if ( command !== 'git' ) {
+					throw new Error( 'You can only test `git stash pop --index` commands here.', { cause: `Received command: '${ command }"` } )
 				}
 
 				return stdOut( [
@@ -384,10 +386,10 @@ describe( 'Git', () => {
 			popStashByIndex( 0 )
 			popStashByIndex( 1 )
 
-			expect( execSync )
-				.toHaveBeenNthCalledWith( 1, `git stash pop --index 0`, { stdio: 'inherit' } )
-			expect( execSync )
-				.toHaveBeenNthCalledWith( 2, `git stash pop --index 1`, { stdio: 'inherit' } )
+			expect( execFileSync )
+				.toHaveBeenNthCalledWith( 1, 'git', [ 'stash', 'pop', '--index', '0' ], { stdio: 'inherit' } )
+			expect( execFileSync )
+				.toHaveBeenNthCalledWith( 2, 'git', [ 'stash', 'pop', '--index', '1' ], { stdio: 'inherit' } )
 
 		} )
 

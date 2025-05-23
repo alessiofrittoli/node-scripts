@@ -1,4 +1,4 @@
-import { execSync } from 'child_process'
+import { execFileSync, execSync } from 'child_process'
 import type { Git } from './types'
 
 /**
@@ -206,5 +206,5 @@ export const getStashBy = ( options: Git.GetStashByOptions ) => (
  * @returns The `git stash pop` command `stdout`.
  */
 export const popStashByIndex = ( index: number ) => (
-	execSync( `git stash pop --index ${ index }`, { stdio: 'inherit' } )
+	execFileSync( 'git', [ 'stash', 'pop', '--index', index.toString() ], { stdio: 'inherit' } )
 )
