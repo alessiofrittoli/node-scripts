@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
-import { getPackageJson } from '../package'
-import { getDefaultRemote, getStashBy } from '../git'
+import { getPackageJson, getPreReleaseTag } from '../package'
+import { getDefaultRemote, getStashBy, popStashByIndex } from '../git'
 import { isPackageInstalled } from '../npm'
 import type { Publish } from '../types'
 
@@ -21,8 +21,7 @@ import type { Publish } from '../types'
  */
 export const publish = () => {
 	
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let project: Record<string, any> | null = null
+	let project: Record<string, string | Record<string, string>> | null = null
 
 	try {
 		project = getPackageJson( getProcessRoot() )
@@ -53,7 +52,7 @@ export const publish = () => {
 	}
 	
 
-	if ( ! version ) {
+	if ( ! version || typeof version !== 'string' ) {
 		console.error( 'No `version` found in `package.json`' )
 		process.exit( 1 )
 	}
@@ -76,17 +75,27 @@ export const publish = () => {
 	}
 
 	try {
+
+		const preReleaseTag = getPreReleaseTag( version )
+
 		execSync( `git stash save -u -m "${ stashName }"`, { stdio: 'inherit' } )
 		execSync( `${ run } build`, { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
+		
 		if ( publishToNpm ) {
-			execSync( `npm publish --access ${ access }`, { stdio: 'inherit' } )
+			const options = [
+				`--access ${ access }`,
+				preReleaseTag && `--tag ${ preReleaseTag }`
+			].filter( Boolean ).join( ' ' )
+
+			execSync( `npm publish ${ options }`, { stdio: 'inherit' } )
 		}
 
 		const stash = getStashBy( { name: stashName } )
+
 		if ( stash ) {
-			execSync( `git stash pop --index ${ stash.index }`, { stdio: 'inherit' } )
+			popStashByIndex( stash.index )
 		}
 
 		if ( verbose ) {
