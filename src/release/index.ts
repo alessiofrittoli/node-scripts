@@ -3,23 +3,23 @@ import { getProcessOptions, getProcessRoot } from '../process'
 import { getPackageJson, getPreReleaseTag } from '../package'
 import { getDefaultRemote, getStashBy, popStashByIndex } from '../git'
 import { isPackageInstalled } from '../npm'
-import type { Publish } from '../types'
+import type { Release } from '../types'
 
 
 /**
- * Executes the publish process for a project.
+ * Executes the release process for a project.
  *
  * This function performs the following steps:
  * 1. Retrieves the project's `package.json` file.
- * 2. Retrieves process options and sets various publish parameters.
+ * 2. Retrieves process options and sets various release parameters.
  * 3. Validates the version and access options.
  * 4. Determines the Git origin for pushing tags.
  * 5. Builds the project, creates a Git tag, pushes the tag, and optionally publishes to npm.
- * 6. Logs the publish details if verbose mode is enabled.
+ * 6. Logs the release details if verbose mode is enabled.
  *
- * @throws Will exit the process with code 1 if any critical error occurs during the publish process.
+ * @throws Will exit the process with code 1 if any critical error occurs during the release process.
  */
-export const publish = () => {
+export const release = () => {
 	
 	let project: Record<string, string | Record<string, string>> | null = null
 
@@ -30,7 +30,7 @@ export const publish = () => {
 		//
 	}
 
-	const options		= getProcessOptions() as Publish.OptionsMap
+	const options		= getProcessOptions() as Release.OptionsMap
 	const verbose		= options.has( '--verbose' )
 	const build			= options.get( '--build' ) || 'build'
 	const version		= options.get( '--version' ) || project?.version

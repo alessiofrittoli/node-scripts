@@ -6,7 +6,7 @@ export default defineConfig( {
 	entry: [
 		'src/index.ts',
 		'src/types.ts',
-		'src/publish/index.ts',
+		'src/release/index.ts',
 		'src/postinstall/index.ts'
 	],
 	format		: [ 'cjs', 'esm' ],
