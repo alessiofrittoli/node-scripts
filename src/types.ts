@@ -25,6 +25,7 @@ export namespace Publish
 		| '--origin'
 		| '--o'
 		| '--npm'
+		| '--build'
 	)
 
 	/**
@@ -35,6 +36,8 @@ export namespace Publish
 	export type OptionValue<T extends Option> = (
 		T extends '--verbose'
 		? null
+		: T extends '--build'
+		? string
 		: T extends '--access'
 		? NodeJS.Process.ArgvValue<'public' | 'restricted'>
 		: NodeJS.Process.ArgvValue
