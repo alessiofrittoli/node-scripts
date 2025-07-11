@@ -246,6 +246,7 @@ The `publish` function automates the process of building, tagging, and optionall
 | Option           | Type                   | Default                 | Description |
 |------------------|------------------------|-------------------------|-------------|
 | `--version`      | `string`               | Value from package.json | The version to release. Retrieved from package.json if omitted. |
+| `--build`        | `string`               | `build`                 | A custom build command that will build your project before publish. |
 | `--verbose`      | `boolean \| undefined` | `false`                 | Enables detailed logging. |
 | `--origin`, `-o` | `string`               | 'origin'                | The Git origin for pushing tags. |
 | `--npm`          | `boolean \| undefined` | `false`                 | Indicates whether to publish the package to npm. |
