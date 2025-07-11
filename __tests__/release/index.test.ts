@@ -1,10 +1,10 @@
 import { execSync } from 'child_process'
-import { publish } from '@/publish'
+import { release } from '@/release'
 import * as processModule from '@/process'
 import * as packageModule from '@/package'
 import * as gitModule from '@/git'
 import type { Git, NodeJS } from '@/types'
-import { mockGlobalPackages, mockGlobalPackagesWithPnpm } from '../../src/lib/mock/publish.mock'
+import { mockGlobalPackages, mockGlobalPackagesWithPnpm } from '@/lib/mock/release.mock'
 
 jest
 	.mock( 'child_process', () => ( {
@@ -33,7 +33,7 @@ jest
 
 const mockExecSync = execSync as jest.Mock
 
-describe( 'publish', () => {
+describe( 'release', () => {
 
 	const mockRoot = '/mock/root'
 	const mockDefaultRemoteUrls: Git.Remote.Urls = new Map( [
@@ -96,9 +96,9 @@ describe( 'publish', () => {
 	} )
 
 
-	it( 'executes the publish process correctly', () => {
+	it( 'executes the release process correctly', () => {
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenNthCalledWith( 1, 'npm list --json -g' )
@@ -117,7 +117,7 @@ describe( 'publish', () => {
 	} )
 
 
-	it( 'executes the publish process with `pnpm`', () => {
+	it( 'executes the release process with `pnpm`', () => {
 
 		mockExecSync.mockImplementation( ( command: string ) => {
 			switch ( command ) {
@@ -127,7 +127,7 @@ describe( 'publish', () => {
 			}
 		} )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'pnpm build', { stdio: 'inherit' } )
@@ -141,7 +141,7 @@ describe( 'publish', () => {
 				[ '--build', 'custom-build' ]
 			] ) )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'npm run custom-build', { stdio: 'inherit' } )
@@ -149,7 +149,7 @@ describe( 'publish', () => {
 	} )
 
 
-	it( 'executes the publish process with `npm` if `isPackageInstalled` throws an error', () => {
+	it( 'executes the release process with `npm` if `isPackageInstalled` throws an error', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
@@ -169,7 +169,7 @@ describe( 'publish', () => {
 
 		const consoleLogSpy = jest.spyOn( console, 'log' )
 
-		publish()
+		release()
 
 		expect( consoleLogSpy )
 			.toHaveBeenCalledWith( {
@@ -189,7 +189,7 @@ describe( 'publish', () => {
 		jest.spyOn( gitModule, 'getDefaultRemote' )
 			.mockReturnValue( undefined )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git push origin tag v1.0.0', { stdio: 'inherit' } )
@@ -207,7 +207,7 @@ describe( 'publish', () => {
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( null )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git tag v1.0.0', { stdio: 'inherit' } )
@@ -222,7 +222,7 @@ describe( 'publish', () => {
 				[ '--npm', 'true' ],
 			] ) )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'npm publish --access public', { stdio: 'inherit' } )
@@ -237,14 +237,14 @@ describe( 'publish', () => {
 				[ '--access', 'restricted' ],
 			] ) )
 
-		publish()
+		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'npm publish --access restricted', { stdio: 'inherit' } )
 	} )
 
 
-	it( 'publish pre-releases to npm', () => {
+	it( 'releases pre-releases to npm', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
@@ -253,7 +253,7 @@ describe( 'publish', () => {
 				[ '--version', '1.0.0-alpha.1' ],
 			] ) )
 		
-		publish()
+		release()
 
 
 		jest.spyOn( processModule, 'getProcessOptions' )
@@ -263,7 +263,7 @@ describe( 'publish', () => {
 				[ '--version', '1.0.0-beta.1' ],
 			] ) )
 
-		publish()
+		release()
 
 
 		jest.spyOn( processModule, 'getProcessOptions' )
@@ -273,7 +273,7 @@ describe( 'publish', () => {
 				[ '--version', '1.0.0-rc.1' ],
 			] ) )
 
-		publish()
+		release()
 		
 
 		expect( execSync )
@@ -293,7 +293,7 @@ describe( 'publish', () => {
 			throw new Error( `command not found: ${ command.split( ' ' ).at( 0 ) }` )
 		} )
 
-		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 	} )
 
@@ -302,21 +302,21 @@ describe( 'publish', () => {
 		jest.spyOn( packageModule, 'getPackageJson' ).mockReturnValue( {} )
 		jest.spyOn( processModule, 'getProcessOptions' ).mockReturnValue( new Map() )
 
-		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 
 		
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( undefined )
 		
-		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 		
 
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( { version: true } )
 		
-		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 	} )
 
@@ -328,7 +328,7 @@ describe( 'publish', () => {
 				[ '--npm', 'true' ],
 			] ) )
 
-		expect( () => publish() ).toThrow( 'process.exit: 1' )
+		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
 	} )
 

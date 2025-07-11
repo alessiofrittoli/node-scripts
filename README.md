@@ -33,8 +33,8 @@
         - [`updateTsConfig`](#updatetsconfig)
         - [`addTypesReference`](#addtypesreference)
       - [Add Types Reference Example usage](#add-types-reference-example-usage)
-  - [Publish Scripts](#publish-scripts)
-    - [Publish](#publish)
+  - [Release Scripts](#release-scripts)
+    - [Release](#release)
 - [Development](#development)
   - [Install depenendencies](#install-depenendencies)
   - [Build the source code](#build-the-source-code)
@@ -233,11 +233,11 @@ addTypesReference( {
 
 ---
 
-#### Publish scripts
+#### Release scripts
 
-##### `publish`
+##### `release`
 
-The `publish` function automates the process of building, tagging, and optionally publishing a project to npm.
+The `release` function automates the process of building, tagging, and optionally releasing a project to npm.
 
 <details>
 
@@ -300,7 +300,7 @@ Restore Stash:
 <li>
 Verbose Logging:
 
-- Logs details of the publish process if the `--verbose` flag is set.
+- Logs details of the release process if the `--verbose` flag is set.
 
 </li>
 </ol>
@@ -320,19 +320,19 @@ Add the `release` script in your `package.json` file so you can easly run from y
     // ...
     "scripts": {
         // ...
-        "release": "node path-to-my-scripts/publish.js --verbose --npm --access restricted"
+        "release": "node path-to-my-scripts/release.js --verbose --npm --access restricted"
     }
 }
 ```
 
-Then in your `publish.js` file simply import the script and execute it.
+Then in your `release.js` file simply import the script and execute it.
 
 ⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
 
 ```ts
-// path-to-my-scripts/publish.js
-require( '@alessiofrittoli/node-scripts/publish' )
-    .publish()
+// path-to-my-scripts/release.js
+require( '@alessiofrittoli/node-scripts/release' )
+    .release()
 ```
 
 </details>

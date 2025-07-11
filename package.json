@@ -42,10 +42,10 @@
 		"./types": {
 			"types": "./dist/types.d.ts"
 		},
-		"./publish": {
-			"types": "./dist/publish/index.d.ts",
-			"import": "./dist/publish/index.mjs",
-			"require": "./dist/publish/index.js"
+		"./release": {
+			"types": "./dist/release/index.d.ts",
+			"import": "./dist/release/index.mjs",
+			"require": "./dist/release/index.js"
 		},
 		"./postinstall": {
 			"types": "./dist/postinstall/index.d.ts",
@@ -62,7 +62,7 @@
 		"build:prod": "NODE_ENV=production tsup",
 		"build": "pnpm lint && pnpm test:ci && pnpm build:prod",
 		"lint": "eslint",
-		"release": "node scripts/publish.js --verbose --npm",
+		"release": "node scripts/release.js --verbose --npm",
 		"//2a": "*********************************************************************",
 		"//2b": "***************************** UNIT TESTS ****************************",
 		"//2c": "*********************************************************************",
@@ -80,7 +80,7 @@
 		"//4b": "************************ TARGETED UNIT TESTS ************************",
 		"//4c": "*********************************************************************",
 		"test:postinstall": "pnpm test:watch postinstall/*",
-		"test:publish": "pnpm test:watch publish/*",
+		"test:release": "pnpm test:watch release/*",
 		"test:git": "pnpm test:watch git.test.ts",
 		"test:npm": "pnpm test:watch npm.test.ts",
 		"test:package": "pnpm test:watch package.test.ts",
