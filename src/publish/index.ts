@@ -32,6 +32,7 @@ export const publish = () => {
 
 	const options		= getProcessOptions() as Publish.OptionsMap
 	const verbose		= options.has( '--verbose' )
+	const build			= options.get( '--build' ) || 'build'
 	const version		= options.get( '--version' ) || project?.version
 	let origin			= options.get( '--origin' ) || options.get( '--o' )
 	const publishToNpm	= options.has( '--npm' )
@@ -79,7 +80,7 @@ export const publish = () => {
 		const preReleaseTag = getPreReleaseTag( version )
 
 		execSync( `git stash save -u -m "${ stashName }"`, { stdio: 'inherit' } )
-		execSync( `${ run } build`, { stdio: 'inherit' } )
+		execSync( `${ run } ${ build }`, { stdio: 'inherit' } )
 		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
 		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
 		
