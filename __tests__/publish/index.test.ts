@@ -135,6 +135,20 @@ describe( 'publish', () => {
 	} )
 
 
+	it( 'executes custom build command', () => {
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--build', 'custom-build' ]
+			] ) )
+
+		publish()
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm run custom-build', { stdio: 'inherit' } )
+
+	} )
+
+
 	it( 'executes the publish process with `npm` if `isPackageInstalled` throws an error', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
