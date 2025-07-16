@@ -93,7 +93,8 @@ export const updateTsConfig = ( options: CommonOptions ) => {
 		const tsconfig = (
 			JSON.parse(
 				fs.readFileSync( tsconfigPath ).toString()
-			)
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			) as any
 		)
 		tsconfig.include ||= []
 		const { include } = tsconfig

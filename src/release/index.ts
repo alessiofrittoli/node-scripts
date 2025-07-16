@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import { getProcessOptions, getProcessRoot } from '../process'
-import { getPackageJson, getPreReleaseTag } from '../package'
+import { getPackageJson, getPreReleaseTag, PackageJson } from '../package'
 import { getDefaultRemote, getStashBy, popStashByIndex } from '../git'
 import { isPackageInstalled } from '../npm'
 import type { Release } from '../types'
@@ -21,7 +21,7 @@ import type { Release } from '../types'
  */
 export const release = () => {
 	
-	let project: Record<string, string | Record<string, string>> | null = null
+	let project: PackageJson | null = null
 
 	try {
 		project = getPackageJson( getProcessRoot() )
