@@ -81,6 +81,7 @@
 		"//4c": "*********************************************************************",
 		"test:postinstall": "pnpm test:watch postinstall/*",
 		"test:release": "pnpm test:watch release/*",
+		"test:fs": "pnpm test:watch fs.test.ts",
 		"test:git": "pnpm test:watch git.test.ts",
 		"test:npm": "pnpm test:watch npm.test.ts",
 		"test:package": "pnpm test:watch package.test.ts",
@@ -102,5 +103,11 @@
 		"tsup": "^8.5.0",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.36.0"
+	},
+	"dependencies": {
+		"@alessiofrittoli/abort-controller": "^0.1.0",
+		"@alessiofrittoli/event-emitter": "^1.5.0",
+		"@alessiofrittoli/exception": "^3.2.0",
+		"@alessiofrittoli/type-utils": "^1.8.0"
 	}
 }
