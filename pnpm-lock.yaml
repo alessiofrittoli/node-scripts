@@ -7,6 +7,19 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@alessiofrittoli/abort-controller':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@alessiofrittoli/event-emitter':
+        specifier: ^1.5.0
+        version: 1.5.0
+      '@alessiofrittoli/exception':
+        specifier: ^3.2.0
+        version: 3.2.0
+      '@alessiofrittoli/type-utils':
+        specifier: ^1.8.0
+        version: 1.8.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.30.1
@@ -55,6 +68,24 @@ importers:
         version: 8.36.0(eslint@9.30.1)(typescript@5.8.3)
 
 packages:
+
+  '@alessiofrittoli/abort-controller@0.1.0':
+    resolution: {integrity: sha512-bVx5XvRT33AOqFI7yvelOEsIVrs6myMzQYQujCjAX5DDRYOA0P9YuR/dVSZmxDLOs5ZKzD4z/6+zKJt1imvtEw==}
+
+  '@alessiofrittoli/chain-functions@2.3.0':
+    resolution: {integrity: sha512-kbOhe6q9jlNLpe93KDSFxh0atsw3fa9Hi6VlA2OnzA28Te6iBw7ZkwFT5FTwBx2vtlBHY9fa8t5UtTMkBR8Flg==}
+
+  '@alessiofrittoli/event-emitter@1.5.0':
+    resolution: {integrity: sha512-BZmfvyLc/ip+CgNRwvND9EBWEvCyEqvhf2bQ6xlQkRlNxmkylauJf7SuVYHjOwoo/kttGmaZdCCLmIZSXfEJ0A==}
+
+  '@alessiofrittoli/exception@3.2.0':
+    resolution: {integrity: sha512-YwkeQTXrIo1Iy1yA0htonNmiTC1CUL324dlC3GIKhulmWzTDjqZVXT8tBsBjhvdGLkCxj4MMvkdg/Oa9ucOspg==}
+
+  '@alessiofrittoli/node-scripts@2.5.0':
+    resolution: {integrity: sha512-K6o0ZJgWb8HAbiBU7ajdlNY8UsrAlcLHO2WAx9pPoxjLKC/QR/PnNE+zLgc+z1q4TefS2UsS1VsUAUjQI/Ro4g==}
+
+  '@alessiofrittoli/type-utils@1.8.0':
+    resolution: {integrity: sha512-/lRf++D3VclldSv4AuGqlX9M1Ir7WAWJHqojVHwwjIZWwwZ2ZXpN1xtzv4f7CQdXWKgl/SMUS6aH8N5Ss5pvqQ==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -2379,6 +2410,23 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@alessiofrittoli/abort-controller@0.1.0':
+    dependencies:
+      '@alessiofrittoli/exception': 3.2.0
+
+  '@alessiofrittoli/chain-functions@2.3.0': {}
+
+  '@alessiofrittoli/event-emitter@1.5.0': {}
+
+  '@alessiofrittoli/exception@3.2.0': {}
+
+  '@alessiofrittoli/node-scripts@2.5.0': {}
+
+  '@alessiofrittoli/type-utils@1.8.0':
+    dependencies:
+      '@alessiofrittoli/chain-functions': 2.3.0
+      '@alessiofrittoli/node-scripts': 2.5.0
 
   '@ampproject/remapping@2.3.0':
     dependencies:
