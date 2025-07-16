@@ -2,6 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import type { Package } from './types'
 
+export type PackageJson = (
+	& Record<string, string | Record<string, string>>
+	& { name: string }
+)
+
+
 /**
  * Reads and parses the `package.json` file from the specified root directory.
  *
@@ -12,7 +18,7 @@ import type { Package } from './types'
 export const getPackageJson = ( root: Package[ 'root' ] ) => (
 	JSON.parse(
 		fs.readFileSync( path.resolve( root, 'package.json' ) ).toString()
-	)
+	) as PackageJson
 )
 
 
