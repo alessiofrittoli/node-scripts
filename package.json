@@ -35,22 +35,44 @@
 	],
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.js"
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			},
+			"require": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			}
 		},
 		"./types": {
-			"types": "./dist/types.d.ts"
+			"import": {
+				"types": "./dist/types.d.mts",
+				"default": "./dist/types.mjs"
+			},
+			"require": {
+				"types": "./dist/types.d.ts",
+				"default": "./dist/types.js"
+			}
 		},
 		"./release": {
-			"types": "./dist/release/index.d.ts",
-			"import": "./dist/release/index.mjs",
-			"require": "./dist/release/index.js"
+			"import": {
+				"types": "./dist/release/index.d.mts",
+				"default": "./dist/release/index.mjs"
+			},
+			"require": {
+				"types": "./dist/release/index.d.ts",
+				"default": "./dist/release/index.js"
+			}
 		},
 		"./postinstall": {
-			"types": "./dist/postinstall/index.d.ts",
-			"import": "./dist/postinstall/index.mjs",
-			"require": "./dist/postinstall/index.js"
+			"import": {
+				"types": "./dist/postinstall/index.d.mts",
+				"default": "./dist/postinstall/index.mjs"
+			},
+			"require": {
+				"types": "./dist/postinstall/index.d.ts",
+				"default": "./dist/postinstall/index.js"
+			}
 		}
 	},
 	"sideEffects": false,
@@ -91,7 +113,7 @@
 		"@eslint/js": "^9.31.0",
 		"@jest/globals": "^30.0.4",
 		"@types/jest": "^30.0.0",
-		"@types/node": "^24.0.14",
+		"@types/node": "^24.0.15",
 		"concurrently": "^9.2.0",
 		"cross-env": "^7.0.3",
 		"dotenv": "^17.2.0",
