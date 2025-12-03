@@ -13,7 +13,6 @@
 [downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fnode-scripts.svg
 [deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-scripts
 [deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts
-
 [sponsor-badge]: https://img.shields.io/static/v1?label=Fund%20this%20package&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
 [sponsor-url]: https://github.com/sponsors/alessiofrittoli
 
@@ -21,28 +20,28 @@
 
 ### Table of Contents
 
-- [Getting started](#getting-started)
-- [API Reference](#api-reference)
-  - [Post-Install scripts](#post-install-scripts)
-    - [TypeScript Type Reference Management](#typescript-type-reference-management)
-      - [Type Reference Interfaces](#type-reference-interfaces)
-        - [`CommonOptions`](#commonoptions)
-        - [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
-      - [Type Reference Functions](#type-reference-functions)
-        - [`createReferenceFile`](#createreferencefile)
-        - [`updateTsConfig`](#updatetsconfig)
-        - [`addTypesReference`](#addtypesreference)
-      - [Add Types Reference Example usage](#add-types-reference-example-usage)
-  - [Release Scripts](#release-scripts)
-    - [Release](#release)
-- [Development](#development)
-  - [Install depenendencies](#install-depenendencies)
-  - [Build the source code](#build-the-source-code)
-  - [ESLint](#eslint)
-  - [Jest](#jest)
-- [Contributing](#contributing)
-- [Security](#security)
-- [Credits](#made-with-)
+-   [Getting started](#getting-started)
+-   [API Reference](#api-reference)
+    -   [Post-Install scripts](#post-install-scripts)
+        -   [TypeScript Type Reference Management](#typescript-type-reference-management)
+            -   [Type Reference Interfaces](#type-reference-interfaces)
+                -   [`CommonOptions`](#commonoptions)
+                -   [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+            -   [Type Reference Functions](#type-reference-functions)
+                -   [`createReferenceFile`](#createreferencefile)
+                -   [`updateTsConfig`](#updatetsconfig)
+                -   [`addTypesReference`](#addtypesreference)
+            -   [Add Types Reference Example usage](#add-types-reference-example-usage)
+    -   [Release Scripts](#release-scripts)
+        -   [Release](#release)
+-   [Development](#development)
+    -   [Install depenendencies](#install-depenendencies)
+    -   [Build the source code](#build-the-source-code)
+    -   [ESLint](#eslint)
+    -   [Jest](#jest)
+-   [Contributing](#contributing)
+-   [Security](#security)
+-   [Credits](#made-with-)
 
 ---
 
@@ -80,11 +79,11 @@ Below are the detailed descriptions of the interfaces and functions included.
 
 <summary>Properties</summary>
 
-| Property     | Type     | Description |
-|--------------|----------|-------------|
+| Property     | Type     | Description                                                             |
+| ------------ | -------- | ----------------------------------------------------------------------- |
 | `root`       | `string` | The root directory of the project which is installing your node module. |
-| `name`       | `string` | The name of your node module. |
-| `outputFile` | `string` | The output file name. |
+| `name`       | `string` | The name of your node module.                                           |
+| `outputFile` | `string` | The output file name.                                                   |
 
 </details>
 
@@ -96,10 +95,10 @@ Below are the detailed descriptions of the interfaces and functions included.
 
 <summary>Properties</summary>
 
-| Property     | Type     | Default | Description |
-|--------------|----------|---------|-------------|
-| `name`       | `string` | - | The project name currently executing the script. |
-| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The *.d.ts output file name. |
+| Property     | Type     | Default                    | Description                                      |
+| ------------ | -------- | -------------------------- | ------------------------------------------------ |
+| `name`       | `string` | -                          | The project name currently executing the script. |
+| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The \*.d.ts output file name.                    |
 
 </details>
 
@@ -115,11 +114,11 @@ Creates or updates a reference file with type definitions for a project.
 
 **Parameters**
 
-| Parameter    | Type            | Description |
-|--------------|-----------------|-------------|
-| `options`    | `CommonOptions` | Common options for the reference file creation. |
+| Parameter | Type            | Description                                     |
+| --------- | --------------- | ----------------------------------------------- |
+| `options` | `CommonOptions` | Common options for the reference file creation. |
 
-- See [CommonOptions](#commonoptions) interface.
+-   See [CommonOptions](#commonoptions) interface.
 
 **Returns**
 
@@ -139,11 +138,11 @@ Updates the tsconfig.json file by adding the specified output file to the `inclu
 
 **Parameters**
 
-| Parameter    | Type            | Description |
-|--------------|-----------------|-------------|
-| `options`    | `CommonOptions` | Common options for the reference file creation. |
+| Parameter | Type            | Description                                     |
+| --------- | --------------- | ----------------------------------------------- |
+| `options` | `CommonOptions` | Common options for the reference file creation. |
 
-- See [CommonOptions](#commonoptions) interface.
+-   See [CommonOptions](#commonoptions) interface.
 
 **Returns**
 
@@ -165,11 +164,11 @@ If the `options.outputFile` already exists, it will be updated with the new pack
 
 **Parameters**
 
-| Parameter    | Type            | Description |
-|--------------|-----------------|-------------|
-| `options`    | `AddTypesReferenceOptions` | The options for adding the types reference. |
+| Parameter | Type                       | Description                                 |
+| --------- | -------------------------- | ------------------------------------------- |
+| `options` | `AddTypesReferenceOptions` | The options for adding the types reference. |
 
-- See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
+-   See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
 
 **Returns**
 
@@ -207,26 +206,30 @@ Then in your `ts-setup.js` file simply import the script and execute it with a f
 
 ```ts
 // path-to-my-scripts/ts-setup.js
-const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
-const project = require( '../../package.json' )
+const {
+    addTypesReference,
+} = require("@alessiofrittoli/node-scripts/postinstall");
+const project = require("../../package.json");
 
-addTypesReference( {
+addTypesReference({
     name: project.name,
-    outputFile: `${ project.name }.d.ts`, // optional
-} )
+    outputFile: `${project.name}.d.ts`, // optional
+});
 ```
 
 Or you can statically pass a `outputFile` to add all your scoped packages in a single file.
 
 ```ts
 // path-to-my-scripts/ts-setup.js
-const { addTypesReference } = require( '@alessiofrittoli/node-scripts/postinstall' )
-const project = require( '../../package.json' )
+const {
+    addTypesReference,
+} = require("@alessiofrittoli/node-scripts/postinstall");
+const project = require("../../package.json");
 
-addTypesReference( {
+addTypesReference({
     name: project.name,
-    outputFile: 'my-package-scope-env.d.ts',
-} )
+    outputFile: "my-package-scope-env.d.ts",
+});
 ```
 
 </details>
@@ -239,18 +242,44 @@ addTypesReference( {
 
 The `release` function automates the process of building, tagging, and optionally releasing a project to npm.
 
+This function either works with process options (passed via CLI) or function arguments (function arguments takes precedence over process options).
+
 <details>
 
-<summary>Process Options</summary>
+<summary>Arguments</summary>
 
-| Option           | Type                   | Default                 | Description |
-|------------------|------------------------|-------------------------|-------------|
-| `--version`      | `string`               | Value from package.json | The version to release. Retrieved from package.json if omitted. |
-| `--build`        | `string`               | `build`                 | A custom build command that will build your project before publish. |
-| `--verbose`      | `boolean \| undefined` | `false`                 | Enables detailed logging. |
-| `--origin`, `-o` | `string`               | 'origin'                | The Git origin for pushing tags. |
-| `--npm`          | `boolean \| undefined` | `false`                 | Indicates whether to publish the package to npm. |
-| `--access`       | `public \| restricted` | 'public'                | Sets npm access level (public or restricted). |
+| Argument  | Type                 | Default                                     | Description                                                                           |
+| --------- | -------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `version` | `string`             | `--version` process option or package.json. | The version to release.                                                               |
+|           |                      |                                             | Retrieved from `--version` process option or package.json if omitted.                 |
+| `build`   | `string`             | 'build'                                     | A custom build command that will build your project before publish.                   |
+|           |                      |                                             | Retrieved from `--build` process option or fallback to `build` if omitted.            |
+| `verbose` | `boolean`            | false                                       | Enables detailed logging.                                                             |
+|           |                      |                                             | Retrieved from `--verbose` process option or fallback to `false` if omitted.          |
+| `origin`  | `string`             | 'origin'                                    | The Git origin name used for pushing version tags.                                    |
+|           |                      |                                             | Retrieved from `--origin` or `--o` process option or fallback to `origin` if omitted. |
+| `npm`     | `boolean`            | false                                       | Indicates whether to publish the package to npm.                                      |
+|           |                      |                                             | Retrieved from `--npm` process option or fallback to `false` if omitted.              |
+| `access`  | `public\|restricted` | 'public'                                    | Sets npm package access level.                                                        |
+|           |                      |                                             | Retrieved from `--access` process option or fallback to `public` if omitted.          |
+
+</details>
+
+---
+
+<details>
+
+<summary>Process Options - CLI</summary>
+
+| Option           | Type                 | Default                 | Description                                                         |
+| ---------------- | -------------------- | ----------------------- | ------------------------------------------------------------------- |
+| `--version`      | `string`             | Value from package.json | The version to release. Retrieved from package.json if omitted.     |
+|                  |                      |                         | Retrieved from package.json if omitted.                             |
+| `--build`        | `string`             | `build`                 | A custom build command that will build your project before publish. |
+| `--verbose`      | `boolean`            | `false`                 | Enables detailed logging.                                           |
+| `--origin`, `-o` | `string`             | 'origin'                | The Git origin name used for pushing version tags.                  |
+| `--npm`          | `boolean`            | `false`                 | Indicates whether to publish the package to npm.                    |
+| `--access`       | `public\|restricted` | 'public'                | Sets npm package access level.                                      |
 
 </details>
 
@@ -264,43 +293,43 @@ The `release` function automates the process of building, tagging, and optionall
 <li>
 Retrieve package.json:
 
-- Attempts to load and parse the `package.json` file.
-- Exits the process with code "1" if the file is unavailable or invalid.
-- Retrieve the version to use as fallback if no `--version` option has been provided.
+-   Attempts to load and parse the `package.json` file.
+-   Exits the process with code "1" if the file is unavailable or invalid.
+-   Retrieve the version to use as fallback if no `--version` option has been provided.
 
 </li>
 <li>
 Parse Options:
 
-- Retrieves CLI options using `getProcessOptions()`.
-- Validates critical parameters such as `version` and `access`.
+-   Retrieves CLI options using `getProcessOptions()`.
+-   Validates critical parameters such as `version` and `access`.
 
 </li>
 <li>
 Prepare Git and Build:
 
-- Stashes any uncommitted changes with a stash name (`pre-release`).
-- Executes the `npm run build` or `pnpm build` command (if `pnpm` is globally installed).
-- Create the Git Tag as `v{version}`
-- Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
+-   Stashes any uncommitted changes with a stash name (`pre-release`).
+-   Executes the `npm run build` or `pnpm build` command (if `pnpm` is globally installed).
+-   Create the Git Tag as `v{version}`
+-   Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
 
 </li>
 <li>
 Publish to npm (Optional):
 
-- Publishes the package using `npm publish` if the `--npm` flag is set.
+-   Publishes the package using `npm publish` if the `--npm` flag is set.
 
 </li>
 <li>
 Restore Stash:
 
-- Restores the stashed changes if any were saved during the process.
+-   Restores the stashed changes if any were saved during the process.
 
 </li>
 <li>
 Verbose Logging:
 
-- Logs details of the release process if the `--verbose` flag is set.
+-   Logs details of the release process if the `--verbose` flag is set.
 
 </li>
 </ol>
@@ -312,6 +341,37 @@ Verbose Logging:
 <details>
 
 <summary>Example usage</summary>
+
+###### Using function arguments
+
+Add the `release` script in your `package.json` file so you can easly run from your terminal.
+
+```json
+{
+    // ...
+    "scripts": {
+        // ...
+        "release": "node path-to-my-scripts/release.js"
+    }
+}
+```
+
+Then in your `release.js` file simply import the script and execute it.
+
+⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
+
+```ts
+// path-to-my-scripts/release.js
+require("@alessiofrittoli/node-scripts/release").release({
+    verbose: true,
+    npm: true,
+    access: "restricted",
+});
+```
+
+---
+
+###### Using CLI options
 
 Add the `release` script in your `package.json` file so you can easly run from your terminal.
 
@@ -331,8 +391,7 @@ Then in your `release.js` file simply import the script and execute it.
 
 ```ts
 // path-to-my-scripts/release.js
-require( '@alessiofrittoli/node-scripts/release' )
-    .release()
+require("@alessiofrittoli/node-scripts/release").release();
 ```
 
 </details>
@@ -381,7 +440,7 @@ pnpm test:watch
 pnpm test:ci
 ```
 
-- See [`package.json`](./package.json) file scripts for more info.
+-   See [`package.json`](./package.json) file scripts for more info.
 
 Run tests with coverage.
 
