@@ -19,7 +19,7 @@ import type { Release } from '../types'
  *
  * @throws Will exit the process with code 1 if any critical error occurs during the release process.
  */
-export const release = () => {
+export const release = ( options?: Release.Options ) => {
 	
 	let project: PackageJson | null = null
 
@@ -30,13 +30,13 @@ export const release = () => {
 		//
 	}
 
-	const options		= getProcessOptions() as Release.OptionsMap
-	const verbose		= options.has( '--verbose' )
-	const build			= options.get( '--build' ) || 'build'
-	const version		= options.get( '--version' ) || project?.version
-	let origin			= options.get( '--origin' ) || options.get( '--o' )
-	const publishToNpm	= options.has( '--npm' )
-	const access		= options.get( '--access' ) || 'public'
+	const processOptions= getProcessOptions() as Release.OptionsMap
+	const verbose		= options?.verbose ?? processOptions.has( '--verbose' )
+	const build			= options?.build ?? ( processOptions.get( '--build' ) || 'build' )
+	const version		= options?.version ?? ( processOptions.get( '--version' ) || project?.version )
+	const origin		= options?.origin ?? ( processOptions.get( '--origin' ) || processOptions.get( '--o' ) || getDefaultRemote()?.get( 'name' ) || 'origin' )
+	const publishToNpm	= options?.npm ?? processOptions.has( '--npm' )
+	const access		= options?.access ?? ( processOptions.get( '--access' ) || 'public' )
 	const stashName		= 'pre-release'
 	
 	let run: 'npm run' | 'pnpm' = 'npm run'
@@ -68,11 +68,6 @@ export const release = () => {
 				console.error( 'Invalid `--access` option. `public` or `restricted` accepted.' )
 				process.exit( 1 )
 		}
-	}
-
-	if ( ! origin ) {
-		const remote = getDefaultRemote()
-		origin = remote?.get( 'name' ) || 'origin'
 	}
 
 	try {
