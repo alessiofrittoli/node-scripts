@@ -45,6 +45,7 @@ export namespace Release
 
 	/**
 	 * Interface representing a map of release options to their values.
+	 * 
 	 */
 	export interface OptionsMap extends Map<Option, OptionValue<Option>>
 	{
@@ -73,6 +74,61 @@ export namespace Release
 		 * @returns The Map object.
 		 */
 		set<K extends Option, V extends OptionValue<K>>( key: K, value: V ): this
+	}
+
+	/**
+	 * Interface representing release accepted options.
+	 * 
+	 */
+	export interface Options
+	{
+		/**
+		 * The version to release.
+		 * 
+		 * Retrieved from `--version` process option or package.json if omitted.
+		 * 
+		 */
+		version?: string
+		/**
+		 * A custom build command that will build your project before publish.
+		 * 
+		 * Retrieved from `--build` process option or fallback to `build` if omitted.
+		 * 
+		 * @default 'build'
+		 */
+		build?: string
+		/**
+		 * Enables detailed logging.
+		 * 
+		 * Retrieved from `--verbose` process option or fallback to `false` if omitted.
+		 * 
+		 * @default false
+		 */
+		verbose?: boolean
+		/**
+		 * The Git origin name used for pushing version tags.
+		 * 
+		 * Retrieved from `--origin` or `--o` process option or fallback to `origin` if omitted.
+		 * 
+		 * @default 'origin'
+		 */
+		origin?: string
+		/**
+		 * Indicates whether to publish the package to npm.
+		 * 
+		 * Retrieved from `--npm` process option or fallback to `false` if omitted.
+		 * 
+		 * @default false
+		 */
+		npm?: boolean
+		/**
+		 * Sets npm package access level.
+		 * 
+		 * Retrieved from `--access` process option or fallback to `public` if omitted.
+		 * 
+		 * @default 'public'
+		 */
+		access?: 'public' | 'restricted'
 	}
 }
 
