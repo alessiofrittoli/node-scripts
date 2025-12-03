@@ -135,7 +135,18 @@ describe( 'release', () => {
 	} )
 
 
-	it( 'executes custom build command', () => {
+	it( 'executes custom build command if build option is set', () => {
+		
+		release( { build: 'custom-command' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm run custom-command', { stdio: 'inherit' } )
+
+	} )
+
+
+	it( 'executes custom build command if --build option is set', () => {
+
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
 				[ '--build', 'custom-build' ]
@@ -157,6 +168,7 @@ describe( 'release', () => {
 			] ) )
 		
 		jest.spyOn( packageModule, 'getPackageJson' )
+			// @ts-expect-error negative testing
 			.mockReturnValue( undefined )
 
 		mockExecSync.mockImplementation( ( command: string ) => {
@@ -194,6 +206,41 @@ describe( 'release', () => {
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git push origin tag v1.0.0', { stdio: 'inherit' } )
 	} )
+	
+	
+	it( 'push the git tag to a custom origin using --origin option', () => {
+
+		release( { origin: 'upstream' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
+
+	} )
+
+
+	it( 'push the git tag to a custom origin using --origin option', () => {
+
+		jest.spyOn( processModule, 'getProcessOptions' )
+			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+				[ '--origin', 'upstream' ]
+			] ) )
+
+		release()
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'git push upstream tag v1.0.0', { stdio: 'inherit' } )
+			
+	} )
+
+
+	it( 'doesn\'t require a package.json if version option is set', () => {
+		
+		release( { verbose: true, version: '1.1.0' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'git tag v1.1.0', { stdio: 'inherit' } )
+
+	} )
 
 
 	it( 'doesn\'t require a package.json if --version option is set', () => {
@@ -205,12 +252,18 @@ describe( 'release', () => {
 			] ) )
 
 		jest.spyOn( packageModule, 'getPackageJson' )
+			// @ts-expect-error negative testing
 			.mockReturnValue( null )
 
 		release()
 
 		expect( execSync )
 			.toHaveBeenCalledWith( 'git tag v1.0.0', { stdio: 'inherit' } )
+		
+		release( { version: '1.1.0' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'git tag v1.1.0', { stdio: 'inherit' } )
 
 	} )
 
@@ -229,7 +282,17 @@ describe( 'release', () => {
 	} )
 
 
-	it( 'publish to npm with restricted access', () => {
+	it( 'publish to npm with restricted access through access option', () => {
+		
+		release( { npm: true, access: 'restricted' } )
+
+		expect( execSync )
+			.toHaveBeenCalledWith( 'npm publish --access restricted', { stdio: 'inherit' } )
+		
+	} )
+
+
+	it( 'publish to npm with restricted access through --access option', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
 			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
 				[ '--verbose', 'true' ],
@@ -299,7 +362,9 @@ describe( 'release', () => {
 
 
 	it( 'exit with code "1" if no `--version` option is provided and no version is found in package.json or package.json cannot be found', () => {
-		jest.spyOn( packageModule, 'getPackageJson' ).mockReturnValue( {} )
+		jest.spyOn( packageModule, 'getPackageJson' )
+			// @ts-expect-error negative testing
+			.mockReturnValue( {} )
 		jest.spyOn( processModule, 'getProcessOptions' ).mockReturnValue( new Map() )
 
 		expect( () => release() ).toThrow( 'process.exit: 1' )
@@ -307,6 +372,7 @@ describe( 'release', () => {
 
 		
 		jest.spyOn( packageModule, 'getPackageJson' )
+			// @ts-expect-error negative testing
 			.mockReturnValue( undefined )
 		
 		expect( () => release() ).toThrow( 'process.exit: 1' )
@@ -314,6 +380,7 @@ describe( 'release', () => {
 		
 
 		jest.spyOn( packageModule, 'getPackageJson' )
+			// @ts-expect-error negative testing
 			.mockReturnValue( { version: true } )
 		
 		expect( () => release() ).toThrow( 'process.exit: 1' )
@@ -330,6 +397,19 @@ describe( 'release', () => {
 
 		expect( () => release() ).toThrow( 'process.exit: 1' )
 		expect( process.exit ).toHaveBeenCalledWith( 1 )
+	} )
+
+
+	it( 'doesn\'t pop stash if no stash has been found', () => {
+
+		jest.spyOn( gitModule, 'getStashBy' )
+			.mockReturnValue( undefined )
+
+		release()
+		
+		expect( gitModule.popStashByIndex )
+			.not.toHaveBeenCalled()
+
 	} )
 
 } )
