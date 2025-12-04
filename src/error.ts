@@ -1,9 +1,8 @@
 import { ErrorCode as Exception } from '@alessiofrittoli/exception/code'
 
-export enum FileSystem
-{
-	ENOENT = 'ERR:ENOENT',
-}
+export const FileSystem = {
+	ENOENT: 'ERR:ENOENT',
+} as const
 
 export const ErrorCode = { ...Exception, ...FileSystem }
-export type ErrorCode = MergedEnumValue<typeof ErrorCode>
+export type ErrorCode = typeof ErrorCode[ keyof typeof ErrorCode ]
