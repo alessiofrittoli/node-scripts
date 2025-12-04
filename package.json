@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/node-scripts",
-	"version": "3.2.0",
+	"version": "3.3.0",
 	"description": "Utility library with common Node.js scripts",
 	"author": {
 		"name": "Alessio Frittoli",
