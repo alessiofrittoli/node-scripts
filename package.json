@@ -110,6 +110,7 @@
 		"test:process": "pnpm test:watch process.test.ts"
 	},
 	"devDependencies": {
+		"@alessiofrittoli/type-utils": "^1.9.0",
 		"@eslint/js": "^9.39.1",
 		"@jest/globals": "^30.2.0",
 		"@types/jest": "^30.0.0",
@@ -129,8 +130,7 @@
 	},
 	"dependencies": {
 		"@alessiofrittoli/abort-controller": "^0.1.0",
-		"@alessiofrittoli/event-emitter": "^1.5.0",
-		"@alessiofrittoli/exception": "^3.2.0",
-		"@alessiofrittoli/type-utils": "^1.8.0"
+		"@alessiofrittoli/event-emitter": "^1.6.0",
+		"@alessiofrittoli/exception": "^3.4.0"
 	}
 }
