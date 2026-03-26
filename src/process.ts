@@ -1,3 +1,4 @@
+import { getTypedMap } from '@alessiofrittoli/web-utils'
 import type { NodeJS } from './types'
 
 /**
@@ -22,15 +23,14 @@ export const getProcessRoot = () => (
  * For subsequent arguments:
  * - If an argument starts with a hyphen (`-`), it is considered an option key.
  * - If the next argument does not start with a hyphen, it is considered the value for the current option key.
- * - If the next argument does start with a hyphen, the current option key is mapped to `null`.
+ * - If the next argument does start with a hyphen, the current option key is mapped to `true`.
  * 
- * @template K - The type of the keys in the resulting Map.
- * @template V - The type of the values in the resulting Map, extending `NodeJS.Process.ArgvValue`.
+ * @template T - The type of custom option names.
  * 
- * @returns {Map<K, V>} A Map containing the processed command line options.
+ * @returns A Map containing the processed command line options.
  */
-export const getProcessOptions = <K, V extends NodeJS.Process.ArgvValue>() => (
-	new Map<K, V>(
+export const getProcessOptions = <T extends string>() => (
+	getTypedMap<NodeJS.Process.OptionsMap<T>>(
 		process.argv
 			.map( option => ( { value: option, isValue: ! option.startsWith( '-' ) } ) )
 			.map( ( option, index, options ) => {
@@ -50,6 +50,6 @@ export const getProcessOptions = <K, V extends NodeJS.Process.ArgvValue>() => (
 					}
 				}
 			} )
-			.filter( Boolean ) as [ K, ( V ) ][]
+			.filter( Boolean ) as [ T, NodeJS.Process.ArgvValue ][]
 	)
 )

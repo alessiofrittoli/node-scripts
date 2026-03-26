@@ -1,10 +1,13 @@
 import { execSync } from 'child_process'
+import { getTypedMap } from '@alessiofrittoli/web-utils'
+
 import { release } from '@/release'
 import * as processModule from '@/process'
 import * as packageModule from '@/package'
 import * as gitModule from '@/git'
-import type { Git, NodeJS } from '@/types'
+import type { Git } from '@/types'
 import { mockGlobalPackages, mockGlobalPackagesWithPnpm } from '@/lib/mock/release.mock'
+
 
 jest
 	.mock( 'child_process', () => ( {
@@ -69,7 +72,7 @@ describe( 'release', () => {
 		jest.spyOn( processModule, 'getProcessRoot' )
 			.mockReturnValue( mockRoot )
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map( [ [ '--verbose', 'true' ] ] ) )
+			.mockReturnValue( getTypedMap( [ [ '--verbose', 'true' ] ] ) )
 
 		jest.spyOn( packageModule, 'getPackageJson' )
 			.mockReturnValue( { version: '1.0.0', name: 'test-package' } )
@@ -148,9 +151,7 @@ describe( 'release', () => {
 	it( 'executes custom build command if --build option is set', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--build', 'custom-build' ]
-			] ) )
+			.mockReturnValue( getTypedMap( [ [ '--build', 'custom-build' ] ] ) )
 
 		release()
 
@@ -163,9 +164,7 @@ describe( 'release', () => {
 	it( 'executes the release process with `npm` if `isPackageInstalled` throws an error', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--version', '1.0.0' ]
-			] ) )
+			.mockReturnValue( getTypedMap( [ [ '--version', '1.0.0' ] ] ) )
 		
 		jest.spyOn( packageModule, 'getPackageJson' )
 			// @ts-expect-error negative testing
@@ -221,9 +220,7 @@ describe( 'release', () => {
 	it( 'push the git tag to a custom origin using --origin option', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
-				[ '--origin', 'upstream' ]
-			] ) )
+			.mockReturnValue( getTypedMap( [ [ '--origin', 'upstream' ] ] ) )
 
 		release()
 
@@ -246,7 +243,7 @@ describe( 'release', () => {
 	it( 'doesn\'t require a package.json if --version option is set', () => {
 		
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--version', '1.0.0' ]
 			] ) )
@@ -270,7 +267,7 @@ describe( 'release', () => {
 
 	it( 'publish to npm if --npm flag is set', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--npm', 'true' ],
 			] ) )
@@ -294,7 +291,7 @@ describe( 'release', () => {
 
 	it( 'publish to npm with restricted access through --access option', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--npm', 'true' ],
 				[ '--access', 'restricted' ],
@@ -310,7 +307,7 @@ describe( 'release', () => {
 	it( 'releases pre-releases to npm', () => {
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--npm', 'true' ],
 				[ '--version', '1.0.0-alpha.1' ],
@@ -320,7 +317,7 @@ describe( 'release', () => {
 
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--npm', 'true' ],
 				[ '--version', '1.0.0-beta.1' ],
@@ -330,7 +327,7 @@ describe( 'release', () => {
 
 
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--verbose', 'true' ],
 				[ '--npm', 'true' ],
 				[ '--version', '1.0.0-rc.1' ],
@@ -390,7 +387,7 @@ describe( 'release', () => {
 	
 	it( 'exit with code "1" if invalid access option is provided', () => {
 		jest.spyOn( processModule, 'getProcessOptions' )
-			.mockReturnValue( new Map<string, NodeJS.Process.ArgvValue>( [
+			.mockReturnValue( getTypedMap( [
 				[ '--access', 'invalid' ],
 				[ '--npm', 'true' ],
 			] ) )
