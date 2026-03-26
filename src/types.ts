@@ -261,4 +261,23 @@ export namespace Git
 			name: NonNullable<Git.Stash['name']>
 		}
 	)
+
+
+	export namespace Diff
+	{
+		export type Option = (
+			| '--file'
+			| '--cached'
+			| '--staged'
+			| '--verbose'
+		)
+
+		export interface Options
+		{
+			file?: true | string
+			cached?: boolean
+			staged?: boolean
+			verbose?: boolean
+		}
+	}
 }

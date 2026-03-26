@@ -1,5 +1,8 @@
+import { resolve } from 'path'
 import { execFileSync, execSync } from 'child_process'
 import type { Git } from './types'
+import { getProcessOptions } from './process'
+
 
 /**
  * Retrieves the list of Git remotes and their URLs.
@@ -208,3 +211,83 @@ export const getStashBy = ( options: Git.GetStashByOptions ) => (
 export const popStashByIndex = ( index: number ) => (
 	execFileSync( 'git', [ 'stash', 'pop', '--index', index.toString() ], { stdio: 'inherit' } )
 )
+
+
+/**
+ * Get git diff and optionally write `patch` file.
+ *
+ * Options can also be passed via process arguments, which are merged with the provided options.
+ *
+ * @param options An object defining custom options. See {@link Git.Diff.Options}.
+ * @returns The `git diff` output as a Buffer.
+ */
+export const patchDiffToFile = ( options: Git.Diff.Options = {} ) => {
+
+	const commands	= new Set( [ 'git diff' ] )
+	const processOptions = getProcessOptions<Git.Diff.Option>()
+
+	if ( options.file ) {
+		processOptions.set( '--file', options.file.toString() )
+	}
+
+	if ( options.cached ) {
+		processOptions.set( '--cached', 'true' )
+	}
+	
+	if ( options.staged ) {
+		processOptions.set( '--staged', 'true' )
+	}
+
+	if ( options.verbose ) {
+		processOptions.set( '--verbose', 'true' )
+	}
+
+	const verbose	= processOptions.has( '--verbose' )
+	const file		= processOptions.get( '--file' )
+	const filename	= file === 'true' ? '.patch' : file
+	const stage		= processOptions.has( '--cached' ) || processOptions.has( '--staged' )
+	const hasStaged	= stage && Boolean( execSync( 'git diff --cached --name-only' ).toString().trim() )
+	const shouldStageAll = stage && ! hasStaged
+
+	processOptions.delete( '--executable' )
+	processOptions.delete( '--scriptPath' )
+	processOptions.delete( '--file' )
+	processOptions.delete( '--verbose' )
+
+	if ( shouldStageAll ) {
+		execSync( 'git add .' )
+	}
+
+	Array.from( processOptions.entries() ).map( ( [ option, value ] ) => {
+		commands.add(
+			[ option, value !== 'true' && value ]
+				.filter( Boolean )
+				.join( ' ' )
+		)
+	} )
+
+
+	if ( filename ) {
+		commands.add( `> ${ filename }` )
+	}
+
+
+	const command	= Array.from( commands.values() ).join( ' ' )
+	const output	= execSync( command )
+
+	if ( shouldStageAll ) {
+		execSync( 'git restore --staged .' )
+	}
+
+	if ( ! verbose ) return output
+
+	if ( filename ) {
+		console.log( 'Git diff written to >', resolve( filename ) )
+		return output
+	}
+
+	console.log( Buffer.from( output ).toString() )
+
+	return output
+	
+}

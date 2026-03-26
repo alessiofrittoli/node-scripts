@@ -33,6 +33,7 @@
 	},
 	"include": [
 		"src",
+		"scripts",
 		"__tests__",
 		"alessiofrittoli-env.d.ts"
 	],

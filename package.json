@@ -85,6 +85,7 @@
 		"build": "pnpm lint && pnpm test:ci && pnpm build:prod",
 		"lint": "eslint",
 		"release": "node scripts/release.js --verbose --npm",
+		"diff": "node scripts/diffPatch.js --verbose --staged --file",
 		"//2a": "*********************************************************************",
 		"//2b": "***************************** UNIT TESTS ****************************",
 		"//2c": "*********************************************************************",
