@@ -1,5 +1,5 @@
 import { execSync as processExecSync, execFileSync as processExecFileSync } from 'child_process'
-import { formatStash, formatStashList, getStashBy, getStashList, popStashByIndex } from '@/git'
+import { formatStash, formatStashList, getStashBy, getStashList, patchDiffToFile, popStashByIndex } from '@/git'
 import { getDefaultRemote, getDefaultRemoteAndBranch, getRemotes } from '@/git'
 
 const stdOut = ( input: string | Array<string> ) => (
@@ -17,8 +17,11 @@ const execFileSync = processExecFileSync as jest.Mock
 
 describe( 'Git', () => {
 
+	const originalArgv = process.argv.slice()
 
 	beforeEach( () => {
+		process.argv = [ originalArgv[ 0 ]!, originalArgv[ 1 ]! ]
+
 		execSync.mockImplementation( ( command: string ) => {
 			if ( command.startsWith( 'git config branch.' ) ) {
 				return stdOut( 'origin' )
@@ -54,6 +57,7 @@ describe( 'Git', () => {
 	} )
 
 	afterEach( () => jest.resetAllMocks().resetModules() )
+	afterAll( () => { process.argv = originalArgv } )
 
 
 	describe( 'getRemotes', () => {
@@ -390,6 +394,143 @@ describe( 'Git', () => {
 				.toHaveBeenNthCalledWith( 1, 'git', [ 'stash', 'pop', '--index', '0' ], { stdio: 'inherit' } )
 			expect( execFileSync )
 				.toHaveBeenNthCalledWith( 2, 'git', [ 'stash', 'pop', '--index', '1' ], { stdio: 'inherit' } )
+
+		} )
+
+	} )
+
+
+	describe( 'patchDiffToFile', () => {
+
+		it( 'writes a patch file when file and cached options are provided', () => {
+
+			const output = stdOut( 'diff --git a/file.txt b/file.txt' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( '' )
+					default:
+						return output
+				}
+			} )
+
+			const result = patchDiffToFile( { file: 'changes.patch', cached: true } )
+
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( 'git diff' ) )
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '--cached' ) )
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '> changes.patch' ) )
+			expect( result ).toBe( output )
+
+		} )
+
+
+		it( 'uses argv options, defaults filename to .patch, and logs resolved path when verbose', () => {
+
+			process.argv = [ originalArgv[ 0 ]!, originalArgv[ 1 ]!, '--file', '--staged', '--verbose' ]
+			const output = stdOut( 'diff --git a/a b/a' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( '' )
+					default:
+						return output
+				}
+			} )
+			const logSpy = jest.spyOn( console, 'log' ).mockImplementation( () => {} )
+
+			const result = patchDiffToFile()
+
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '--staged' ) )
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '> .patch' ) )
+			expect( logSpy ).toHaveBeenCalledWith( 'Git diff written to >', expect.stringContaining( '.patch' ) )
+			expect( result ).toBe( output )
+
+			logSpy.mockRestore()
+
+		} )
+
+
+		it( 'logs diff output when verbose and no filename is provided', () => {
+
+			const output = stdOut( 'diff --git a/a b/a' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( '' )
+					default:
+						return output
+				}
+			} )
+			const logSpy = jest.spyOn( console, 'log' ).mockImplementation( () => {} )
+
+			const result = patchDiffToFile( { verbose: true, staged: true } )
+
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '--staged' ) )
+			expect( logSpy ).toHaveBeenCalledWith( output.toString() )
+			expect( result ).toBe( output )
+
+			logSpy.mockRestore()
+			
+		} )
+
+		it( 'includes argv options that carry a value', () => {
+
+			process.argv = [ originalArgv[ 0 ]!, originalArgv[ 1 ]!, '--word-diff', 'plain' ]
+			const output = stdOut( 'diff --git a/a b/a' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( '' )
+					default:
+						return output
+				}
+			} )
+
+			const result = patchDiffToFile()
+
+			expect( execSync ).toHaveBeenCalledWith( expect.stringContaining( '--word-diff plain' ) )
+			expect( result ).toBe( output )
+
+		} )
+
+		it( 'stages and restores when cached/staged is set and nothing is staged', () => {
+
+			const output = stdOut( 'diff --git a/a b/a' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( '' )
+					case 'git add .':
+					case 'git restore --staged .':
+						return stdOut( '' )
+					default:
+						return output
+				}
+			} )
+
+			patchDiffToFile( { staged: true } )
+
+			expect( execSync ).toHaveBeenCalledWith( 'git add .' )
+			expect( execSync ).toHaveBeenCalledWith( 'git restore --staged .' )
+
+		} )
+
+		it( 'does not stage or restore when cached/staged is set and staged changes exist', () => {
+
+			const output = stdOut( 'diff --git a/a b/a' )
+			execSync.mockImplementation( ( command: string ) => {
+				switch ( command ) {
+					case 'git diff --cached --name-only':
+						return stdOut( 'src/file.ts' )
+					default:
+						return output
+				}
+			} )
+
+			patchDiffToFile( { cached: true } )
+
+			expect( execSync ).not.toHaveBeenCalledWith( 'git add .' )
+			expect( execSync ).not.toHaveBeenCalledWith( 'git restore --staged .' )
 
 		} )
 
