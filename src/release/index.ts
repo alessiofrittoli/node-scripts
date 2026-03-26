@@ -30,7 +30,7 @@ export const release = ( options?: Release.Options ) => {
 		//
 	}
 
-	const processOptions= getProcessOptions() as Release.OptionsMap
+	const processOptions= getProcessOptions<Release.Option>()
 	const verbose		= options?.verbose ?? processOptions.has( '--verbose' )
 	const build			= options?.build ?? ( processOptions.get( '--build' ) || 'build' )
 	const version		= options?.version ?? ( processOptions.get( '--version' ) || project?.version )

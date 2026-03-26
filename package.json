@@ -131,6 +131,7 @@
 	"dependencies": {
 		"@alessiofrittoli/abort-controller": "^0.1.0",
 		"@alessiofrittoli/event-emitter": "^1.6.0",
-		"@alessiofrittoli/exception": "^3.4.0"
+		"@alessiofrittoli/exception": "^3.4.0",
+		"@alessiofrittoli/web-utils": "^2.3.0"
 	}
 }

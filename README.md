@@ -20,28 +20,28 @@
 
 ### Table of Contents
 
--   [Getting started](#getting-started)
--   [API Reference](#api-reference)
-    -   [Post-Install scripts](#post-install-scripts)
-        -   [TypeScript Type Reference Management](#typescript-type-reference-management)
-            -   [Type Reference Interfaces](#type-reference-interfaces)
-                -   [`CommonOptions`](#commonoptions)
-                -   [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
-            -   [Type Reference Functions](#type-reference-functions)
-                -   [`createReferenceFile`](#createreferencefile)
-                -   [`updateTsConfig`](#updatetsconfig)
-                -   [`addTypesReference`](#addtypesreference)
-            -   [Add Types Reference Example usage](#add-types-reference-example-usage)
-    -   [Release Scripts](#release-scripts)
-        -   [Release](#release)
--   [Development](#development)
-    -   [Install depenendencies](#install-depenendencies)
-    -   [Build the source code](#build-the-source-code)
-    -   [ESLint](#eslint)
-    -   [Jest](#jest)
--   [Contributing](#contributing)
--   [Security](#security)
--   [Credits](#made-with-)
+- [Getting started](#getting-started)
+- [API Reference](#api-reference)
+    - [Post-Install scripts](#post-install-scripts)
+        - [TypeScript Type Reference Management](#typescript-type-reference-management)
+            - [Type Reference Interfaces](#type-reference-interfaces)
+                - [`CommonOptions`](#commonoptions)
+                - [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+            - [Type Reference Functions](#type-reference-functions)
+                - [`createReferenceFile`](#createreferencefile)
+                - [`updateTsConfig`](#updatetsconfig)
+                - [`addTypesReference`](#addtypesreference)
+            - [Add Types Reference Example usage](#add-types-reference-example-usage)
+    - [Release Scripts](#release-scripts)
+        - [Release](#release)
+- [Development](#development)
+    - [Install dependencies](#install-dependencies)
+    - [Build the source code](#build-the-source-code)
+    - [ESLint](#eslint)
+    - [Jest](#jest)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Credits](#made-with-)
 
 ---
 
@@ -118,7 +118,7 @@ Creates or updates a reference file with type definitions for a project.
 | --------- | --------------- | ----------------------------------------------- |
 | `options` | `CommonOptions` | Common options for the reference file creation. |
 
--   See [CommonOptions](#commonoptions) interface.
+- See [CommonOptions](#commonoptions) interface.
 
 **Returns**
 
@@ -142,7 +142,7 @@ Updates the tsconfig.json file by adding the specified output file to the `inclu
 | --------- | --------------- | ----------------------------------------------- |
 | `options` | `CommonOptions` | Common options for the reference file creation. |
 
--   See [CommonOptions](#commonoptions) interface.
+- See [CommonOptions](#commonoptions) interface.
 
 **Returns**
 
@@ -168,7 +168,7 @@ If the `options.outputFile` already exists, it will be updated with the new pack
 | --------- | -------------------------- | ------------------------------------------- |
 | `options` | `AddTypesReferenceOptions` | The options for adding the types reference. |
 
--   See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
+- See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
 
 **Returns**
 
@@ -293,43 +293,43 @@ This function either works with process options (passed via CLI) or function arg
 <li>
 Retrieve package.json:
 
--   Attempts to load and parse the `package.json` file.
--   Exits the process with code "1" if the file is unavailable or invalid.
--   Retrieve the version to use as fallback if no `--version` option has been provided.
+- Attempts to load and parse the `package.json` file.
+- Exits the process with code "1" if the file is unavailable or invalid.
+- Retrieve the version to use as fallback if no `--version` option has been provided.
 
 </li>
 <li>
 Parse Options:
 
--   Retrieves CLI options using `getProcessOptions()`.
--   Validates critical parameters such as `version` and `access`.
+- Retrieves CLI options using `getProcessOptions()`.
+- Validates critical parameters such as `version` and `access`.
 
 </li>
 <li>
 Prepare Git and Build:
 
--   Stashes any uncommitted changes with a stash name (`pre-release`).
--   Executes the `npm run build` or `pnpm build` command (if `pnpm` is globally installed).
--   Create the Git Tag as `v{version}`
--   Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
+- Stashes any uncommitted changes with a stash name (`pre-release`).
+- Executes the `npm run build` or `pnpm build` command (if `pnpm` is globally installed).
+- Create the Git Tag as `v{version}`
+- Push the Git Tag the the specified `origin` or to the default Git Repository Remote.
 
 </li>
 <li>
 Publish to npm (Optional):
 
--   Publishes the package using `npm publish` if the `--npm` flag is set.
+- Publishes the package using `npm publish` if the `--npm` flag is set.
 
 </li>
 <li>
 Restore Stash:
 
--   Restores the stashed changes if any were saved during the process.
+- Restores the stashed changes if any were saved during the process.
 
 </li>
 <li>
 Verbose Logging:
 
--   Logs details of the release process if the `--verbose` flag is set.
+- Logs details of the release process if the `--verbose` flag is set.
 
 </li>
 </ol>
@@ -400,7 +400,7 @@ require("@alessiofrittoli/node-scripts/release").release();
 
 ### Development
 
-#### Install depenendencies
+#### Install dependencies
 
 ```bash
 npm install
@@ -422,7 +422,7 @@ pnpm build
 
 #### [ESLint](https://www.npmjs.com/package/eslint)
 
-warnings / errors check.
+Run warnings and errors checks.
 
 ```bash
 pnpm lint
@@ -440,7 +440,7 @@ pnpm test:watch
 pnpm test:ci
 ```
 
--   See [`package.json`](./package.json) file scripts for more info.
+- See [`package.json`](./package.json) file scripts for more info.
 
 Run tests with coverage.
 
