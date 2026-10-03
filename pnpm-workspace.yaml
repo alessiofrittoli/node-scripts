@@ -1,5 +1,10 @@
+allowBuilds:
+  "@alessiofrittoli/fetcher": true
+  "@alessiofrittoli/type-utils": true
+  esbuild: true
+  unrs-resolver: true
 onlyBuiltDependencies:
-  - '@alessiofrittoli/fetcher'
-  - '@alessiofrittoli/type-utils'
+  - "@alessiofrittoli/fetcher"
+  - "@alessiofrittoli/type-utils"
   - esbuild
   - unrs-resolver
