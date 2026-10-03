@@ -13,10 +13,9 @@ jobs:
 
     steps:
       - name: Setup environment
-        uses: alessiofrittoli/github-actions/.github/actions/setup-pnpm-node@feature/add-Setup-pnpm-and-Node.js-composite-action
+        uses: alessiofrittoli/github-actions/.github/actions/setup-pnpm-node@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          additional_pnpm_configs: "config=value;config2=value;"
 
       - name: Linting
         run: pnpm lint
