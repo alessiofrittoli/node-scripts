@@ -76,8 +76,6 @@ export const release = ( options?: Release.Options ) => {
 
 		execSync( `git stash save -u -m "${ stashName }"`, { stdio: 'inherit' } )
 		execSync( `${ run } ${ build }`, { stdio: 'inherit' } )
-		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
-		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
 		
 		if ( publishToNpm ) {
 			const options = [
@@ -87,6 +85,9 @@ export const release = ( options?: Release.Options ) => {
 
 			execSync( `npm publish ${ options }`, { stdio: 'inherit' } )
 		}
+
+		execSync( `git tag v${ version }`, { stdio: 'inherit' } )
+		execSync( `git push ${ origin } tag v${ version }`, { stdio: 'inherit' } )
 
 		const stash = getStashBy( { name: stashName } )
 
