@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/node-scripts",
-	"version": "3.4.0",
+	"version": "3.5.0",
 	"description": "Utility library with common Node.js scripts",
 	"type": "module",
 	"author": {
