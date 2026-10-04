@@ -1,10 +1,7 @@
 allowBuilds:
-  "@alessiofrittoli/fetcher": true
-  "@alessiofrittoli/type-utils": true
+  '@alessiofrittoli/fetcher': true
+  '@alessiofrittoli/type-utils': true
   esbuild: true
   unrs-resolver: true
-onlyBuiltDependencies:
-  - "@alessiofrittoli/fetcher"
-  - "@alessiofrittoli/type-utils"
-  - esbuild
-  - unrs-resolver
+minimumReleaseAgeExclude:
+  - '@alessiofrittoli/*'

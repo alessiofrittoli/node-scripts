@@ -1,12 +1,8 @@
-import fs from 'fs'
+import type { Package } from '@/types'
 import path from 'path'
-import type { Package } from './types'
+import fs from 'fs'
 
-export type PackageJson = (
-	& Record<string, string | Record<string, string>>
-	& { name: string }
-)
-
+export type PackageJson = Record<string, string | Record<string, string>> & { name: string }
 
 /**
  * Reads and parses the `package.json` file from the specified root directory.
@@ -15,12 +11,8 @@ export type PackageJson = (
  * @returns The parsed contents of the `package.json` file as an object.
  * @throws Will throw an error if the file cannot be read or parsed.
  */
-export const getPackageJson = ( root: Package[ 'root' ] ) => (
-	JSON.parse(
-		fs.readFileSync( path.resolve( root, 'package.json' ) ).toString()
-	) as PackageJson
-)
-
+export const getPackageJson = (root: Package['root']): PackageJson =>
+	JSON.parse(fs.readFileSync(path.resolve(root, 'package.json')).toString()) as PackageJson
 
 /**
  * Determines if the script is running in an external project.
@@ -29,27 +21,25 @@ export const getPackageJson = ( root: Package[ 'root' ] ) => (
  * @returns A boolean indicating whether the script is running in an external project.
  * @throws Will throw an error if `INIT_CWD` is not set or if the script cannot determine the project status.
  */
-export const isExternalPackage = ( { root, name }: Package ) => {
-
+export const isExternalPackage = ({ root, name }: Package): boolean => {
 	try {
-		const project = getPackageJson( root )
-		if ( project.name.endsWith( name ) ) {
+		const project = getPackageJson(root)
+		if (project.name.endsWith(name)) {
 			return false
 		}
 		return true
-	} catch ( cause ) {
-		throw new Error( 'Couldn\'t check if script is running in an external project.', { cause } )
+	} catch (cause) {
+		throw new Error("Couldn't check if script is running in an external project.", { cause })
 	}
 }
 
-
 /**
  * Get package pre-release tag.
- * 
+ *
  * @param version The package version.
  * @returns The pre-release tag.
  */
-export const getPreReleaseTag = ( version: string ): string | null => {
-	const match = version.match( /-(\w+)\.\d+/ )
-	return match ? match[ 1 ]! : null
+export const getPreReleaseTag = (version: string): string | null => {
+	const match = version.match(/-(\w+)\.\d+/)
+	return match ? match[1]! : null
 }

@@ -2,6 +2,7 @@
 	"name": "@alessiofrittoli/node-scripts",
 	"version": "3.4.0",
 	"description": "Utility library with common Node.js scripts",
+	"type": "module",
 	"author": {
 		"name": "Alessio Frittoli",
 		"email": "info@alessiofrittoli.it",
@@ -31,9 +32,9 @@
 		"node": ">=24.15.0",
 		"pnpm": ">=11.27.1"
 	},
-	"main": "./dist/index.js",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
+	"types": "./dist/index.d.mts",
 	"files": [
 		"dist"
 	],
@@ -44,38 +45,18 @@
 				"default": "./dist/index.mjs"
 			},
 			"require": {
-				"types": "./dist/index.d.ts",
-				"default": "./dist/index.js"
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
 			}
 		},
-		"./types": {
+		"./*": {
 			"import": {
-				"types": "./dist/types.d.mts",
-				"default": "./dist/types.mjs"
+				"types": "./dist/*/index.d.mts",
+				"default": "./dist/*/index.mjs"
 			},
 			"require": {
-				"types": "./dist/types.d.ts",
-				"default": "./dist/types.js"
-			}
-		},
-		"./release": {
-			"import": {
-				"types": "./dist/release/index.d.mts",
-				"default": "./dist/release/index.mjs"
-			},
-			"require": {
-				"types": "./dist/release/index.d.ts",
-				"default": "./dist/release/index.js"
-			}
-		},
-		"./postinstall": {
-			"import": {
-				"types": "./dist/postinstall/index.d.mts",
-				"default": "./dist/postinstall/index.mjs"
-			},
-			"require": {
-				"types": "./dist/postinstall/index.d.ts",
-				"default": "./dist/postinstall/index.js"
+				"types": "./dist/*/index.d.cts",
+				"default": "./dist/*/index.cjs"
 			}
 		}
 	},
@@ -84,54 +65,41 @@
 		"//1a": "*********************************************************************",
 		"//1b": "******************** DEV - BUILD - LINT - RELEASE *******************",
 		"//1c": "*********************************************************************",
-		"dev": "cross-env NODE_ENV=development tsup --watch",
-		"build:prod": "cross-env NODE_ENV=production tsup",
-		"build": "pnpm lint && pnpm tsc && pnpm test:ci && pnpm build:prod",
-		"lint": "eslint",
-		"release": "node scripts/release.js --verbose --npm",
-		"diff": "node scripts/diffPatch.js --verbose --staged --file",
+		"dev": "tsdown --watch",
+		"build": "pnpm lint && pnpm tsc && pnpm tsdown",
+		"lint": "oxlint --report-unused-disable-directives --max-warnings 0",
+		"release": "node scripts/release.ts --verbose --npm",
+		"diff": "vite-node scripts/diffPatch.ts --verbose --staged --file",
 		"//2a": "*********************************************************************",
 		"//2b": "***************************** UNIT TESTS ****************************",
 		"//2c": "*********************************************************************",
-		"test": "jest --verbose",
-		"test:watch": "jest --watchAll --verbose",
-		"test:ci": "jest --ci --verbose",
+		"test": "vitest --reporter=tree",
+		"test:watch": "pnpm test watch",
+		"test:ci": "pnpm test run",
 		"//3a": "*********************************************************************",
 		"//3b": "************************ UNIT TESTS COVERAGE ************************",
 		"//3c": "*********************************************************************",
 		"test:coverage": "pnpm test:watch --coverage",
 		"test:coverage:ci": "pnpm test:ci --coverage",
-		"test:serve-coverage": "http-server ./coverage/lcov-report --gzip true -p 0 -o --silent",
-		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\"",
-		"//4a": "*********************************************************************",
-		"//4b": "************************ TARGETED UNIT TESTS ************************",
-		"//4c": "*********************************************************************",
-		"test:postinstall": "pnpm test:watch postinstall/*",
-		"test:release": "pnpm test:watch release/*",
-		"test:fs": "pnpm test:watch fs.test.ts",
-		"test:git": "pnpm test:watch git.test.ts",
-		"test:npm": "pnpm test:watch npm.test.ts",
-		"test:package": "pnpm test:watch package.test.ts",
-		"test:process": "pnpm test:watch process.test.ts"
+		"test:serve-coverage": "http-server ./coverage --gzip true -p 0 -o /index.html --silent",
+		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\""
 	},
 	"devDependencies": {
+		"@alessiofrittoli/package-configs": "^1.5.0",
 		"@alessiofrittoli/type-utils": "^1.9.0",
-		"@eslint/js": "^10.0.1",
-		"@jest/globals": "^30.3.0",
-		"@types/jest": "^30.0.0",
-		"@types/node": "^25.5.0",
+		"@types/node": "^24.19.1",
+		"@vitest/coverage-v8": "^5.0.3",
 		"concurrently": "^9.2.1",
-		"cross-env": "^10.1.0",
 		"dotenv": "^17.3.1",
-		"eslint": "^10.1.0",
-		"globals": "^17.4.0",
 		"http-server": "^14.1.1",
-		"jest": "^30.3.0",
-		"ts-jest": "^29.4.6",
-		"ts-node": "^10.9.2",
-		"tsup": "^8.5.1",
-		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.57.2"
+		"oxlint": "^1.86.0",
+		"prettier": "^3.9.9",
+		"prettier-plugin-sort-imports": "^1.8.11",
+		"tsdown": "^0.23.0",
+		"typescript": "^6.0.3",
+		"vite": "^8.3.2",
+		"vite-node": "^6.0.0",
+		"vitest": "^5.0.3"
 	},
 	"dependencies": {
 		"@alessiofrittoli/abort-controller": "^0.1.0",

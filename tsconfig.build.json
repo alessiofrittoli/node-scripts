@@ -1,0 +1,11 @@
+{
+	"extends": "@alessiofrittoli/package-configs/tsconfig/base.json",
+	"include": ["**/*.ts", "alessiofrittoli-env.d.ts"],
+	"compilerOptions": {
+		"types": ["node"],
+		"paths": {
+			"@/*": ["./src/*"],
+			"#/*": ["./*"]
+		}
+	}
+}

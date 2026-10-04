@@ -1,8 +1,7 @@
 /**
  * Represents a package in the project.
  */
-export interface Package
-{
+export interface Package {
 	/** The root directory of the project. */
 	root: string
 	/** The name of the project. */
@@ -12,74 +11,63 @@ export interface Package
 /**
  * Namespace containing types related to release options.
  */
-export namespace Release
-{
+export namespace Release {
 	/**
 	 * Type representing possible release options.
-	 * 
+	 *
 	 */
-	export type Option = (
-		| '--verbose'
-		| '--version'
-		| '--v'
-		| '--access'
-		| '--origin'
-		| '--o'
-		| '--npm'
-		| '--build'
-	)
-
+	export type Option =
+		'--verbose' | '--version' | '--v' | '--access' | '--origin' | '--o' | '--npm' | '--build'
 
 	/**
 	 * Interface representing release accepted options.
-	 * 
+	 *
 	 */
-	export interface Options
-	{
+	export interface Options {
 		/**
 		 * The version to release.
-		 * 
+		 *
 		 * Retrieved from `--version` process option or package.json if omitted.
-		 * 
+		 *
 		 */
 		version?: string
 		/**
 		 * A custom build command that will build your project before publish.
-		 * 
+		 *
 		 * Retrieved from `--build` process option or fallback to `build` if omitted.
-		 * 
+		 *
 		 * @default 'build'
 		 */
 		build?: string
 		/**
 		 * Enables detailed logging.
-		 * 
+		 *
 		 * Retrieved from `--verbose` process option or fallback to `false` if omitted.
-		 * 
+		 *
 		 * @default false
 		 */
 		verbose?: boolean
 		/**
 		 * The Git origin name used for pushing version tags.
-		 * 
+		 *
 		 * Retrieved from `--origin` or `--o` process option or fallback to `origin` if omitted.
-		 * 
+		 *
 		 * @default 'origin'
 		 */
 		origin?: string
 		/**
 		 * Indicates whether to publish the package to npm.
-		 * 
+		 *
 		 * Retrieved from `--npm` process option or fallback to `false` if omitted.
-		 * 
+		 *
 		 * @default false
 		 */
 		npm?: boolean
 		/**
 		 * Sets npm package access level.
-		 * 
+		 *
 		 * Retrieved from `--access` process option or fallback to `public` if omitted.
-		 * 
+		 *
 		 * @default 'public'
 		 */
 		access?: 'public' | 'restricted'
@@ -89,16 +77,14 @@ export namespace Release
 /**
  * Namespace for NodeJS related types.
  */
-export namespace NodeJS
-{
+export namespace NodeJS {
 	/**
 	 * Namespace for Process related types.
 	 */
-	export namespace Process
-	{
+	export namespace Process {
 		/**
 		 * Type representing a value in the process arguments.
-		 * 
+		 *
 		 * @template T - The type of the argument value, defaults to `string`.
 		 * @type T | 'true' - The argument value can be of type `T` or `'true'`.
 		 */
@@ -108,50 +94,41 @@ export namespace NodeJS
 		export type OptionName<T extends string> = T | NodeJS.Process.DefaultOption
 
 		export type OptionsMap<T extends string> = {
-			[ x in NodeJS.Process.OptionName<T> ]: NodeJS.Process.ArgvValue
+			[x in NodeJS.Process.OptionName<T>]: NodeJS.Process.ArgvValue
 		}
 	}
 
-	export interface GlobalPackage
-	{
+	export interface GlobalPackage {
 		version?: string
 		overridden: boolean
 		problems?: string[]
 	}
 
-
-	export interface LocalPackage extends GlobalPackage
-	{
+	export interface LocalPackage extends GlobalPackage {
 		resolved: string
 		extraneous?: boolean
 	}
 
-	export namespace Deps
-	{
-		export interface Global
-		{
+	export namespace Deps {
+		export interface Global {
 			name?: string
 			dependencies?: Record<string, GlobalPackage>
 		}
 
-		export interface Local extends Global, Omit<LocalPackage, 'extraneous' | 'overridden' | 'resolved'>
-		{
+		export interface Local extends Global, Omit<LocalPackage, 'extraneous' | 'overridden' | 'resolved'> {
 			dependencies?: Record<string, LocalPackage>
 		}
 	}
 }
 
-
 /**
  * Namespace containing Git-related types.
  */
-export namespace Git
-{
+export namespace Git {
 	/**
 	 * Namespace containing types and interfaces related to remote operations.
 	 */
-	export namespace Remote
-	{
+	export namespace Remote {
 		/**
 		 * Type representing the kind of remote url type.
 		 * - 'fetch': Represents a fetch operation.
@@ -159,13 +136,11 @@ export namespace Git
 		 */
 		export type Type = 'fetch' | 'push'
 
-
 		/**
 		 * Type representing a map of url types to their corresponding URLs.
 		 */
 		export type Urls = globalThis.Map<Git.Remote.Type, string>
 
-		
 		/**
 		 * Union type representing the possible keys for the Git.Remote.Map.
 		 * - 'name': Represents the name key.
@@ -173,61 +148,56 @@ export namespace Git
 		 */
 		export type MapKey = 'name' | 'urls'
 
-
 		/**
 		 * Conditional type that maps a Remote.MapKey to its corresponding value type.
 		 * - If T is 'urls', the value type is Remote.Urls.
 		 * - If T is 'name', the value type is string.
 		 * - Otherwise, the value type is never.
 		 */
-		export type MapValue<T extends Remote.MapKey> = (
-			T extends 'urls'
-				? Remote.Urls
+		export type MapValue<T extends Remote.MapKey> = T extends 'urls'
+			? Remote.Urls
 			: T extends 'name'
 				? string
-			: never
-		)
-		
-		
+				: never
+
 		/**
 		 * Interface representing a map with keys of type Remote.MapKey and values of type Remote.MapValue.
 		 * Extends the global Map interface.
-		 * 
+		 *
 		 * @template K - The type of the keys in the map. Defaults to Remote.MapKey.
 		 */
-		export interface Map<
-			K extends Remote.MapKey = Remote.MapKey
-		> extends globalThis.Map<K, Remote.MapValue<K>>
-		{
+		export interface Map<K extends Remote.MapKey = Remote.MapKey> extends globalThis.Map<
+			K,
+			Remote.MapValue<K>
+		> {
 			/**
 			 * Executes a provided function once per each key/value pair in the Map, in insertion order.
 			 */
-			forEach<
-				K extends Remote.MapKey = Remote.MapKey,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			>( callbackfn: ( value: Remote.MapValue<K>, key: K, map: globalThis.Map<K, Remote.MapValue<K>> ) => void, thisArg?: any ): void
+			forEach<K extends Remote.MapKey = Remote.MapKey>(
+				callbackfn: (
+					value: Remote.MapValue<K>,
+					key: K,
+					map: globalThis.Map<K, Remote.MapValue<K>>,
+				) => void,
+				// oxlint-disable-next-line typescript/no-explicit-any
+				thisArg?: any,
+			): void
 			/**
-			  * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
-			  * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
-			  */
-			get<
-				K extends Remote.MapKey = Remote.MapKey,
-			>( key: K ): Remote.MapValue<K> | undefined
+			 * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
+			 * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
+			 */
+			get<K extends Remote.MapKey = Remote.MapKey>(key: K): Remote.MapValue<K> | undefined
 			/**
 			 * Adds a new element with a specified key and value to the Map. If an element with the same key already exists, the element will be updated.
 			 */
-			set<
-				K extends Remote.MapKey = Remote.MapKey,
-			>( key: K, value: Remote.MapValue<K> ): this
+			set<K extends Remote.MapKey = Remote.MapKey>(key: K, value: Remote.MapValue<K>): this
 		}
 	}
-
 
 	/**
 	 * Represents a Git stash.
 	 */
-	export interface Stash
-	{
+	export interface Stash {
 		/**
 		 * The index of the stash.
 		 */
@@ -247,33 +217,24 @@ export namespace Git
 	/**
 	 * Options for retrieving a stash by either index or name.
 	 */
-	export type GetStashByOptions = (
+	export type GetStashByOptions =
 		| {
-			/**
-			 * The index of the stash to retrieve.
-			 */
-			index: NonNullable<Git.Stash['index']>
-		}
+				/**
+				 * The index of the stash to retrieve.
+				 */
+				index: NonNullable<Git.Stash['index']>
+		  }
 		| {
-			/**
-			 * The name of the stash to retrieve.
-			 */
-			name: NonNullable<Git.Stash['name']>
-		}
-	)
+				/**
+				 * The name of the stash to retrieve.
+				 */
+				name: NonNullable<Git.Stash['name']>
+		  }
 
+	export namespace Diff {
+		export type Option = '--file' | '--cached' | '--staged' | '--verbose'
 
-	export namespace Diff
-	{
-		export type Option = (
-			| '--file'
-			| '--cached'
-			| '--staged'
-			| '--verbose'
-		)
-
-		export interface Options
-		{
+		export interface Options {
 			file?: true | string
 			cached?: boolean
 			staged?: boolean
