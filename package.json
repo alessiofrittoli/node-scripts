@@ -68,7 +68,7 @@
 		"dev": "tsdown --watch",
 		"build": "pnpm lint && pnpm tsc && pnpm tsdown",
 		"lint": "oxlint --report-unused-disable-directives --max-warnings 0",
-		"release": "node scripts/release.ts --verbose --npm",
+		"release": "vite-node scripts/release.ts --verbose --npm",
 		"diff": "vite-node scripts/diffPatch.ts --verbose --staged --file",
 		"//2a": "*********************************************************************",
 		"//2b": "***************************** UNIT TESTS ****************************",
