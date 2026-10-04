@@ -90,7 +90,6 @@
 		"@types/node": "^24.19.1",
 		"@vitest/coverage-v8": "^5.0.3",
 		"concurrently": "^9.2.1",
-		"dotenv": "^17.3.1",
 		"http-server": "^14.1.1",
 		"oxlint": "^1.86.0",
 		"prettier": "^3.9.9",
