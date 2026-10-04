@@ -1,26 +1,57 @@
-# Node.js Scripts 🫧
+<h1 align="center">Node.js Scripts 🫧</h1>
+<h2 align="center">
+  Utility library with common Node.js scripts
+</h2>
+<p align="center">
+  <a href="https://npmjs.org/package/@alessiofrittoli/node-scripts">
+    <img src="https://img.shields.io/npm/v/@alessiofrittoli/node-scripts" alt="Latest version"/>
+  </a>
+  <a href="https://coveralls.io/github/alessiofrittoli/node-scripts">
+    <img src="https://coveralls.io/repos/github/alessiofrittoli/node-scripts/badge.svg" alt="Test coverage"/>
+  </a>
+  <a href="https://socket.dev/npm/package/@alessiofrittoli/node-scripts/overview">
+    <img src="https://socket.dev/api/badge/npm/package/@alessiofrittoli/node-scripts" alt="Socket Security score"/>
+  </a>
+  <a href="https://npmjs.org/package/@alessiofrittoli/node-scripts">
+    <img src="https://img.shields.io/npm/dm/@alessiofrittoli/node-scripts.svg" alt="npm downloads"/>
+  </a>
+  <a href="https://bundlephobia.com/package/@alessiofrittoli/node-scripts">
+    <img src="https://badgen.net/bundlephobia/dependency-count/@alessiofrittoli/node-scripts" alt="Dependencies"/>
+  </a>
+  <a href="https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts">
+    <img src="https://img.shields.io/librariesio/release/npm/@alessiofrittoli/node-scripts" alt="Dependencies status"/>
+  </a>
+</p>
+<p align="center">
+  <a href="https://bundlephobia.com/package/@alessiofrittoli/node-scripts">
+    <img src="https://badgen.net/bundlephobia/min/@alessiofrittoli/node-scripts" alt="minified"/>
+  </a>
+  <a href="https://bundlephobia.com/package/@alessiofrittoli/node-scripts">
+    <img src="https://badgen.net/bundlephobia/minzip/@alessiofrittoli/node-scripts" alt="minizipped"/>
+  </a>
+  <a href="https://bundlephobia.com/package/@alessiofrittoli/node-scripts">
+    <img src="https://badgen.net/bundlephobia/tree-shaking/@alessiofrittoli/node-scripts" alt="Tree shakable"/>
+  </a>
+</p>
+<p align="center">
+  <a href="https://github.com/sponsors/alessiofrittoli">
+    <img src="https://img.shields.io/static/v1?label=Fund%20this%20package&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2" alt="Fund this package"/>
+  </a>
+</p>
 
-[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![Socket Status][socket-badge]][socket-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
-
-[![GitHub Sponsor][sponsor-badge]][sponsor-url]
-
-[version-badge]: https://img.shields.io/npm/v/%40alessiofrittoli%2Fnode-scripts
-[npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fnode-scripts
-[coverage-badge]: https://coveralls.io/repos/github/alessiofrittoli/node-scripts/badge.svg
-[coverage-url]: https://coveralls.io/github/alessiofrittoli/node-scripts
-[socket-badge]: https://socket.dev/api/badge/npm/package/@alessiofrittoli/node-scripts
-[socket-url]: https://socket.dev/npm/package/@alessiofrittoli/node-scripts/overview
-[downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fnode-scripts.svg
-[deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-scripts
-[deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fnode-scripts
 [sponsor-badge]: https://img.shields.io/static/v1?label=Fund%20this%20package&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
 [sponsor-url]: https://github.com/sponsors/alessiofrittoli
 
-## Utility library with common Node.js scripts
-
-### Table of Contents
+### Table of Content
 
 - [Getting started](#getting-started)
+- [Development](#development)
+  - [Local development](#local-development)
+  - [Production build](#production-build)
+  - [Unit tests](#unit-tests)
+    - [Run tests with coverage](#run-tests-with-coverage)
+  - [Contributing](#contributing)
+  - [Security](#security)
 - [API Reference](#api-reference)
   - [Post-Install scripts](#post-install-scripts)
     - [TypeScript Type Reference Management](#typescript-type-reference-management)
@@ -34,13 +65,6 @@
       - [Add Types Reference Example usage](#add-types-reference-example-usage)
   - [Release Scripts](#release-scripts)
     - [Release](#release)
-- [Development](#development)
-  - [Install dependencies](#install-dependencies)
-  - [Build the source code](#build-the-source-code)
-  - [ESLint](#eslint)
-  - [Jest](#jest)
-- [Contributing](#contributing)
-- [Security](#security)
 - [Credits](#made-with-)
 
 ---
@@ -58,6 +82,84 @@ or using `pnpm`
 ```bash
 pnpm i @alessiofrittoli/node-scripts
 ```
+
+---
+
+### Development
+
+Run the following to start development
+
+```shell
+nvm use
+
+pnpm i
+```
+
+#### Local development
+
+Run the following
+
+```shell
+pnpm dev
+```
+
+This will generate unminified output code, sourcemaps and will enable source file watcher.
+
+---
+
+#### Production build
+
+Run the following to create a local production build
+
+```shell
+pnpm build
+```
+
+This will generate minified output code without sourcemaps.
+
+---
+
+#### Unit tests
+
+Run all the defined test suites by running the following:
+
+```shell
+# Run tests and watch file changes.
+pnpm test:watch
+
+# Run tests in a CI environment.
+pnpm test:ci
+```
+
+---
+
+##### Run tests with coverage
+
+An HTTP server is then started to serve coverage files from `./coverage` folder.
+
+⚠️ You may see a blank page the first time you run this command. Simply refresh the browser to see the updates.
+
+```shell
+pnpm test:coverage:serve
+```
+
+---
+
+#### Contributing
+
+Contributions are truly welcome!
+
+Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information on how to start contributing to this project.
+
+Help keep this project up to date with [GitHub Sponsor][sponsor-url].
+
+[![GitHub Sponsor][sponsor-badge]][sponsor-url]
+
+---
+
+#### Security
+
+If you believe you have found a security vulnerability, we encourage you to **_responsibly disclose this and NOT open a public issue_**. We will investigate all legitimate reports. Email `security@alessiofrittoli.it` to disclose any security vulnerabilities.
 
 ---
 
@@ -393,78 +495,6 @@ require('@alessiofrittoli/node-scripts/release').release()
 </details>
 
 ---
-
-### Development
-
-#### Install dependencies
-
-```bash
-npm install
-```
-
-or using `pnpm`
-
-```bash
-pnpm i
-```
-
-#### Build the source code
-
-Run the following command to test and build code for distribution.
-
-```bash
-pnpm build
-```
-
-#### [ESLint](https://www.npmjs.com/package/eslint)
-
-Run warnings and errors checks.
-
-```bash
-pnpm lint
-```
-
-#### [Jest](https://npmjs.com/package/jest)
-
-Run all the defined test suites by running the following:
-
-```bash
-# Run tests and watch file changes.
-pnpm test:watch
-
-# Run tests in a CI environment.
-pnpm test:ci
-```
-
-- See [`package.json`](./package.json) file scripts for more info.
-
-Run tests with coverage.
-
-An HTTP server is then started to serve coverage files from `./coverage` folder.
-
-⚠️ You may see a blank page the first time you run this command. Simply refresh the browser to see the updates.
-
-```bash
-test:coverage:serve
-```
-
----
-
-### Contributing
-
-Contributions are truly welcome!
-
-Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information on how to start contributing to this project.
-
-Help keep this project up to date with [GitHub Sponsor][sponsor-url].
-
-[![GitHub Sponsor][sponsor-badge]][sponsor-url]
-
----
-
-### Security
-
-If you believe you have found a security vulnerability, we encourage you to **_responsibly disclose this and NOT open a public issue_**. We will investigate all legitimate reports. Email `security@alessiofrittoli.it` to disclose any security vulnerabilities.
 
 ### Made with ☕
 
