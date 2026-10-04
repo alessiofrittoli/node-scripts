@@ -11,9 +11,6 @@ importers:
       '@alessiofrittoli/abort-controller':
         specifier: ^0.1.0
         version: 0.1.0
-      '@alessiofrittoli/event-emitter':
-        specifier: ^1.6.0
-        version: 1.6.0
       '@alessiofrittoli/exception':
         specifier: ^3.5.0
         version: 3.5.0
@@ -24,9 +21,6 @@ importers:
       '@alessiofrittoli/package-configs':
         specifier: ^1.5.0
         version: 1.5.0(@eslint/js@10.0.1)(oxlint@1.86.0)(prettier-plugin-sort-imports@1.8.11(typescript@6.0.3))(prettier@3.9.9)(tsdown@0.23.0(tsx@4.23.15)(typescript@6.0.3))(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.1)(esbuild@0.28.2)(tsx@4.23.15))(vitest@5.0.3)
-      '@alessiofrittoli/type-utils':
-        specifier: ^1.9.0
-        version: 1.9.0
       '@types/node':
         specifier: ^24.19.1
         version: 24.19.1

@@ -85,11 +85,13 @@
 		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\""
 	},
 	"peerDependencies": {
-		"@alessiofrittoli/package-configs": "^1.5.0"
+		"@alessiofrittoli/abort-controller": "^0.1.0",
+		"@alessiofrittoli/exception": "^3.5.0",
+		"@alessiofrittoli/package-configs": "^1.5.0",
+		"@alessiofrittoli/web-utils": "^2.3.0"
 	},
 	"devDependencies": {
 		"@alessiofrittoli/package-configs": "^1.5.0",
-		"@alessiofrittoli/type-utils": "^1.9.0",
 		"@types/node": "^24.19.1",
 		"@vitest/coverage-v8": "^5.0.3",
 		"concurrently": "^9.2.1",
@@ -102,11 +104,5 @@
 		"vite": "^8.3.2",
 		"vite-node": "^6.0.0",
 		"vitest": "^5.0.3"
-	},
-	"dependencies": {
-		"@alessiofrittoli/abort-controller": "^0.1.0",
-		"@alessiofrittoli/event-emitter": "^1.6.0",
-		"@alessiofrittoli/exception": "^3.5.0",
-		"@alessiofrittoli/web-utils": "^2.3.0"
 	}
 }
