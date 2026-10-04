@@ -22,23 +22,23 @@
 
 - [Getting started](#getting-started)
 - [API Reference](#api-reference)
-    - [Post-Install scripts](#post-install-scripts)
-        - [TypeScript Type Reference Management](#typescript-type-reference-management)
-            - [Type Reference Interfaces](#type-reference-interfaces)
-                - [`CommonOptions`](#commonoptions)
-                - [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
-            - [Type Reference Functions](#type-reference-functions)
-                - [`createReferenceFile`](#createreferencefile)
-                - [`updateTsConfig`](#updatetsconfig)
-                - [`addTypesReference`](#addtypesreference)
-            - [Add Types Reference Example usage](#add-types-reference-example-usage)
-    - [Release Scripts](#release-scripts)
-        - [Release](#release)
+  - [Post-Install scripts](#post-install-scripts)
+    - [TypeScript Type Reference Management](#typescript-type-reference-management)
+      - [Type Reference Interfaces](#type-reference-interfaces)
+        - [`CommonOptions`](#commonoptions)
+        - [`AddTypesReferenceOptions`](#addtypesreferenceoptions)
+      - [Type Reference Functions](#type-reference-functions)
+        - [`createReferenceFile`](#createreferencefile)
+        - [`updateTsConfig`](#updatetsconfig)
+        - [`addTypesReference`](#addtypesreference)
+      - [Add Types Reference Example usage](#add-types-reference-example-usage)
+  - [Release Scripts](#release-scripts)
+    - [Release](#release)
 - [Development](#development)
-    - [Install dependencies](#install-dependencies)
-    - [Build the source code](#build-the-source-code)
-    - [ESLint](#eslint)
-    - [Jest](#jest)
+  - [Install dependencies](#install-dependencies)
+  - [Build the source code](#build-the-source-code)
+  - [ESLint](#eslint)
+  - [Jest](#jest)
 - [Contributing](#contributing)
 - [Security](#security)
 - [Credits](#made-with-)
@@ -190,15 +190,15 @@ Add the `postinstall` script in your `package.json` file which will execute the 
 
 ```json
 {
+  // ...
+  "files": [
+    // ...,
+    "path-to-my-scripts" // ensure folder is published to `npm`
+  ],
+  "scripts": {
     // ...
-    "files": [
-        // ...,
-        "path-to-my-scripts" // ensure folder is published to `npm`
-    ],
-    "scripts": {
-        // ...
-        "postinstall": "node path-to-my-scripts/ts-setup.js"
-    }
+    "postinstall": "node path-to-my-scripts/ts-setup.js"
+  }
 }
 ```
 
@@ -206,30 +206,26 @@ Then in your `ts-setup.js` file simply import the script and execute it with a f
 
 ```ts
 // path-to-my-scripts/ts-setup.js
-const {
-    addTypesReference,
-} = require("@alessiofrittoli/node-scripts/postinstall");
-const project = require("../../package.json");
+const { addTypesReference } = require('@alessiofrittoli/node-scripts/postinstall')
+const project = require('../../package.json')
 
 addTypesReference({
-    name: project.name,
-    outputFile: `${project.name}.d.ts`, // optional
-});
+  name: project.name,
+  outputFile: `${project.name}.d.ts`, // optional
+})
 ```
 
 Or you can statically pass a `outputFile` to add all your scoped packages in a single file.
 
 ```ts
 // path-to-my-scripts/ts-setup.js
-const {
-    addTypesReference,
-} = require("@alessiofrittoli/node-scripts/postinstall");
-const project = require("../../package.json");
+const { addTypesReference } = require('@alessiofrittoli/node-scripts/postinstall')
+const project = require('../../package.json')
 
 addTypesReference({
-    name: project.name,
-    outputFile: "my-package-scope-env.d.ts",
-});
+  name: project.name,
+  outputFile: 'my-package-scope-env.d.ts',
+})
 ```
 
 </details>
@@ -348,11 +344,11 @@ Add the `release` script in your `package.json` file so you can easly run from y
 
 ```json
 {
+  // ...
+  "scripts": {
     // ...
-    "scripts": {
-        // ...
-        "release": "node path-to-my-scripts/release.js"
-    }
+    "release": "node path-to-my-scripts/release.js"
+  }
 }
 ```
 
@@ -362,11 +358,11 @@ Then in your `release.js` file simply import the script and execute it.
 
 ```ts
 // path-to-my-scripts/release.js
-require("@alessiofrittoli/node-scripts/release").release({
-    verbose: true,
-    npm: true,
-    access: "restricted",
-});
+require('@alessiofrittoli/node-scripts/release').release({
+  verbose: true,
+  npm: true,
+  access: 'restricted',
+})
 ```
 
 ---
@@ -377,11 +373,11 @@ Add the `release` script in your `package.json` file so you can easly run from y
 
 ```json
 {
+  // ...
+  "scripts": {
     // ...
-    "scripts": {
-        // ...
-        "release": "node path-to-my-scripts/release.js --verbose --npm --access restricted"
-    }
+    "release": "node path-to-my-scripts/release.js --verbose --npm --access restricted"
+  }
 }
 ```
 
@@ -391,7 +387,7 @@ Then in your `release.js` file simply import the script and execute it.
 
 ```ts
 // path-to-my-scripts/release.js
-require("@alessiofrittoli/node-scripts/release").release();
+require('@alessiofrittoli/node-scripts/release').release()
 ```
 
 </details>

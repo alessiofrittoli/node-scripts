@@ -5,4 +5,4 @@ export const FileSystem = {
 } as const
 
 export const ErrorCode = { ...Exception, ...FileSystem }
-export type ErrorCode = typeof ErrorCode[ keyof typeof ErrorCode ]
+export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode]

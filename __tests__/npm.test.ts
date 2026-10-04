@@ -1,69 +1,66 @@
-import { execSync as processExecSync } from 'child_process'
+import { mockGlobalPackages, mockLocalPackages, noDepsGlobalPackages } from '#/__tests__/__mocks__/npm.mock'
+import { afterEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { getPackage, isPackageInstalled } from '@/npm'
-import { mockGlobalPackages, mockLocalPackages, noDepsGlobalPackages } from '../src/lib/mock/npm.mock'
+import { execSync as _execSync } from 'child_process'
 
-jest.mock( 'child_process' )
-const execSync = processExecSync as jest.Mock
+vi.mock('child_process')
 
-describe( 'NPM', () => {
+const execSync = _execSync as Mock<typeof _execSync>
 
-	afterEach( () => {
-		jest.resetAllMocks().resetModules()
-	} )
+describe('NPM', () => {
+	afterEach(() => {
+		vi.resetAllMocks().resetModules()
+	})
 
-	const localPackages		= JSON.stringify( mockLocalPackages )
-	const globalPackages	= JSON.stringify( mockGlobalPackages )
-	const noDepsPackages	= JSON.stringify( noDepsGlobalPackages )
+	const localPackages = JSON.stringify(mockLocalPackages)
+	const globalPackages = JSON.stringify(mockGlobalPackages)
+	const noDepsPackages = JSON.stringify(noDepsGlobalPackages)
 
-	describe( 'getPackage', () => {
-		it( 'retrieves local npm packages', () => {
-			execSync.mockReturnValueOnce( Buffer.from( localPackages ) )
+	describe('getPackage', () => {
+		it('retrieves local npm packages', () => {
+			execSync.mockReturnValueOnce(Buffer.from(localPackages))
 
 			const result = getPackage()
-			expect( execSync ).toHaveBeenCalledWith( 'npm list --json' )
-			expect( result ).toEqual( JSON.parse( localPackages ) )
-		} )
+			expect(execSync).toHaveBeenCalledWith('npm list --json')
+			expect(result).toEqual(JSON.parse(localPackages))
+		})
 
-		it( 'retrieves global npm packages', () => {
-			execSync.mockReturnValueOnce( Buffer.from( globalPackages ) )
+		it('retrieves global npm packages', () => {
+			execSync.mockReturnValueOnce(Buffer.from(globalPackages))
 
-			const result = getPackage( true )
-			expect( execSync ).toHaveBeenCalledWith( 'npm list --json -g' )
-			expect( result ).toEqual( JSON.parse( globalPackages ) )
-		} )
-	} )
+			const result = getPackage(true)
+			expect(execSync).toHaveBeenCalledWith('npm list --json -g')
+			expect(result).toEqual(JSON.parse(globalPackages))
+		})
+	})
 
-	describe( 'isPackageInstalled', () => {
-		it( 'returns `true` if the package is installed locally', () => {
-			execSync.mockReturnValueOnce( Buffer.from( localPackages ) )
-			expect( isPackageInstalled( 'package-dep' ) ).toBe( true )
-		} )
+	describe('isPackageInstalled', () => {
+		it('returns `true` if the package is installed locally', () => {
+			execSync.mockReturnValueOnce(Buffer.from(localPackages))
+			expect(isPackageInstalled('package-dep')).toBe(true)
+		})
 
+		it('returns `false` if the package is not installed locally', () => {
+			execSync.mockReturnValueOnce(Buffer.from(localPackages))
 
-		it( 'returns `false` if the package is not installed locally', () => {
-			execSync.mockReturnValueOnce( Buffer.from( localPackages ) )
+			expect(isPackageInstalled('non-existent-package')).toBe(false)
+		})
 
-			expect( isPackageInstalled( 'non-existent-package' ) ).toBe( false )
-		} )
+		it('returns `true` if the package is installed globally', () => {
+			execSync.mockReturnValueOnce(Buffer.from(globalPackages))
 
+			expect(isPackageInstalled('global-package', true)).toBe(true)
+		})
 
-		it( 'returns `true` if the package is installed globally', () => {
-			execSync.mockReturnValueOnce( Buffer.from( globalPackages ) )
+		it('returns `false` if the package is not installed globally', () => {
+			execSync.mockReturnValueOnce(Buffer.from(globalPackages))
 
-			expect( isPackageInstalled( 'global-package', true ) ).toBe( true )
-		} )
+			expect(isPackageInstalled('non-existent-package', true)).toBe(false)
+		})
 
-
-		it( 'returns `false` if the package is not installed globally', () => {
-			execSync.mockReturnValueOnce( Buffer.from( globalPackages ) )
-
-			expect( isPackageInstalled( 'non-existent-package', true ) ).toBe( false )
-		} )
-		
-		
-		it( 'returns `false` if `dependencies` is not defined in package details returned by `getPackage`', () => {
-			execSync.mockReturnValueOnce( Buffer.from( noDepsPackages ) )
-			expect( isPackageInstalled( 'some-package' ) ).toBe( false )
-		} )
-	} )
-} )
+		it('returns `false` if `dependencies` is not defined in package details returned by `getPackage`', () => {
+			execSync.mockReturnValueOnce(Buffer.from(noDepsPackages))
+			expect(isPackageInstalled('some-package')).toBe(false)
+		})
+	})
+})

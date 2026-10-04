@@ -1,3 +1,2 @@
-export * from './types-reference'
-
-export type * from './types'
+export * from '@/postinstall/types-reference'
+export type * from '@/postinstall/types'
