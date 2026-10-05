@@ -1,6 +1,7 @@
 {
 	"extends": "@alessiofrittoli/package-configs/tsconfig/base.json",
-	"include": ["**/*.ts", "alessiofrittoli-env.d.ts"],
+	"include": ["**/*.ts"],
+	"exclude": ["dist"],
 	"compilerOptions": {
 		"types": ["node"],
 		"paths": {
