@@ -86,7 +86,7 @@ export const release = (options?: Release.Options): void => {
 				.filter(Boolean)
 				.join(' ')
 
-			execSync(`npm publish ${options}`, { stdio: 'inherit' })
+			execSync(`${engine} publish ${options}`, { stdio: 'inherit' })
 		}
 
 		execSync(`git tag v${version}`, { stdio: 'inherit' })
