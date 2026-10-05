@@ -27,6 +27,8 @@ const writeFileSync = _writeFileSync as Mock<typeof _writeFileSync>
 
 const parseTsConfig = _parseTsConfig as Mock<typeof _parseTsConfig>
 
+const consoleWarnSpy = vi.spyOn(console, 'warn')
+
 describe('Post-Install', () => {
 	describe('addTypesReference', () => {
 		const mockRoot = '/mock/root'
@@ -44,6 +46,7 @@ describe('Post-Install', () => {
 			existsSync.mockReturnValue(false)
 
 			vi.spyOn(console, 'log').mockImplementation(() => {})
+			consoleWarnSpy.mockImplementation(() => {})
 			vi.spyOn(console, 'error').mockImplementation(() => {})
 			vi.spyOn(process, 'exit').mockImplementation(code => {
 				throw new Error(`process.exit: ${code}`)
@@ -56,7 +59,9 @@ describe('Post-Install', () => {
 		afterEach(() => vi.resetAllMocks().resetModules())
 
 		it('creates a new reference file and checks the file is in the program', () => {
-			const consoleWarnSpy = vi.spyOn(console, 'warn')
+			parseTsConfig.mockReturnValue({ fileNames: [defaultOutputFile] } as ReturnType<
+				typeof parseTsConfig
+			>)
 
 			addTypesReference({ name: mockName })
 
