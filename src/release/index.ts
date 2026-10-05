@@ -44,9 +44,11 @@ export const release = (options?: Release.Options): void => {
 	const stashName = 'pre-release'
 
 	let run: 'npm run' | 'pnpm' = 'npm run'
+	let engine: 'npm' | 'pnpm' = 'npm'
 
 	try {
-		run = !isPackageInstalled('pnpm', true) ? 'npm run' : 'pnpm'
+		engine = !isPackageInstalled('pnpm', true) ? 'npm' : 'pnpm'
+		run = engine === 'npm' ? 'npm run' : 'pnpm'
 	} catch (err) {
 		const error = err as Error
 		console.log({
@@ -99,10 +101,11 @@ export const release = (options?: Release.Options): void => {
 		if (verbose) {
 			console.log({
 				package: project?.name,
-				message: `Released version ${version}`,
+				message: `Released version ${version}.`,
 				origin: origin,
 				tag: `v${version}`,
 				npmPublish: publishToNpm,
+				engine,
 			})
 		}
 	} catch (error) {
