@@ -108,7 +108,7 @@ export const addTypesReference = (options: AddTypesReferenceOptions): void => {
 		try {
 			const parsedTsConfig = parseTsConfig({ filepath: projectTsConfigPath })
 
-			if (parsedTsConfig.fileNames.some(file => file.includes(outputFile))) {
+			if (!parsedTsConfig.fileNames.some(file => file.includes(outputFile))) {
 				console.warn(
 					`⚠️ The created "${outputFile}" is not in the program. Please make sure to reference this file in your tsconifg file.`,
 				)
