@@ -1,10 +1,10 @@
 import { parseTsConfig } from '@alessiofrittoli/package-configs/tsconfig'
 import type { AddTypesReferenceOptions } from '@/postinstall/types'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { isExternalPackage } from '@/package'
 import { getProcessRoot } from '@/process'
 import type { Package } from '@/types'
-import path from 'path'
-import fs from 'fs'
+import { resolve } from 'path'
 
 /**
  * Common options for types-reference scripts.
@@ -32,11 +32,11 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
 	const data = `/// <reference types="${name}" />\n`
 	const comment = '// NOTE: This file should not be edited\n'
 
-	const referencesFilePath = path.resolve(root, outputFile)
+	const referencesFilePath = resolve(root, outputFile)
 
 	// the type reference file already exists
-	if (fs.existsSync(referencesFilePath)) {
-		const file = fs.readFileSync(referencesFilePath)
+	if (existsSync(referencesFilePath)) {
+		const file = readFileSync(referencesFilePath)
 		const references = file.toString().split('\n')
 
 		// the type reference file already includes the given package `name`
@@ -51,7 +51,7 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
 		const output = Buffer.concat([Buffer.from(data), file])
 
 		try {
-			fs.writeFileSync(referencesFilePath, output)
+			writeFileSync(referencesFilePath, output)
 
 			console.log({
 				package: name,
@@ -69,7 +69,8 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
 	const output = [data, comment].join('\n')
 
 	try {
-		fs.writeFileSync(referencesFilePath, Buffer.from(output))
+		writeFileSync(referencesFilePath, Buffer.from(output))
+
 		console.log({
 			package: name,
 			message: `"${outputFile}" has been created at the root of your project.`,
@@ -102,9 +103,20 @@ export const addTypesReference = (options: AddTypesReferenceOptions): void => {
 
 		createReferenceFile({ name, root, outputFile })
 
-		if (!parseTsConfig().fileNames.some(file => file.includes(outputFile))) {
+		const projectTsConfigPath = resolve(root, 'tsconfig.json')
+
+		try {
+			const parsedTsConfig = parseTsConfig({ filepath: projectTsConfigPath })
+
+			if (parsedTsConfig.fileNames.some(file => file.includes(outputFile))) {
+				console.warn(
+					`⚠️ The created "${outputFile}" is not in the program. Please make sure to reference this file in your tsconifg file.`,
+				)
+			}
+		} catch {
 			console.warn(
-				`⚠️ The created "${outputFile}" is not in the program. Please make sure to reference this file in your tsconifg file.`,
+				`⚠️ We could check if "${outputFile}" is in the program. Could parse project tsconfig`,
+				{ projectTsConfigPath },
 			)
 		}
 	} catch (error) {
