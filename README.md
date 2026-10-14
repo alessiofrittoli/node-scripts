@@ -62,7 +62,6 @@
         - [`createReferenceFile`](#createreferencefile)
         - [`updateTsConfig`](#updatetsconfig)
         - [`addTypesReference`](#addtypesreference)
-      - [Add Types Reference Example usage](#add-types-reference-example-usage)
   - [Release Scripts](#release-scripts)
     - [Release](#release)
 - [Credits](#made-with-)
@@ -197,10 +196,11 @@ Below are the detailed descriptions of the interfaces and functions included.
 
 <summary>Properties</summary>
 
-| Property     | Type     | Default                    | Description                                      |
-| ------------ | -------- | -------------------------- | ------------------------------------------------ |
-| `name`       | `string` | -                          | The project name currently executing the script. |
-| `outputFile` | `string` | 'alessiofrittoli-env.d.ts' | The \*.d.ts output file name.                    |
+| Property     | Type       | Default                    | Description                                             |
+| ------------ | ---------- | -------------------------- | ------------------------------------------------------- |
+| `name`       | `string`   | -                          | The project name currently executing the script.        |
+| `scopes`     | `string[]` | -                          | An array of scopes references used over package `name`. |
+| `outputFile` | `string`   | 'alessiofrittoli-env.d.ts' | The \*.d.ts output file name.                           |
 
 </details>
 
@@ -214,7 +214,7 @@ Creates or updates a reference file with type definitions for a project.
 
 <details>
 
-**Parameters**
+<summary style="cursor:pointer">Parameters</summary>
 
 | Parameter | Type            | Description                                     |
 | --------- | --------------- | ----------------------------------------------- |
@@ -222,15 +222,19 @@ Creates or updates a reference file with type definitions for a project.
 
 - See [CommonOptions](#commonoptions) interface.
 
-**Returns**
+</details>
 
-`void`
+---
 
-**Throws**
+<details>
+
+<summary style="cursor:pointer">Throws</summary>
 
 `Error` - Throws an error if there is an issue creating or updating the file.
 
 </details>
+
+---
 
 ###### `updateTsConfig`
 
@@ -238,7 +242,7 @@ Updates the tsconfig.json file by adding the specified output file to the `inclu
 
 <details>
 
-**Parameters**
+<summary style="cursor:pointer">Parameters</summary>
 
 | Parameter | Type            | Description                                     |
 | --------- | --------------- | ----------------------------------------------- |
@@ -246,15 +250,19 @@ Updates the tsconfig.json file by adding the specified output file to the `inclu
 
 - See [CommonOptions](#commonoptions) interface.
 
-**Returns**
+</details>
 
-`void`
+---
 
-**Throws**
+<details>
 
-`Error` - Throws an error if the tsconfig.json file cannot be read or updated.
+<summary style="cursor:pointer">Throws</summary>
+
+- `Error` - Throws an error if the tsconfig.json file cannot be read or updated.
 
 </details>
+
+---
 
 ###### `addTypesReference`
 
@@ -264,7 +272,7 @@ If the `options.outputFile` already exists, it will be updated with the new pack
 
 <details>
 
-**Parameters**
+<summary style="cursor:pointer">Parameters</summary>
 
 | Parameter | Type                       | Description                                 |
 | --------- | -------------------------- | ------------------------------------------- |
@@ -272,11 +280,13 @@ If the `options.outputFile` already exists, it will be updated with the new pack
 
 - See [AddTypesReferenceOptions](#addtypesreferenceoptions) interface.
 
-**Returns**
+</details>
 
-`void`
+---
 
-**Error**
+<details>
+
+<summary style="cursor:pointer">Error</summary>
 
 Exit the process with code `1` on failure.
 
@@ -284,9 +294,9 @@ Exit the process with code `1` on failure.
 
 ---
 
-###### Add Types Reference Example usage
-
 <details>
+
+<summary style="cursor:pointer">Add Types Reference Example usage</summary>
 
 Add the `postinstall` script in your `package.json` file which will execute the script once your package get installed in an external project.
 
@@ -295,38 +305,58 @@ Add the `postinstall` script in your `package.json` file which will execute the 
   // ...
   "files": [
     // ...,
-    "path-to-my-scripts" // ensure folder is published to `npm`
+    "my-scripts" // ensure folder is published to `npm`
   ],
   "scripts": {
     // ...
-    "postinstall": "node path-to-my-scripts/ts-setup.js"
+    "postinstall": "node my-scripts/ts-setup.ts"
   }
 }
 ```
 
-Then in your `ts-setup.js` file simply import the script and execute it with a few options.
+Then in your `ts-setup.ts` file simply import the script and execute it with a few options.
 
 ```ts
-// path-to-my-scripts/ts-setup.js
-const { addTypesReference } = require('@alessiofrittoli/node-scripts/postinstall')
-const project = require('../../package.json')
+// my-scripts/ts-setup.ts
+import { addTypesReference } from '@alessiofrittoli/node-scripts/postinstall'
+import packageJson from '../package.json'
 
 addTypesReference({
-  name: project.name,
-  outputFile: `${project.name}.d.ts`, // optional
+  name: packageJson.name,
+  outputFile: `${packageJson.name}.d.ts`, // optional
 })
 ```
 
 Or you can statically pass a `outputFile` to add all your scoped packages in a single file.
 
 ```ts
-// path-to-my-scripts/ts-setup.js
-const { addTypesReference } = require('@alessiofrittoli/node-scripts/postinstall')
-const project = require('../../package.json')
+// my-scripts/ts-setup.ts
+import { addTypesReference } from '@alessiofrittoli/node-scripts/postinstall'
+import packageJson from '../package.json'
 
 addTypesReference({
-  name: project.name,
+  name: packageJson.name,
   outputFile: 'my-package-scope-env.d.ts',
+})
+```
+
+</details>
+
+---
+
+<details>
+
+<summary style="cursor:pointer">Add custom types references</summary>
+
+```ts
+// my-scripts/ts-setup.ts
+import { addTypesReference } from '@alessiofrittoli/node-scripts/postinstall'
+import packageJson from '../package.json'
+
+addTypesReference({
+  name: packageJson.name,
+  types: [`${packageJson.name}/globals`, `${packageJson.name}/globals-2`],
+  outputFile: `${packageJson.name}.d.ts`, // optional
 })
 ```
 
@@ -449,18 +479,20 @@ Add the `release` script in your `package.json` file so you can easly run from y
   // ...
   "scripts": {
     // ...
-    "release": "node path-to-my-scripts/release.js"
+    "release": "node my-scripts/release.ts"
   }
 }
 ```
 
-Then in your `release.js` file simply import the script and execute it.
+Then in your `release.ts` file simply import the script and execute it.
 
 ⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
 
 ```ts
-// path-to-my-scripts/release.js
-require('@alessiofrittoli/node-scripts/release').release({
+// my-scripts/release.ts
+import { release } from '@alessiofrittoli/node-scripts/release'
+
+release({
   verbose: true,
   npm: true,
   access: 'restricted',
@@ -478,18 +510,20 @@ Add the `release` script in your `package.json` file so you can easly run from y
   // ...
   "scripts": {
     // ...
-    "release": "node path-to-my-scripts/release.js --verbose --npm --access restricted"
+    "release": "node my-scripts/release.ts --verbose --npm --access restricted"
   }
 }
 ```
 
-Then in your `release.js` file simply import the script and execute it.
+Then in your `release.ts` file simply import the script and execute it.
 
 ⚠️ Remember to add this file to `.npmignore` so it won't be published within you package.
 
 ```ts
-// path-to-my-scripts/release.js
-require('@alessiofrittoli/node-scripts/release').release()
+// my-scripts/release.ts
+import { release } from '@alessiofrittoli/node-scripts/release'
+
+release()
 ```
 
 </details>

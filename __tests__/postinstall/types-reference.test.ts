@@ -1,8 +1,8 @@
 import { existsSync as _existsSync, readFileSync as _readFileSync, writeFileSync as _writeFileSync } from 'fs'
 import { parseTsConfig as _parseTsConfig } from '@alessiofrittoli/package-configs/tsconfig'
+import { addTypesReference, formatReferences } from '@/postinstall/types-reference'
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { isExternalPackage as _isExternalPackage } from '@/package'
-import { addTypesReference } from '@/postinstall/types-reference'
 import { getProcessRoot as _getProcessRoot } from '@/process'
 import { resolve } from 'path'
 
@@ -65,7 +65,7 @@ describe('Post-Install', () => {
 
 			addTypesReference({ name: mockName })
 
-			const data = `/// <reference types="${mockName}" />\n`
+			const data = formatReferences([mockName])
 			const comment = '// NOTE: This file should not be edited\n'
 			const output = [data, comment].join('\n')
 
@@ -76,7 +76,7 @@ describe('Post-Install', () => {
 		it('creates a new reference file with custom name', () => {
 			addTypesReference({ name: mockName, outputFile: mockOutputFile })
 
-			const data = `/// <reference types="${mockName}" />\n`
+			const data = formatReferences([mockName])
 			const comment = '// NOTE: This file should not be edited\n'
 			const output = [data, comment].join('\n')
 
@@ -84,22 +84,38 @@ describe('Post-Install', () => {
 		})
 
 		it('updates the reference file if already exists', () => {
-			const data = `/// <reference types="${mockName}" />\n`
+			const data = formatReferences([mockName])
 			const comment = '// NOTE: This file should not be edited\n'
 			const output = [data, comment].join('\n')
-			const outputBuffer = Buffer.from(output)
+			const existingData = Buffer.from(output)
 
 			const dataUpdate = `/// <reference types="${mockName2}" />\n`
-			const dataUpdateOutput = Buffer.concat([Buffer.from(dataUpdate), outputBuffer])
+			const dataUpdateOutput = Buffer.concat([Buffer.from(dataUpdate), existingData])
 
 			existsSync.mockReturnValueOnce(true) // reference file already exists.
 
-			readFileSync.mockReturnValueOnce(outputBuffer) // return reference file content that need to be updated.
+			readFileSync.mockReturnValueOnce(existingData) // return reference file content that need to be updated.
 
 			addTypesReference({ name: mockName2, outputFile: mockOutputFile })
 
 			expect(writeFileSync).toHaveBeenCalledTimes(1) // 1 time - update reference file
 			expect(writeFileSync).toHaveBeenCalledWith(referencesFilePath, dataUpdateOutput)
+		})
+
+		it('allows to custom references over package name', () => {
+			const data = formatReferences([`${mockName}/globals`, `${mockName}/globals-2`])
+			const comment = '// NOTE: This file should not be edited\n'
+			const output = [data, comment].join('\n')
+
+			const outputBuffer = Buffer.from(output)
+
+			addTypesReference({
+				name: mockName,
+				outputFile: mockOutputFile,
+				scopes: [`${mockName}/globals`, `${mockName}/globals-2`],
+			})
+
+			expect(writeFileSync).toHaveBeenCalledWith(referencesFilePath, outputBuffer)
 		})
 
 		it('prints a warning if the type reference file is not in the program', () => {
@@ -112,7 +128,7 @@ describe('Post-Install', () => {
 		})
 
 		it("doesn't update the reference file if reference package is already included", () => {
-			const data = `/// <reference types="${mockName}" />\n`
+			const data = formatReferences([mockName])
 			const comment = '// NOTE: This file should not be edited\n'
 			const output = [data, comment].join('\n')
 			const outputBuffer = Buffer.from(output)
@@ -125,6 +141,40 @@ describe('Post-Install', () => {
 
 			addTypesReference({ name: mockName, outputFile: mockOutputFile })
 			expect(writeFileSync).not.toHaveBeenCalled() // no need to update since `mockName` package reference is already in there.
+		})
+
+		it('does nothing if no type references can be added - project name is falsey or no `types` is given', () => {
+			addTypesReference({
+				name: '',
+				outputFile: mockOutputFile,
+			})
+			expect(writeFileSync).not.toHaveBeenCalled()
+		})
+
+		it("doesn't update the reference file if no type references can be added - project name is falsey or no `types` is given", () => {
+			const data = formatReferences([mockName])
+			const comment = '// NOTE: This file should not be edited\n'
+			const output = [data, comment].join('\n')
+			const outputBuffer = Buffer.from(output)
+
+			existsSync.mockReturnValueOnce(true) // reference file already exists.
+
+			readFileSync
+				.mockReturnValueOnce(outputBuffer) // return reference file content that need to be updated.
+				.mockReturnValueOnce(Buffer.from(JSON.stringify({ include: [mockOutputFile] }))) // return tsconfig file content to check if it need to be updated.
+
+			addTypesReference({
+				name: '',
+				outputFile: mockOutputFile,
+			})
+
+			addTypesReference({
+				name: mockName,
+				scopes: [],
+				outputFile: mockOutputFile,
+			})
+
+			expect(writeFileSync).not.toHaveBeenCalled()
 		})
 
 		it('log a message and return if the package is not external', () => {
@@ -156,7 +206,7 @@ describe('Post-Install', () => {
 		})
 
 		it('exit with code "1" if updating the existing reference file fails', () => {
-			const data = `/// <reference types="${mockName}" />\n`
+			const data = formatReferences([mockName])
 			const comment = '// NOTE: This file should not be edited\n'
 			const output = [data, comment].join('\n')
 			const outputBuffer = Buffer.from(output)
