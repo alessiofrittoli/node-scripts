@@ -110,7 +110,7 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
  * @throws Will throw an error if the process fails.
  */
 export const addTypesReference = (options: AddTypesReferenceOptions): void => {
-	const { name, scopes, outputFile = 'alessiofrittoli-env.d.ts' } = options
+	const { name, scopes, outputFile = 'globals.d.ts' } = options
 	const root = getProcessRoot()
 
 	try {

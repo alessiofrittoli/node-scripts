@@ -196,11 +196,11 @@ Below are the detailed descriptions of the interfaces and functions included.
 
 <summary>Properties</summary>
 
-| Property     | Type       | Default                    | Description                                             |
-| ------------ | ---------- | -------------------------- | ------------------------------------------------------- |
-| `name`       | `string`   | -                          | The project name currently executing the script.        |
-| `scopes`     | `string[]` | -                          | An array of scopes references used over package `name`. |
-| `outputFile` | `string`   | 'alessiofrittoli-env.d.ts' | The \*.d.ts output file name.                           |
+| Property     | Type       | Default        | Description                                             |
+| ------------ | ---------- | -------------- | ------------------------------------------------------- |
+| `name`       | `string`   | -              | The project name currently executing the script.        |
+| `scopes`     | `string[]` | -              | An array of scopes references used over package `name`. |
+| `outputFile` | `string`   | 'globals.d.ts' | The \*.d.ts output file name.                           |
 
 </details>
 

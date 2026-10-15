@@ -28,7 +28,7 @@ export interface AddTypesReferenceOptions extends Pick<CommonOptions, 'scopes'> 
 	 */
 	name: string
 	/**
-	 * The `*.d.ts` output file name. Default: `alessiofrittoli-env.d.ts`.
+	 * The `*.d.ts` output file name. Default: `globals.d.ts`.
 	 *
 	 */
 	outputFile?: string
