@@ -1,21 +1,19 @@
+import type { AddTypesReferenceOptions, CommonOptions } from '@/postinstall/types'
 import { parseTsConfig } from '@alessiofrittoli/package-configs/tsconfig'
-import type { AddTypesReferenceOptions } from '@/postinstall/types'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { arrayUnique } from '@alessiofrittoli/web-utils'
 import { isExternalPackage } from '@/package'
 import { getProcessRoot } from '@/process'
-import type { Package } from '@/types'
 import { resolve } from 'path'
 
-/**
- * Common options for types-reference scripts.
- *
- */
-interface CommonOptions extends Package {
-	/**
-	 * The `*.d.ts` output file name.
-	 *
-	 */
-	outputFile: string
+export const formatReferences = (types: string[]): string | undefined => {
+	const typesArray = types
+		.filter(types => !!types.trim())
+		.map(types => `/// <reference types="${types.trim()}" />`)
+
+	if (typesArray.length <= 0) return
+
+	return typesArray.join('\n') + '\n'
 }
 
 /**
@@ -28,8 +26,10 @@ interface CommonOptions extends Package {
  * @throws A new Exception if there is an issue creating or updating the file.
  */
 export const createReferenceFile = (options: CommonOptions): true | undefined => {
-	const { root, name, outputFile } = options
-	const data = `/// <reference types="${name}" />\n`
+	const { root, name, scopes: _scopes = [name], outputFile } = options
+
+	const scopes = arrayUnique(_scopes)
+
 	const comment = '// NOTE: This file should not be edited\n'
 
 	const referencesFilePath = resolve(root, outputFile)
@@ -37,14 +37,26 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
 	// the type reference file already exists
 	if (existsSync(referencesFilePath)) {
 		const file = readFileSync(referencesFilePath)
+		/**
+		 * Existing references in file.
+		 *
+		 */
 		const references = file.toString().split('\n')
 
+		const newTypes = scopes.filter(type => !references.includes(`/// <reference types="${type}" />`))
+
 		// the type reference file already includes the given package `name`
-		if (references.some(reference => reference.includes(name))) {
+		if (newTypes.length <= 0) {
 			console.log({
 				package: name,
 				message: `The "${outputFile}" file already exists and it includes the needed type references.`,
 			})
+			return
+		}
+
+		const data = formatReferences(newTypes)
+
+		if (!data) {
 			return
 		}
 
@@ -64,6 +76,12 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
 				{ cause },
 			)
 		}
+	}
+
+	const data = formatReferences(scopes)
+
+	if (!data) {
+		return
 	}
 
 	const output = [data, comment].join('\n')
@@ -92,7 +110,7 @@ export const createReferenceFile = (options: CommonOptions): true | undefined =>
  * @throws Will throw an error if the process fails.
  */
 export const addTypesReference = (options: AddTypesReferenceOptions): void => {
-	const { name, outputFile = 'alessiofrittoli-env.d.ts' } = options
+	const { name, scopes, outputFile = 'alessiofrittoli-env.d.ts' } = options
 	const root = getProcessRoot()
 
 	try {
@@ -101,7 +119,7 @@ export const addTypesReference = (options: AddTypesReferenceOptions): void => {
 			return
 		}
 
-		createReferenceFile({ name, root, outputFile })
+		createReferenceFile({ name, scopes, root, outputFile })
 
 		const projectTsConfigPath = resolve(root, 'tsconfig.json')
 
