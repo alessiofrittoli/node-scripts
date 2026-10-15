@@ -34,7 +34,7 @@ describe('Post-Install', () => {
 		const mockRoot = '/mock/root'
 		const mockName = 'mock-package'
 		const mockName2 = 'mock-package-2'
-		const defaultOutputFile = 'alessiofrittoli-env.d.ts'
+		const defaultOutputFile = 'globals.d.ts'
 		const mockOutputFile = 'mock-env.d.ts'
 
 		let referencesFilePath = ''
