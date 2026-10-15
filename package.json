@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/node-scripts",
-	"version": "4.0.0",
+	"version": "4.1.0",
 	"description": "Utility library with common Node.js scripts",
 	"type": "module",
 	"author": {
@@ -86,7 +86,7 @@
 	},
 	"peerDependencies": {
 		"@alessiofrittoli/abort-controller": "^0.1.0",
-		"@alessiofrittoli/exception": "^3.5.0",
+		"@alessiofrittoli/exception": "^4.1.0",
 		"@alessiofrittoli/package-configs": "^1.5.0",
 		"@alessiofrittoli/web-utils": "^2.3.0"
 	},
