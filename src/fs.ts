@@ -49,7 +49,7 @@ export const getDirectoryTree = (path: string, exclude?: string[]): DirectoryTre
 	}
 
 	if (!existsSync(path)) {
-		throw new Exception(`No such file or directory, '${path}'`, { code: ErrorCode.ENOENT })
+		throw new Exception({ message: `No such file or directory: ${path}`, code: ErrorCode.ENOENT })
 	}
 
 	const stats = lstatSync(path)
