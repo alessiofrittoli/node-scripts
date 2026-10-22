@@ -1,8 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import type { AbortSignal } from '@alessiofrittoli/abort-controller'
 import { getDirectoryTree, forEachDirectoryEntry } from '@/fs'
 import { writeFileSync, rmSync, mkdtempSync } from 'fs'
-import { Exception } from '@alessiofrittoli/exception'
 import type { DirectoryTreeEntry } from '@/fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
@@ -69,7 +67,7 @@ describe('fs', () => {
 		})
 
 		it('throws Exception if path does not exist', () => {
-			expect(() => getDirectoryTree('/non/existent/path')).toThrow(Exception)
+			expect(() => getDirectoryTree('/non/existent/path')).toThrow(Error)
 		})
 	})
 

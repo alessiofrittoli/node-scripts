@@ -1,3 +1,3 @@
 import { oxlintConfig } from '@alessiofrittoli/package-configs/oxlint'
 
-export default oxlintConfig()
+export default oxlintConfig({ options: { typeAware: true } })

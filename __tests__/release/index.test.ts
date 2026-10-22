@@ -303,6 +303,7 @@ describe('release', () => {
 		})
 
 		expect(() => release()).toThrow('process.exit: 1')
+		// oxlint-disable-next-line typescript/unbound-method
 		expect(process.exit).toHaveBeenCalledWith(1)
 	})
 
@@ -313,6 +314,7 @@ describe('release', () => {
 		getProcessOptions.mockReturnValue(new Map())
 
 		expect(() => release()).toThrow('process.exit: 1')
+		// oxlint-disable-next-line typescript/unbound-method
 		expect(process.exit).toHaveBeenCalledWith(1)
 
 		getPackageJson
@@ -320,6 +322,7 @@ describe('release', () => {
 			.mockReturnValue(undefined)
 
 		expect(() => release()).toThrow('process.exit: 1')
+		// oxlint-disable-next-line typescript/unbound-method
 		expect(process.exit).toHaveBeenCalledWith(1)
 
 		getPackageJson
@@ -327,6 +330,7 @@ describe('release', () => {
 			.mockReturnValue({ version: true })
 
 		expect(() => release()).toThrow('process.exit: 1')
+		// oxlint-disable-next-line typescript/unbound-method
 		expect(process.exit).toHaveBeenCalledWith(1)
 	})
 
@@ -339,6 +343,7 @@ describe('release', () => {
 		)
 
 		expect(() => release()).toThrow('process.exit: 1')
+		// oxlint-disable-next-line typescript/unbound-method
 		expect(process.exit).toHaveBeenCalledWith(1)
 	})
 
