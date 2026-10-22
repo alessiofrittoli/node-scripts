@@ -1,9 +1,5 @@
-import { existsSync, lstatSync, readdirSync, type Stats } from 'fs'
+import { lstatSync, readdirSync, type Stats } from 'fs'
 import { parse, join, type ParsedPath } from 'path'
-
-import type { AbortSignal } from '@alessiofrittoli/abort-controller'
-import { Exception } from '@alessiofrittoli/exception'
-import { ErrorCode } from './error'
 
 export interface DirectoryTreeEntry {
 	path: string
@@ -18,13 +14,13 @@ export type OnIteration<T = unknown> = (
 	total: number,
 ) => T | Promise<T>
 
-export interface ForEachDirectoryEntryOptions<T = unknown, TCode = ErrorCode> {
+export interface ForEachDirectoryEntryOptions<T = unknown> {
 	/** The root directory path to start traversal. */
 	path: string
 	/** Excluded paths. */
 	exclude?: string[]
 	/** An AbortSignal to cancel the iteration early. */
-	signal?: AbortSignal<TCode>
+	signal?: AbortSignal
 	/** Callback function invoked for each directory entry. */
 	onIteration: OnIteration<T>
 }
@@ -46,10 +42,6 @@ export interface ForEachDirectoryEntryOptions<T = unknown, TCode = ErrorCode> {
 export const getDirectoryTree = (path: string, exclude?: string[]): DirectoryTreeEntry[] => {
 	if (exclude?.includes(path)) {
 		return []
-	}
-
-	if (!existsSync(path)) {
-		throw new Exception({ message: `No such file or directory: ${path}`, code: ErrorCode.ENOENT })
 	}
 
 	const stats = lstatSync(path)
@@ -77,15 +69,15 @@ export const getDirectoryTree = (path: string, exclude?: string[]): DirectoryTre
  *
  * @returns	A new Promise that resolves to an array of results returned by the callback for each entry.
  */
-export const forEachDirectoryEntry = async <T = unknown, TCode = ErrorCode>(
-	options: ForEachDirectoryEntryOptions<T, TCode>,
+export const forEachDirectoryEntry = async <T = unknown>(
+	options: ForEachDirectoryEntryOptions<T>,
 ): Promise<T[]> => {
 	const { path, exclude, signal, onIteration } = options
 
 	const entries = getDirectoryTree(path, exclude)
 	const results: T[] = []
 
-	for await (const entry of entries) {
+	for (const entry of entries) {
 		if (signal?.aborted) break
 		results.push(await onIteration(entry, results.length, entries.length))
 	}

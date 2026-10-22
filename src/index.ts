@@ -1,4 +1,3 @@
-export * from '@/error'
 export * from '@/fs'
 export * from '@/git'
 export * from '@/npm'
