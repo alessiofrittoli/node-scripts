@@ -66,7 +66,7 @@
 		"//1b": "******************** DEV - BUILD - LINT - RELEASE *******************",
 		"//1c": "*********************************************************************",
 		"dev": "tsdown --watch",
-		"build": "pnpm lint && pnpm tsc && pnpm tsdown",
+		"build": "pnpm lint && pnpm tsdown",
 		"lint": "oxlint --report-unused-disable-directives --max-warnings 0",
 		"release": "vite-node scripts/release.ts --verbose --npm",
 		"diff": "vite-node scripts/diffPatch.ts --verbose --staged --file",
@@ -85,24 +85,24 @@
 		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\""
 	},
 	"peerDependencies": {
-		"@alessiofrittoli/package-configs": "^1.5.0",
-		"@alessiofrittoli/web-utils": "^2.3.0"
+		"@alessiofrittoli/tsconfig": "^1.0.0",
+		"@alessiofrittoli/typed-map": "^1.0.0"
 	},
 	"devDependencies": {
-		"@alessiofrittoli/package-configs": "^1.6.0",
-		"@alessiofrittoli/web-utils": "^2.3.0",
+		"@alessiofrittoli/package-configs": "^1.8.1",
+		"@alessiofrittoli/tsconfig": "^1.0.0",
+		"@alessiofrittoli/typed-map": "^1.0.0",
 		"@types/node": "^24.19.1",
-		"@vitest/coverage-v8": "^5.0.4",
+		"@vitest/coverage-v8": "^5.0.5",
 		"concurrently": "^10.0.6",
 		"http-server": "^14.1.1",
-		"oxlint": "^1.88.0",
-		"oxlint-tsgolint": "^7.0.2004",
+		"oxlint": "^1.89.0",
+		"oxlint-tsgolint": "^7.0.2005",
 		"prettier": "^3.9.10",
 		"prettier-plugin-sort-imports": "^1.8.11",
-		"tsdown": "^0.23.1",
+		"tsdown": "^0.23.2",
 		"typescript": "^6.0.3",
-		"vite": "^8.3.4",
 		"vite-node": "^6.0.0",
-		"vitest": "^5.0.4"
+		"vitest": "^5.0.5"
 	}
 }

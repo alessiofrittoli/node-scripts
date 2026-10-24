@@ -1,6 +1,3 @@
-import { getTypedMap } from '@alessiofrittoli/web-utils'
-import { execSync as _execSync } from 'child_process'
-
 import {
 	getDefaultRemote as _getDefaultRemote,
 	getStashBy as _getStashBy,
@@ -10,6 +7,8 @@ import { getProcessRoot as _getProcessRoot, getProcessOptions as _getProcessOpti
 import { mockGlobalPackages, mockGlobalPackagesWithPnpm } from '#/__tests__/__mocks__/release.mock'
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { getPackageJson as _getPackageJson } from '@/package'
+import { getTypedMap } from '@alessiofrittoli/typed-map'
+import { execSync as _execSync } from 'child_process'
 import { release } from '@/release'
 import type { Git } from '@/types'
 import * as gitModule from '@/git'
