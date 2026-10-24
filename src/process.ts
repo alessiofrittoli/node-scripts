@@ -1,4 +1,4 @@
-import { getTypedMap, type TypedMap } from '@alessiofrittoli/web-utils'
+import { getTypedMap, type TypedMap } from '@alessiofrittoli/typed-map'
 import type { NodeJS } from '@/types'
 
 /**

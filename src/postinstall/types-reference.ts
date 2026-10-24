@@ -1,9 +1,9 @@
 import type { AddTypesReferenceOptions, CommonOptions } from '@/postinstall/types'
-import { parseTsConfig } from '@alessiofrittoli/package-configs/tsconfig'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { arrayUnique } from '@alessiofrittoli/web-utils'
+import { parseTsConfig } from '@alessiofrittoli/tsconfig'
 import { isExternalPackage } from '@/package'
 import { getProcessRoot } from '@/process'
+import { arrayUnique } from '@/utils'
 import { resolve } from 'path'
 
 export const formatReferences = (types: string[]): string | undefined => {
