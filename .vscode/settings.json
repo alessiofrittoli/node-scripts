@@ -19,9 +19,10 @@
 		"button.foreground": "#F0F0F0",
 		"button.hoverBackground": "#D25C5C",
 		"button.separator": "#F0F0F0",
-		"button.secondaryBackground": "#CB3837",
+		// secondary buttons
+		"button.secondaryBackground": "#ffffff00",
 		"button.secondaryForeground": "#F0F0F0",
-		"button.secondaryHoverBackground": "#D25C5C"
+		"button.secondaryHoverBackground": "#CB383720"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
