@@ -1,7 +1,7 @@
 import { existsSync as _existsSync, readFileSync as _readFileSync, writeFileSync as _writeFileSync } from 'fs'
-import { parseTsConfig as _parseTsConfig } from '@alessiofrittoli/package-configs/tsconfig'
 import { addTypesReference, formatReferences } from '@/postinstall/types-reference'
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
+import { parseTsConfig as _parseTsConfig } from '@alessiofrittoli/tsconfig'
 import { isExternalPackage as _isExternalPackage } from '@/package'
 import { getProcessRoot as _getProcessRoot } from '@/process'
 import { resolve } from 'path'
@@ -11,8 +11,8 @@ vi.mock('path')
 vi.mock('@/process')
 vi.mock('@/package')
 
-vi.mock('@alessiofrittoli/package-configs/tsconfig', async () => {
-	const { parseTsConfig, ...module } = await vi.importActual('@alessiofrittoli/package-configs/tsconfig')
+vi.mock('@alessiofrittoli/tsconfig', async () => {
+	const { parseTsConfig, ...module } = await vi.importActual('@alessiofrittoli/tsconfig')
 	return {
 		...module,
 		parseTsConfig: vi.fn(parseTsConfig as typeof _parseTsConfig),
